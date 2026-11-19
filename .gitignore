@@ -1,0 +1,11 @@
+# ملفات محلية
+.DS_Store
+Thumbs.db
+*.log
+node_modules/
+
+# ملفات الاختبار والاستعادة (مش للموقع)
+_verify_*.py
+verify_*.py
+_*.py
+_bak_*/

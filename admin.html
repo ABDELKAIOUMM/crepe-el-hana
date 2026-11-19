@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>لوحة تحكم — كريب الهنا</title>
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<!-- ══════════ شاشة الدخول ══════════ -->
+<div id="login" class="login-screen">
+  <form class="login-card" id="loginForm" autocomplete="off">
+    <div class="login-logo">🍕</div>
+    <h1>لوحة التحكم</h1>
+    <p>كريب الهنا — إدارة المحتوى</p>
+    <label class="fld">
+      <span>كلمة السر</span>
+      <input type="password" id="pass" placeholder="اكتب كلمة السر" required>
+    </label>
+    <div class="login-err" id="loginErr" hidden>❌ كلمة السر غلط</div>
+    <button class="btn primary lg" type="submit">دخول</button>
+  </form>
+</div>
+
+<!-- ══════════ اللوحة ══════════ -->
+<div id="app" class="app" hidden>
+
+  <header class="topbar">
+    <div class="tb-brand"><span class="mark">🍕</span><b>لوحة التحكم</b></div>
+    <nav class="tb-tabs" id="tabs">
+      <button class="tb-tab active" data-tab="sections"><span>📂</span>الأقسام</button>
+      <button class="tb-tab" data-tab="items"><span>🍽️</span>الأصناف والأسعار</button>
+      <button class="tb-tab" data-tab="catalog"><span>🏷️</span>صفحات المنتجات</button>
+      <button class="tb-tab" data-tab="images"><span>🖼️</span>الصور</button>
+      <button class="tb-tab" data-tab="content"><span>✏️</span>النصوص</button>
+      <button class="tb-tab" data-tab="info"><span>📞</span>بيانات المطعم</button>
+    </nav>
+    <div class="tb-actions">
+      <span class="save-state" id="saveState">● محفوظ</span>
+      <button class="btn ghost sm" id="btnExport">⬇ تصدير</button>
+      <button class="btn ghost sm" id="btnImport">⬆ استيراد</button>
+      <button class="btn primary sm" id="btnSave">💾 حفظ</button>
+      <button class="btn ghost sm" id="btnLogout">خروج</button>
+    </div>
+  </header>
+
+  <main class="content">
+
+    <!-- ═══════ الأقسام ═══════ -->
+    <section class="panel" data-panel="sections">
+      <div class="panel-head">
+        <h2>الأقسام</h2>
+        <p>عدّل أسماء الأقسام ووصفها وصورها وكمان النصوص العامة للموقع.</p>
+      </div>
+      <div class="grid" id="sectionsGrid"></div>
+      <div class="panel-foot">
+        <button class="btn ghost" id="addSection">+ قسم جديد</button>
+        <button class="btn danger ghost" id="delSection">− حذف آخر قسم</button>
+      </div>
+    </section>
+
+    <!-- ═══════ الأصناف ═══════ -->
+    <section class="panel" data-panel="items" hidden>
+      <div class="panel-head">
+        <h2>الأصناف والأسعار</h2>
+        <p>اختار القسم، عدّل الأصناف والأسعار، ضيف أو احذف.</p>
+      </div>
+      <div class="subtabs" id="menuTabs"></div>
+      <div class="panel-head sm">
+        <h3 id="menuTitle"></h3>
+        <div class="row-inline">
+          <input class="inp" id="menuDesc" placeholder="وصف القسم">
+          <input class="inp emoji" id="menuEmoji" placeholder="🍕" maxlength="4">
+        </div>
+      </div>
+      <div id="sizeRow"></div>
+      <div class="items-table" id="itemsTable"></div>
+      <div class="panel-foot">
+        <button class="btn ghost" id="addItem">+ صنف جديد</button>
+        <button class="btn ghost" id="addSize">+ حجم جديد</button>
+        <button class="btn danger ghost" id="delSize">− حذف آخر حجم</button>
+      </div>
+    </section>
+
+    <!-- ═══════ صفحات المنتجات ═══════ -->
+    <section class="panel" data-panel="catalog" hidden>
+      <div class="panel-head">
+        <h2>صفحات المنتجات (Catalog)</h2>
+        <p>الأصناف اللي ليها صفحة تفصيلية: المقاسات، الإضافات، الوصف والصورة.</p>
+      </div>
+      <div class="subtabs" id="catTabs"></div>
+      <div id="catEditor"></div>
+    </section>
+
+    <!-- ═══════ الصور ═══════ -->
+    <section class="panel" data-panel="images" hidden>
+      <div class="panel-head">
+        <h2>الصور</h2>
+        <p>اختار صورة أو ارفع صورة جديدة، وكمان اكتب النص التوضيحي وطبّق التحجيم (Scaling) على نصوص الموقع.</p>
+      </div>
+
+      <div class="img-note">
+        <h3>📐 المقاسات المثالية للصور</h3>
+        <div class="dims">
+          <div class="dim"><b>الغلاف الرئيسي (Hero)</b><span>1200 × 800 بكسل</span><em>WebP — أقل من 150 KB</em></div>
+          <div class="dim"><b>صور الأقسام</b><span>800 × 600 بكسل</span><em>WebP — أقل من 120 KB</em></div>
+          <div class="dim"><b>صور الأصناف</b><span>600 × 450 بكسل</span><em>WebP — أقل من 80 KB</em></div>
+          <div class="dim"><b>الصور الصغيرة (400px)</b><span>400 × 300 بكسل</span><em>WebP — أقل من 40 KB</em></div>
+        </div>
+        <p class="tip">💡 النسبة المثالية <b>4:3</b> (عرض × ارتفاع). الصورةLARGE بتتقص على الموبايل، فحاول تطلعها واضحة.</p>
+      </div>
+
+      <h3 class="sub-title">رفع صورة جديدة</h3>
+      <div class="upload-zone" id="uploadZone">
+        <input type="file" id="fileInput" accept="image/*" hidden>
+        <div class="uz-inner" id="uzInner">
+          <span class="uz-icon">📤</span>
+          <b>اضغط هنا أو اسحب الصورة</b>
+          <small>PNG / JPG / WebP — تتحوّل لـ WebP تلقائياً</small>
+        </div>
+      </div>
+      <div class="upload-preview" id="upPreview" hidden></div>
+
+      <h3 class="sub-title">معرض الصور</h3>
+      <div class="imgs-gallery" id="imgsGallery"></div>
+      <div class="panel-foot">
+        <button class="btn danger ghost" id="delImg">− حذف الصورة المحددة</button>
+      </div>
+
+      <h3 class="sub-title">تكبير وتصغير النصوص</h3>
+      <div class="scale-box" id="scaleBox"></div>
+    </section>
+
+    <!-- ═══════ النصوص ═══════ -->
+    <section class="panel" data-panel="content" hidden>
+      <div class="panel-head">
+        <h2>النصوص</h2>
+        <p>كل النصوص الظاهرة في الموقع — تقدر تعدّلها من هنا.</p>
+      </div>
+      <div id="contentEditor" class="content-editor"></div>
+    </section>
+
+    <!-- ═══════ بيانات المطعم ═══════ -->
+    <section class="panel" data-panel="info" hidden>
+      <div class="panel-head">
+        <h2>بيانات المطعم</h2>
+        <p>الأرقام والعنوان واسم المطعم.</p>
+      </div>
+      <div id="infoEditor" class="content-editor"></div>
+    </section>
+
+  </main>
+
+  <footer class="appfoot">
+    <span>لوحة تحكم كريب الهنا — كل التعديلات محفوظة في المتصفح عندك</span>
+    <span class="ver" id="verInfo"></span>
+  </footer>
+</div>
+
+<!-- ══════════ نافذة التأكيد ══════════ -->
+<div id="confirm" class="modal" hidden>
+  <div class="modal-card">
+    <h3 id="confirmTitle">تأكيد</h3>
+    <p id="confirmMsg"></p>
+    <div class="modal-actions">
+      <button class="btn ghost" id="confirmNo">إلغاء</button>
+      <button class="btn danger" id="confirmYes">تأكيد</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ نافذة معاينة الصورة ══════════ -->
+<div id="lightbox" class="modal lightbox" hidden>
+  <button class="lb-close" id="lbClose">✕</button>
+  <img id="lbImg" alt="">
+  <div class="lb-cap" id="lbCap"></div>
+</div>
+
+<div id="toast" class="toast" hidden></div>
+
+<script src="admin.js"></script>
+</body>
+</html>

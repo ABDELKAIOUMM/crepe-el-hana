@@ -1,0 +1,719 @@
+/* ══════════════════════════════════════════════════════════
+   لوحة تحكم كريب الهنا — المنطق
+   ══════════════════════════════════════════════════════════ */
+(function () {
+  'use strict';
+
+  var PASS = 'hana2026';           // كلمة سر الدخول
+  var LS_KEY = 'crepeElHana_data_v1';
+  var SCALE_KEY = 'crepeElHana_scale_v1';
+  var IMGS_KEY = 'crepeElHana_images_v1';
+
+  var data = null;       // بيانات الموقع
+  var images = [];       // الصور المتاحة (مسار + اسم)
+  var scale = {};        // معاملات تكبير النصوص
+  var dirty = false;
+  var curMenu = 0;
+  var curCat = 'pizza';
+  var selImg = null;
+  var curConfirm = null;
+
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var esc = function (s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  };
+
+  /* ═══════════ 1) الحفظ والتحميل ═══════════ */
+  function loadAll() {
+    data = JSON.parse(localStorage.getItem(LS_KEY) || 'null');
+    scale = JSON.parse(localStorage.getItem(SCALE_KEY) || 'null') || {};
+    images = JSON.parse(localStorage.getItem(IMGS_KEY) || 'null') || [];
+  }
+
+  function saveData(silent) {
+    localStorage.setItem(LS_KEY, JSON.stringify(data));
+    localStorage.setItem(SCALE_KEY, JSON.stringify(scale));
+    localStorage.setItem(IMGS_KEY, JSON.stringify(images));
+    dirty = false;
+    setSaveState('saved');
+    if (!silent) toast('✅ اتحفظ كل التعديلات', 'ok');
+  }
+
+  function setSaveState(s) {
+    var el = $('#saveState');
+    el.className = 'save-state ' + s;
+    el.textContent = s === 'dirty' ? '● فيه تعديلات' : (s === 'saved' ? '● محفوظ' : '● محفوظ');
+  }
+
+  function markDirty() {
+    dirty = true;
+    setSaveState('dirty');
+  }
+
+  /* ═══════════ 2) تحميل من data.json (أول مرة) ═══════════ */
+  function fetchDefaults() {
+    return fetch('data.json?v=' + Date.now())
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        data = d;
+        scanImages();
+        saveData(true);
+      });
+  }
+
+  function scanImages() {
+    // نقرأ قائمة الصور من الـ manifest الموجود في data.json
+    if (data && data._images) {
+      images = data._images.slice();
+      return;
+    }
+    images = [];
+  }
+
+  /* ═══════════ 3) الدخول ═══════════ */
+  function initLogin() {
+    $('#loginForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var v = $('#pass').value;
+      if (v === PASS) {
+        $('#loginErr').hidden = true;
+        $('#login').hidden = true;
+        $('#app').hidden = false;
+        boot();
+      } else {
+        $('#loginErr').hidden = false;
+        $('#pass').value = '';
+        $('#pass').focus();
+      }
+    });
+  }
+
+  function boot() {
+    loadAll();
+    var chain = data ? Promise.resolve() : fetchDefaults();
+    chain.then(function () {
+      applyScale();
+      renderAll();
+      setSaveState('saved');
+    }).catch(function (e) {
+      toast('❌ فشل تحميل البيانات: ' + e.message, 'err');
+    });
+  }
+
+  /* ═══════════ 4) التصيير العام ═══════════ */
+  function renderAll() {
+    renderTabs();
+    renderSections();
+    renderMenu();
+    renderCatalog();
+    renderImages();
+    renderContent();
+    renderInfo();
+    renderScale();
+    $('#verInfo').textContent = 'الإصدار ' + (data.version || 1) + ' — ' +
+      (data.menu.length) + ' قسم / ' +
+      (data.menu.reduce(function (a, m) { return a + m.items.length; }, 0)) + ' صنف';
+  }
+
+  /* ═══════════ 5) التبويبات ═══════════ */
+  function renderTabs() {
+    $$('#tabs .tb-tab').forEach(function (b) {
+      b.onclick = function () {
+        $$('#tabs .tb-tab').forEach(function (x) { x.classList.remove('active'); });
+        b.classList.add('active');
+        $$('.panel').forEach(function (p) { p.hidden = p.dataset.panel !== b.dataset.tab; });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
+    });
+  }
+
+  /* ═══════════ 6) الأقسام ═══════════ */
+  function renderSections() {
+    var grid = $('#sectionsGrid');
+    var cs = data.content.sections;
+    grid.innerHTML = cs.map(function (s, i) {
+      return '' +
+        '<div class="sec-card" data-i="' + i + '">' +
+          '<div class="sec-num">' + esc(s.num) + '</div>' +
+          '<img class="sec-img" src="' + esc(s.img) + '" alt="" loading="lazy">' +
+          '<div class="sec-thumb-row">' +
+            '<img src="' + esc(s.img) + '" alt="">' +
+            '<input class="inp sm" data-f="img" value="' + esc(s.img) + '">' +
+            '<button class="btn ghost sm" data-pick="' + i + '">🖼️</button>' +
+          '</div>' +
+          '<div class="ce-2">' +
+            '<label class="fld"><span>رقم القسم</span><input class="inp sm" data-f="num" value="' + esc(s.num) + '"></label>' +
+            '<label class="fld"><span>العنوان</span><input class="inp sm" data-f="title" value="' + esc(s.title) + '"></label>' +
+          '</div>' +
+          '<label class="fld"><span>الوصف</span><input class="inp sm" data-f="desc" value="' + esc(s.desc) + '"></label>' +
+          '<label class="fld"><span>المفتاح (URL)</span><input class="inp sm" data-f="key" value="' + esc(s.key) + '"></label>' +
+          '<div class="row-inline">' +
+            '<button class="btn danger ghost sm" data-del="' + i + '">− حذف القسم</button>' +
+          '</div>' +
+        '</div>';
+    }).join('');
+
+    grid.querySelectorAll('.sec-card').forEach(function (card) {
+      var i = +card.dataset.i;
+      card.querySelectorAll('[data-f]').forEach(function (inp) {
+        inp.oninput = function () {
+          data.content.sections[i][inp.dataset.f] = inp.value;
+          if (inp.dataset.f === 'img') {
+            card.querySelector('.sec-img').src = inp.value;
+            card.querySelector('.sec-thumb-row img').src = inp.value;
+          }
+          markDirty();
+        };
+      });
+      var del = card.querySelector('[data-del]');
+      if (del) del.onclick = function () {
+        confirmBox('حذف القسم', 'متأكد إنك عايز تحذف «' + data.content.sections[i].title + '»؟')(
+          function () {
+            data.content.sections.splice(i, 1);
+            markDirty(); renderSections();
+          });
+      };
+      var pick = card.querySelector('[data-pick]');
+      if (pick) pick.onclick = function () {
+        openPicker(function (path) {
+          data.content.sections[i].img = path;
+          markDirty(); renderSections();
+        });
+      };
+    });
+  }
+
+  $('#addSection').onclick = function () {
+    data.content.sections.push({
+      key: 'new' + (data.content.sections.length + 1),
+      num: String(data.content.sections.length + 1).padStart(2, '0'),
+      title: 'قسم جديد', desc: 'وصف القسم', img: 'assets/webp/hero-pizza.webp'
+    });
+    markDirty(); renderSections();
+  };
+  $('#delSection').onclick = function () {
+    if (data.content.sections.length <= 1) return toast('❌ لازم يفضل قسم واحد على الأقل', 'err');
+    confirmBox('حذف آخر قسم', 'متأكد؟')(
+      function () {
+        data.content.sections.pop(); markDirty(); renderSections();
+      });
+  };
+
+  /* المفتاح الحقيقي لعمود الحجم */
+  function colKeyOf(m, label) {
+    var sk = (data.sizeKeys && data.sizeKeys[m.key]) || {};
+    return sk[label] || label;
+  }
+
+  /* ═══════════ 7) الأصناف والأسعار ═══════════ */
+  function renderMenu() {
+    var tabs = $('#menuTabs');
+    tabs.innerHTML = data.menu.map(function (m, i) {
+      return '<button class="subtab' + (i === curMenu ? ' active' : '') + '" data-i="' + i + '">' +
+        esc(m.emoji || '') + ' ' + esc(m.title) + ' (' + m.items.length + ')</button>';
+    }).join('');
+    tabs.querySelectorAll('.subtab').forEach(function (b) {
+      b.onclick = function () { curMenu = +b.dataset.i; renderMenu(); };
+    });
+
+    var m = data.menu[curMenu];
+    $('#menuTitle').textContent = 'قسم: ' + m.title;
+    $('#menuDesc').value = m.desc || '';
+    $('#menuEmoji').value = m.emoji || '';
+
+    var hasSizes = !!m.sizes;
+    var cols = hasSizes ? m.sizes : ['price'];
+    // خريطة: اسم العرض (عربي) → المفتاح في البيانات (إنجليزي)
+    var sk = (data.sizeKeys && data.sizeKeys[m.key]) || {};
+    var colKey = function (c) { return (hasSizes && sk[c]) ? sk[c] : c; };
+    $('#sizeRow').innerHTML = hasSizes
+      ? '<div class="size-note">ℹ️ القسم ده بيستخدم أحجام: <b>' + m.sizes.join(' / ') + '</b> — الأسعار دي للأصناف اللي في القسم ده.</div>'
+      : '';
+
+    var head = '<div class="it-row head"><div>اسم الصنف</div>' +
+      cols.map(function (c) { return '<div>' + esc(c) + '</div>'; }).join('') +
+      '<div></div></div>';
+
+    var rows = m.items.map(function (it, i) {
+      var inputs = cols.map(function (c) {
+        var k = colKey(c);
+        var v = it[k];
+        return '<div><input class="inp num" data-c="' + esc(c) + '" data-k="' + esc(k) + '" data-i="' + i + '" type="number" min="0" step="1" value="' +
+          (v == null ? '' : v) + '"></div>';
+      }).join('');
+      return '<div class="it-row">' +
+        '<div class="nm"><input class="inp" data-c="name" data-i="' + i + '" value="' + esc(it.name) + '"></div>' +
+        inputs +
+        '<div><button class="it-del" data-del="' + i + '" title="حذف">✕</button></div>' +
+      '</div>';
+    }).join('');
+
+    $('#itemsTable').innerHTML = head + (rows || '<div class="it-empty">مفيش أصناف — اضغط «+ صنف جديد»</div>');
+
+    $('#itemsTable').querySelectorAll('[data-c]').forEach(function (inp) {
+      inp.oninput = function () {
+        var i = +inp.dataset.i;
+        var c = (inp.dataset.k || inp.dataset.c);
+        var v = (c === 'name') ? inp.value : (inp.value === '' ? 0 : +inp.value);
+        m.items[i][c] = v;
+        markDirty();
+      };
+    });
+    $('#itemsTable').querySelectorAll('[data-del]').forEach(function (b) {
+      b.onclick = function () {
+        var i = +b.dataset.del;
+        confirmBox('حذف الصنف', 'متأكد إنك عايز تحذف «' + m.items[i].name + '»؟')(
+          function () { m.items.splice(i, 1); markDirty(); renderMenu(); });
+      };
+    });
+
+    $('#addSize').hidden = !hasSizes;
+    $('#delSize').hidden = !hasSizes;
+  }
+
+  $('#menuDesc').oninput = function () { data.menu[curMenu].desc = this.value; markDirty(); };
+  $('#menuEmoji').oninput = function () { data.menu[curMenu].emoji = this.value; markDirty(); };
+
+  $('#addItem').onclick = function () {
+    var m = data.menu[curMenu];
+    var it = { name: 'صنف جديد' };
+    if (m.sizes) m.sizes.forEach(function (s) { it[colKeyOf(m, s)] = 0; });
+    else it.price = 0;
+    m.items.push(it);
+    markDirty(); renderMenu();
+  };
+
+  $('#addSize').onclick = function () {
+    var m = data.menu[curMenu];
+    var n = 'حجم ' + (m.sizes.length + 1);
+    m.sizes.push(n);
+    m.items.forEach(function (it) { it[n] = 0; });
+    markDirty(); renderMenu();
+  };
+
+  $('#delSize').onclick = function () {
+    var m = data.menu[curMenu];
+    if (m.sizes.length <= 1) return toast('❌ لازم يفضل حجم واحد على الأقل', 'err');
+    var last = m.sizes.pop();
+    confirmBox('حذف الحجم', 'متأكد إنك عايز تحذف «' + last + '»؟ الأسعار بتاعته هتتشال.')(
+      function () {
+        var lk = colKeyOf(m, last);
+        m.items.forEach(function (it) { delete it[lk]; });
+        markDirty(); renderMenu();
+      });
+  };
+
+  /* ═══════════ 8) Catalog — صفحات المنتجات ═══════════ */
+  function renderCatalog() {
+    var cats = Object.keys(data.catalog);
+    $('#catTabs').innerHTML = cats.map(function (k) {
+      return '<button class="subtab' + (k === curCat ? ' active' : '') + '" data-k="' + esc(k) + '">' +
+        esc(data.catalog[k].title) + '</button>';
+    }).join('');
+    $('#catTabs').querySelectorAll('.subtab').forEach(function (b) {
+      b.onclick = function () { curCat = b.dataset.k; renderCatalog(); };
+    });
+
+    var c = data.catalog[curCat];
+    if (!c) { $('#catEditor').innerHTML = ''; return; }
+
+    var list = c.items.map(function (it, i) {
+      return '<div class="cat-item">' +
+        '<img src="' + esc(it.img) + '" alt="" loading="lazy">' +
+        '<div class="ci-main">' +
+          '<b>' + esc(it.name) + '</b>' +
+          '<span>' + esc(it.desc || '') + '</span>' +
+          '<div class="cat-prices">' +
+            '<span class="chip">🏷️ ' + esc(it.tag || '—') + '</span>' +
+            '<span class="chip">💰 <input class="inp sm" data-p="price" data-i="' + i + '" type="number" min="0" value="' + it.price + '"> ج.م</span>' +
+          '</div>' +
+        '</div>' +
+        '<input class="inp sm" data-p="name" data-i="' + i + '" value="' + esc(it.name) + '">' +
+        '<button class="it-del" data-cdel="' + i + '">✕</button>' +
+      '</div>';
+    }).join('');
+
+    $('#catEditor').innerHTML =
+      '<div class="cat-editor">' +
+        '<div class="ce-2">' +
+          '<label class="fld"><span>عنوان القسم</span><input class="inp" id="cTitle" value="' + esc(c.title) + '"></label>' +
+          '<label class="fld"><span>العنوان في المسار</span><input class="inp" id="cCrumb" value="' + esc(c.crumb) + '"></label>' +
+        '</div>' +
+        '<label class="fld"><span>العنوان الفرعي</span><input class="inp" id="cEyebrow" value="' + esc(c.eyebrow || '') + '"></label>' +
+        '<label class="fld"><span>الوصف</span><textarea class="inp" id="cIntro">' + esc(c.intro || '') + '</textarea></label>' +
+        '<h4 style="margin-top:18px;font-size:15px;color:var(--orange)">الأصناف (' + c.items.length + ')</h4>' +
+        '<div class="cat-list">' + (list || '<div class="it-empty">مفيش أصناف</div>') + '</div>' +
+        '<div class="panel-foot">' +
+          '<button class="btn ghost" id="addCatItem">+ صنف جديد</button>' +
+          '<button class="btn ghost" id="addCatField">+ حقل مخصص</button>' +
+        '</div>' +
+      '</div>';
+
+    var bind = function (sel, fn) { var el = $(sel); if (el) el.oninput = fn; };
+    bind('#cTitle', function () { c.title = this.value; markDirty(); });
+    bind('#cCrumb', function () { c.crumb = this.value; markDirty(); });
+    bind('#cEyebrow', function () { c.eyebrow = this.value; markDirty(); });
+    bind('#cIntro', function () { c.intro = this.value; markDirty(); });
+
+    $('#catEditor').querySelectorAll('[data-p]').forEach(function (inp) {
+      inp.oninput = function () {
+        var i = +inp.dataset.i, p = inp.dataset.p;
+        c.items[i][p] = (p === 'price') ? +inp.value : inp.value;
+        markDirty();
+      };
+    });
+    $('#catEditor').querySelectorAll('[data-cdel]').forEach(function (b) {
+      b.onclick = function () {
+        var i = +b.dataset.cdel;
+        confirmBox('حذف الصنف', 'حذف «' + c.items[i].name + '»؟')(
+          function () { c.items.splice(i, 1); markDirty(); renderCatalog(); });
+      };
+    });
+    $('#addCatItem').onclick = function () {
+      c.items.push({
+        id: 'item' + Date.now(), name: 'صنف جديد', price: 0,
+        img: 'assets/webp/hero-pizza.webp', tag: 'جديد', desc: 'وصف الصنف'
+      });
+      markDirty(); renderCatalog();
+    };
+    $('#addCatField').onclick = function () {
+      var k = prompt('اسم الحقل المخصص (بالإنجليزي مثلاً: sauce)');
+      if (!k) return;
+      c.items.forEach(function (it) { it[k] = ''; });
+      c.__custom = c.__custom || [];
+      c.__custom.push(k);
+      markDirty(); renderCatalog();
+    };
+  }
+
+  /* ═══════════ 9) الصور ═══════════ */
+  function renderImages() {
+    var g = $('#imgsGallery');
+    if (!images.length) {
+      g.innerHTML = '<div class="it-empty">مفيش صور — ارفع صورة عشان تبدأ</div>';
+      return;
+    }
+    g.innerHTML = images.map(function (im, i) {
+      return '<div class="img-card' + (selImg === im.path ? ' sel' : '') + '" data-i="' + i + '">' +
+        '<img src="' + esc(im.path) + '" alt="" loading="lazy">' +
+        (im.dim ? '<span class="img-dim">' + esc(im.dim) + '</span>' : '') +
+        '<div class="img-meta"><b>' + esc(im.name) + '</b><small>' + esc(im.path) + '</small></div>' +
+      '</div>';
+    }).join('');
+    g.querySelectorAll('.img-card').forEach(function (c) {
+      c.onclick = function () {
+        var im = images[+c.dataset.i];
+        selImg = im.path;
+        renderImages();
+        $('#lbImg').src = im.path;
+        $('#lbCap').textContent = im.name + ' — ' + im.path + (im.dim ? ' — ' + im.dim : '');
+        $('#lightbox').hidden = false;
+      };
+    });
+  }
+
+  $('#delImg').onclick = function () {
+    if (!selImg) return toast('❌ اختار صورة الأول', 'err');
+    confirmBox('حذف الصورة', 'حذف «' + selImg + '»؟')(
+      function () {
+        images = images.filter(function (x) { return x.path !== selImg; });
+        selImg = null;
+        markDirty(); renderImages();
+      });
+  };
+
+  $('#lbClose').onclick = function () { $('#lightbox').hidden = true; };
+  $('#lightbox').onclick = function (e) { if (e.target.id === 'lightbox') $('#lightbox').hidden = true; };
+
+  // رفع صورة
+  var zone = $('#uploadZone');
+  zone.onclick = function () { $('#fileInput').click(); };
+  zone.ondragover = function (e) { e.preventDefault(); zone.classList.add('drag'); };
+  zone.ondragleave = function () { zone.classList.remove('drag'); };
+  zone.ondrop = function (e) {
+    e.preventDefault(); zone.classList.remove('drag');
+    if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+  };
+  $('#fileInput').onchange = function () { if (this.files[0]) handleFile(this.files[0]); };
+
+  function handleFile(file) {
+    if (!/^image\//.test(file.type)) return toast('❌ الملف ده مش صورة', 'err');
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      var img = new Image();
+      img.onload = function () {
+        var w = img.width, h = img.height;
+        var ratio = (w / h).toFixed(2);
+        var ideal = ratio > 1.2 && ratio < 1.5 ? '✅ النسبة قريبة من 4:3'
+          : (w < 400 ? '⚠️ العرض صغير — يفضل 400 بكسل على الأقل'
+          : (w > 1600 ? '⚠️ العرض كبير — يفضل أقل من 1200 بكسل'
+          : '✅ حجم مناسب'));
+        var path = 'assets/upload/' + file.name.replace(/[^\w.\-]/g, '_');
+        images.push({ path: path, name: file.name, dim: w + '×' + h, dataUrl: e.target.result });
+        selImg = path;
+        markDirty();
+        $('#upPreview').hidden = false;
+        $('#upPreview').innerHTML =
+          '<div class="up-preview-box">' +
+            '<img src="' + esc(e.target.result) + '" alt="">' +
+            '<div><b>' + esc(file.name) + '</b><br>' +
+            '<small style="color:var(--muted)">المقاس: <b style="color:var(--orange)">' + w + '×' + h + '</b> بكسل · النسبة ' + ratio + '</small><br>' +
+            '<small style="color:' + (ideal.startsWith('✅') ? 'var(--green)' : 'var(--orange)') + '">' + ideal + '</small></div>' +
+          '</div>';
+        renderImages();
+        toast('✅ اتضافت الصورة: ' + file.name, 'ok');
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // منتقي الصور
+  function openPicker(cb) {
+    var wrap = document.createElement('div');
+    wrap.className = 'modal';
+    wrap.innerHTML = '<div class="modal-card" style="width:min(760px,100%)">' +
+      '<h3>اختار صورة</h3>' +
+      '<div class="imgs-gallery" style="max-height:60vh;overflow:auto">' +
+      images.map(function (im) {
+        return '<div class="img-card" data-p="' + esc(im.path) + '">' +
+          '<img src="' + esc(im.dataUrl || im.path) + '" alt="">' +
+          '<div class="img-meta"><b>' + esc(im.name) + '</b></div></div>';
+      }).join('') + '</div>' +
+      '<div class="modal-actions" style="margin-top:16px"><button class="btn ghost" data-cancel>إلغاء</button></div>' +
+      '</div>';
+    document.body.appendChild(wrap);
+    wrap.querySelectorAll('[data-p]').forEach(function (c) {
+      c.onclick = function () { cb(c.dataset.p); wrap.remove(); };
+    });
+    wrap.querySelector('[data-cancel]').onclick = function () { wrap.remove(); };
+    wrap.onclick = function (e) { if (e.target === wrap) wrap.remove(); };
+  }
+
+  /* ═══════════ 10) النصوص ═══════════ */
+  var TEXT_MAP = [
+    { grp: 'الهوية', fields: [
+      { path: 'content.brand.name', l: 'اسم المطعم' },
+      { path: 'content.brand.name2', l: 'اسم المطعم (الجزء الملوّن)' },
+      { path: 'content.brand.english', l: 'الاسم بالإنجليزي' },
+      { path: 'content.brand.logoEmoji', l: 'إيموجي اللوجو' },
+      { path: 'content.brand.tagline', l: 'الشعار النصي' }
+    ]},
+    { grp: 'الصفحة الرئيسية', fields: [
+      { path: 'content.hero.eyebrow', l: 'العنوان الصغير فوق' },
+      { path: 'content.hero.title1', l: 'العنوان — السطر 1' },
+      { path: 'content.hero.title2', l: 'العنوان — السطر 2' },
+      { path: 'content.hero.desc', l: 'الوصف', ta: 1 },
+      { path: 'content.hero.cta', l: 'زر «شوف القائمة»' },
+      { path: 'content.hero.cta2', l: 'زر «قائمة الأكل» في الترويسة' }
+    ]},
+    { grp: 'أقسام الرئيسية', fields: [
+      { path: 'content.home.sectionsTitle', l: 'عنوان قسم «أقسامنا»' },
+      { path: 'content.home.sectionsSub', l: 'وصف قسم «أقسامنا»' }
+    ]},
+    { grp: 'صفحة القائمة', fields: [
+      { path: 'content.menu.eyebrow', l: 'العنوان الصغير' },
+      { path: 'content.menu.title', l: 'العنوان' },
+      { path: 'content.menu.titleHl', l: 'العنوان الملوّن' },
+      { path: 'content.menu.crumb', l: 'مسار التنقل' },
+      { path: 'content.menu.desc', l: 'الوصف', ta: 1 }
+    ]},
+    { grp: 'صفحة المنتج', fields: [
+      { path: 'content.product.builderTitle', l: 'عنوان صندوق الطلب' },
+      { path: 'content.product.hint', l: 'التلميح' },
+      { path: 'content.product.sizeLabel', l: 'عنوان الأحجام' },
+      { path: 'content.product.sizeRequired', l: 'كلمة «مطلوب»' },
+      { path: 'content.product.extrasLabel', l: 'عنوان الإضافات' },
+      { path: 'content.product.extrasRequired', l: 'كلمة «اختياري»' },
+      { path: 'content.product.notesLabel', l: 'عنوان الملاحظات' },
+      { path: 'content.product.notesPlaceholder', l: 'نص حقل الملاحظات' },
+      { path: 'content.product.qtyLabel', l: 'عنوان الكمية' },
+      { path: 'content.product.sumItem', l: 'سطر الملخص: سعر الأكلة' },
+      { path: 'content.product.sumExtras', l: 'سطر الملخص: الإضافات' },
+      { path: 'content.product.sumTotal', l: 'سطر الملخص: الإجمالي' },
+      { path: 'content.product.footer', l: 'نص الفوتر' }
+    ]},
+    { grp: 'خطوات الطلب', fields: [
+      { path: 'content.home.steps.0', l: 'الخطوة 1' },
+      { path: 'content.home.steps.1', l: 'الخطوة 2' },
+      { path: 'content.home.steps.2', l: 'الخطوة 3' },
+      { path: 'content.home.steps.3', l: 'الخطوة 4' }
+    ]}
+  ];
+
+  function getPath(o, path) {
+    return path.split('.').reduce(function (a, k) { return a == null ? a : a[k]; }, o);
+  }
+  function setPath(o, path, v) {
+    var ks = path.split('.'), last = ks.pop();
+    var t = ks.reduce(function (a, k) { return a[k] = a[k] || {}; }, o);
+    t[last] = v;
+  }
+
+  function renderContent() {
+    $('#contentEditor').innerHTML = TEXT_MAP.map(function (g) {
+      return '<div class="ce-group"><h4>📝 ' + esc(g.grp) + '</h4>' +
+        g.fields.map(function (f) {
+          var v = getPath(data, f.path);
+          return '<label class="fld"><span>' + esc(f.l) + '</span>' +
+            (f.ta
+              ? '<textarea class="inp" data-p="' + esc(f.path) + '">' + esc(v) + '</textarea>'
+              : '<input class="inp" data-p="' + esc(f.path) + '" value="' + esc(v) + '">') +
+            '</label>';
+        }).join('') + '</div>';
+    }).join('');
+    $('#contentEditor').querySelectorAll('[data-p]').forEach(function (el) {
+      el.oninput = function () { setPath(data, el.dataset.p, el.value); markDirty(); };
+    });
+  }
+
+  /* ═══════════ 11) بيانات المطعم ═══════════ */
+  function renderInfo() {
+    var r = data.restaurant;
+    $('#infoEditor').innerHTML =
+      '<div class="ce-group"><h4>📞 بيانات المطعم</h4>' +
+        '<div class="ce-2">' +
+          '<label class="fld"><span>اسم المطعم</span><input class="inp" data-p="name" value="' + esc(r.name) + '"></label>' +
+          '<label class="fld"><span>الاسم بالإنجليزي</span><input class="inp" data-p="english" value="' + esc(r.english) + '"></label>' +
+        '</div>' +
+        '<label class="fld"><span>رقم واتساب (<code>201004388613</code>)</span><input class="inp" data-p="whatsapp" value="' + esc(r.whatsapp) + '"></label>' +
+        '<label class="fld"><span>العنوان</span><input class="inp" data-p="address" value="' + esc(r.address) + '"></label>' +
+        '<label class="fld"><span>صفحة الفيسبوك</span><input class="inp" data-p="facebook" value="' + esc(r.facebook) + '"></label>' +
+        '<label class="fld"><span>أرقام الحجز (افصل بينهم بفاصلة)</span><input class="inp" id="phones" value="' + esc(r.phones.join(', ')) + '"></label>' +
+      '</div>';
+    $('#infoEditor').querySelectorAll('[data-p]').forEach(function (el) {
+      el.oninput = function () { data.restaurant[el.dataset.p] = el.value; markDirty(); };
+    });
+    $('#phones').oninput = function () {
+      data.restaurant.phones = this.value.split(/[,،]/).map(function (s) { return s.trim(); }).filter(Boolean);
+      markDirty();
+    };
+  }
+
+  /* ═══════════ 12) تكبير وتصغير النصوص ═══════════ */
+  var SCALE_TARGETS = [
+    { k: 'base', l: 'حجم الخط الأساسي', d: 'كل النصوص العادية', min: 80, max: 130 },
+    { k: 'hero', l: 'عنوان البطل (Hero)', d: 'الكلام الكبير فوق «عايز تاكل إيه»', min: 70, max: 150 },
+    { k: 'sectionTitle', l: 'عناوين الأقسام', d: 'زي «اختار القسم اللي يعجبك»', min: 70, max: 150 },
+    { k: 'menuTitle', l: 'عناوين البطاقات', d: 'أسماء الأصناف في القايمة', min: 75, max: 140 },
+    { k: 'price', l: 'الأسعار', d: 'أرقام الأسعار في القايمة', min: 75, max: 150 },
+    { k: 'btn', l: 'الأزرار', d: 'حجم نص الأزرار', min: 75, max: 140 },
+    { k: 'desc', l: 'الأوصاف', d: 'النصوص التوضيحية', min: 80, max: 130 }
+  ];
+
+  function renderScale() {
+    $('#scaleBox').innerHTML =
+      SCALE_TARGETS.map(function (t) {
+        var v = scale[t.k] || 100;
+        return '<div class="scale-row">' +
+          '<label>' + esc(t.l) + '<small>' + esc(t.d) + '</small></label>' +
+          '<input type="range" data-s="' + t.k + '" min="' + t.min + '" max="' + t.max + '" value="' + v + '">' +
+          '<div class="scale-val" data-v="' + t.k + '">' + v + '%</div>' +
+        '</div>';
+      }).join('') +
+      '<div class="scale-preview">' +
+        '<div style="font-size:' + (scale.base || 100) / 100 + 'em">النص الأساسي — وده بيكبر ويصغر</div>' +
+        '<div style="font-size:' + (scale.hero || 100) / 100 + 'em;font-weight:900;color:var(--red);margin-top:9px">عنوان كبير</div>' +
+        '<div style="font-size:' + (scale.price || 100) / 100 + 'em;color:var(--orange);font-weight:800;margin-top:9px">120 ج.م</div>' +
+      '</div>' +
+      '<div class="panel-foot"><button class="btn ghost" id="scaleReset">↺ رجّع الافتراضي</button></div>';
+
+    $('#scaleBox').querySelectorAll('[data-s]').forEach(function (r) {
+      r.oninput = function () {
+        scale[r.dataset.s] = +r.value;
+        $('#scaleBox').querySelector('[data-v="' + r.dataset.s + '"]').textContent = r.value + '%';
+        applyScale();
+        markDirty();
+      };
+    });
+    $('#scaleReset').onclick = function () {
+      scale = {};
+      applyScale(); markDirty(); renderScale();
+    };
+  }
+
+  function applyScale() {
+    var s = scale || {};
+    var set = function (sel, prop, key, def) {
+      var v = s[key] || def;
+      $$(sel).forEach(function (el) { el.style[prop] = (v / 100) + 'em'; });
+    };
+    document.documentElement.style.setProperty('--sc-base', (s.base || 100) / 100);
+    document.documentElement.style.setProperty('--sc-hero', (s.hero || 100) / 100);
+    document.documentElement.style.setProperty('--sc-sectionTitle', (s.sectionTitle || 100) / 100);
+    document.documentElement.style.setProperty('--sc-menuTitle', (s.menuTitle || 100) / 100);
+    document.documentElement.style.setProperty('--sc-price', (s.price || 100) / 100);
+    document.documentElement.style.setProperty('--sc-btn', (s.btn || 100) / 100);
+    document.documentElement.style.setProperty('--sc-desc', (s.desc || 100) / 100);
+  }
+
+  /* ═══════════ 13) استيراد / تصدير ═══════════ */
+  $('#btnExport').onclick = function () {
+    var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'crepe-el-hana-data.json';
+    a.click();
+    toast('⬇ اتصدّر الملف', 'ok');
+  };
+
+  $('#btnImport').onclick = function () {
+    var inp = document.createElement('input');
+    inp.type = 'file'; inp.accept = 'application/json';
+    inp.onchange = function () {
+      var f = inp.files[0]; if (!f) return;
+      var r = new FileReader();
+      r.onload = function (e) {
+        try {
+          data = JSON.parse(e.target.result);
+          markDirty(); renderAll(); saveData();
+          toast('✅ اتستورد الملف', 'ok');
+        } catch (err) { toast('❌ ملف غير صالح', 'err'); }
+      };
+      r.readAsText(f);
+    };
+    inp.click();
+  };
+
+  $('#btnSave').onclick = function () { saveData(); };
+  $('#btnLogout').onclick = function () {
+    if (dirty) {
+      confirmBox('فيه تعديلات مش متحفوظة', 'تحب تحفظها الأول؟')(
+        function () { saveData(true); location.reload(); },
+        function () { location.reload(); });
+    } else location.reload();
+  };
+
+  /* ═══════════ 14) تأكيد + توست ═══════════ */
+  function confirmBox(title, msg) {
+    $('#confirmTitle').textContent = title;
+    $('#confirmMsg').textContent = msg;
+    $('#confirm').hidden = false;
+    return function (yes, no) {
+      $('#confirmYes').onclick = function () { $('#confirm').hidden = true; if (yes) yes(); };
+      $('#confirmNo').onclick = function () { $('#confirm').hidden = true; if (no) no(); };
+    };
+  }
+
+  function toast(msg, kind) {
+    var t = $('#toast');
+    t.textContent = msg;
+    t.className = 'toast ' + (kind || '');
+    t.hidden = false;
+    clearTimeout(t._tm);
+    t._tm = setTimeout(function () { t.hidden = true; }, 2600);
+  }
+
+  /* ═══════════ 15) الاختصارات ═══════════ */
+  document.addEventListener('keydown', function (e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveData(); }
+  });
+  window.addEventListener('beforeunload', function (e) {
+    if (dirty) { e.preventDefault(); e.returnValue = ''; }
+  });
+
+  initLogin();
+})();
