@@ -142,6 +142,9 @@
       window.__RESTAURANT_OVERRIDE = saved.restaurant;
       window.__CATALOG_OVERRIDE = saved.catalog;
     }
+    if (saved.sizeKeys) window.__SIZEKEYS_OVERRIDE = saved.sizeKeys;
+    if (saved.extras) window.__EXTRAS_OVERRIDE = saved.extras;
+    if (saved._images) window.__IMAGES_MANIFEST = saved._images;
     applyContent(saved.content);
 
     if (saved.restaurant) {
@@ -156,6 +159,9 @@
         window.__CONTENT_OVERRIDE = d.content;
         window.__RESTAURANT_OVERRIDE = d.restaurant;
         window.__CATALOG_OVERRIDE = d.catalog;
+        window.__SIZEKEYS_OVERRIDE = d.sizeKeys;
+        window.__EXTRAS_OVERRIDE = d.extras;
+        window.__IMAGES_MANIFEST = d._images;
         applyContent(d.content);
         if (window.__reapplyData) window.__reapplyData();
       })

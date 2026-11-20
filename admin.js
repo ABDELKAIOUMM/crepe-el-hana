@@ -108,7 +108,7 @@
     renderTabs();
     renderSections();
     renderMenu();
-    renderCatalog();
+    renderExtras();
     renderImages();
     renderContent();
     renderInfo();
@@ -124,7 +124,7 @@
     var onOpen = {
       sections: renderSections,
       items: renderMenu,
-      catalog: renderCatalog,
+      extras: renderExtras,
       images: renderImages,
       content: renderContent,
       info: renderInfo
@@ -394,124 +394,56 @@
       });
   };
 
-  /* ═══════════ 8) Catalog — صفحات المنتجات ═══════════ */
-  function renderCatalog() {
-    var cats = Object.keys(data.catalog);
-    $('#catTabs').innerHTML = cats.map(function (k) {
+  /* ═══════════ 8) الإضافات — extras ═══════════ */
+  function renderExtras() {
+    var cats = Object.keys(data.extras || {});
+    if (!cats.length) { $('#extrasEditor').innerHTML = '<div class="it-empty">مفيش إضافات</div>'; return; }
+
+    var tabs = cats.map(function (k) {
+      var m = data.menu.find(function (x) { return x.key === k; });
       return '<button class="subtab' + (k === curCat ? ' active' : '') + '" data-k="' + esc(k) + '">' +
-        esc(data.catalog[k].title) + '</button>';
+        esc(m ? m.title : k) + '</button>';
     }).join('');
-    $('#catTabs').querySelectorAll('.subtab').forEach(function (b) {
-      b.onclick = function () { curCat = b.dataset.k; renderCatalog(); };
+
+    var list = (data.extras[curCat] || []).map(function (e, i) {
+      return '<div class="cat-item ex-item">' +
+        '<div class="ci-main"><b>' + esc(e.name) + '</b></div>' +
+        '<div class="cat-prices"><span class="chip">💰 <input class="inp sm" data-ep="price" data-i="' + i + '" type="number" min="0" value="' + e.price + '"> ج.م</span></div>' +
+        '<input class="inp sm" data-ep="name" data-i="' + i + '" value="' + esc(e.name) + '">' +
+        '<button class="it-del" data-exdel="' + i + '">✕</button>' +
+      '</div>';
+    }).join('');
+
+    $('#extrasEditor').innerHTML =
+      '<div class="cat-tabs" id="exTabs">' + tabs + '</div>' +
+      '<div class="cat-editor"><h4 style="font-size:15px;color:var(--orange);margin-bottom:10px">إضافات قسم: ' +
+        esc((data.menu.find(function (x) { return x.key === curCat; }) || {}).title || curCat) +
+      '</h4>' +
+      '<div class="cat-list">' + (list || '<div class="it-empty">مفيش إضافات</div>') + '</div>' +
+      '<div class="panel-foot"><button class="btn ghost" id="addExtra">+ إضافة جديدة</button></div>' +
+      '</div>';
+
+    $('#exTabs').querySelectorAll('.subtab').forEach(function (b) {
+      b.onclick = function () { curCat = b.dataset.k; renderExtras(); };
     });
 
-    var c = data.catalog[curCat];
-    if (!c) { $('#catEditor').innerHTML = ''; return; }
-
-    var list = c.items.map(function (it, i) {
-      return '<div class="cat-item">' +
-        '<img src="' + esc(it.img || 'assets/webp/hero-pizza.webp') + '" alt="" loading="lazy" data-catimg="' + i + '">' +
-        '<div class="ci-main">' +
-          '<b>' + esc(it.name) + '</b>' +
-          '<span>' + esc(it.desc || '') + '</span>' +
-          '<div class="cat-prices">' +
-            '<span class="chip">🏷️ ' + esc(it.tag || '—') + '</span>' +
-            '<span class="chip">💰 <input class="inp sm" data-p="price" data-i="' + i + '" type="number" min="0" value="' + it.price + '"> ج.م</span>' +
-          '</div>' +
-        '</div>' +
-        '<input class="inp sm" data-p="name" data-i="' + i + '" value="' + esc(it.name) + '">' +
-        '<div class="cat-img-ctl">' +
-          imgField(it.img || '', 'data-cimg-i="' + i + '"') +
-          imgUploadBtn('data-cimgup-i="' + i + '"') +
-        '</div>' +
-        '<button class="it-del" data-cdel="' + i + '">✕</button>' +
-      '</div>';
-    }).join('');
-
-    $('#catEditor').innerHTML =
-      '<div class="cat-editor">' +
-        '<div class="ce-2">' +
-          '<label class="fld"><span>عنوان القسم</span><input class="inp" id="cTitle" value="' + esc(c.title) + '"></label>' +
-          '<label class="fld"><span>العنوان في المسار</span><input class="inp" id="cCrumb" value="' + esc(c.crumb) + '"></label>' +
-        '</div>' +
-        '<label class="fld"><span>العنوان الفرعي</span><input class="inp" id="cEyebrow" value="' + esc(c.eyebrow || '') + '"></label>' +
-        '<label class="fld"><span>الوصف</span><textarea class="inp" id="cIntro">' + esc(c.intro || '') + '</textarea></label>' +
-        '<h4 style="margin-top:18px;font-size:15px;color:var(--orange)">الأصناف (' + c.items.length + ')</h4>' +
-        '<div class="cat-list">' + (list || '<div class="it-empty">مفيش أصناف</div>') + '</div>' +
-        '<div class="panel-foot">' +
-          '<button class="btn ghost" id="addCatItem">+ صنف جديد</button>' +
-          '<button class="btn ghost" id="addCatField">+ حقل مخصص</button>' +
-        '</div>' +
-      '</div>';
-
-    var bind = function (sel, fn) { var el = $(sel); if (el) el.oninput = fn; };
-    bind('#cTitle', function () { c.title = this.value; markDirty(); });
-    bind('#cCrumb', function () { c.crumb = this.value; markDirty(); });
-    bind('#cEyebrow', function () { c.eyebrow = this.value; markDirty(); });
-    bind('#cIntro', function () { c.intro = this.value; markDirty(); });
-
-    $('#catEditor').querySelectorAll('[data-p]').forEach(function (inp) {
+    $('#extrasEditor').querySelectorAll('[data-ep]').forEach(function (inp) {
       inp.oninput = function () {
-        var i = +inp.dataset.i, p = inp.dataset.p;
-        c.items[i][p] = (p === 'price') ? +inp.value : inp.value;
+        var i = +inp.dataset.i, p = inp.dataset.ep;
+        data.extras[curCat][i][p] = (p === 'price') ? +inp.value : inp.value;
         markDirty();
       };
     });
-    // منتقي صورة catalog
-    $('#catEditor').querySelectorAll('[data-cimg-i]').forEach(function (sel) {
-      sel.onchange = function () {
-        var i = +sel.dataset.cimgI;
-        c.items[i].img = sel.value;
-        markDirty();
-        renderCatalog();
-      };
-    });
-    // رفع صورة catalog
-    $('#catEditor').querySelectorAll('[data-cimgup-i]').forEach(function (b) {
+    $('#extrasEditor').querySelectorAll('[data-exdel]').forEach(function (b) {
       b.onclick = function () {
-        var i = +b.dataset.cimgupI;
-        var inp = document.createElement('input');
-        inp.type = 'file';
-        inp.accept = 'image/*';
-        inp.onchange = function () {
-          var f = inp.files[0];
-          if (!f) return;
-          var rd = new FileReader();
-          rd.onload = function (e) {
-            var path = 'assets/upload/' + String(f.name).replace(/[^\w.\-]/g, '_');
-            images.push({ path: path, name: f.name, dataUrl: e.target.result });
-            c.items[i].img = path;
-            markDirty();
-            renderCatalog();
-            toast('✅ اتحدّثت صورة المنتج', 'ok');
-          };
-          rd.readAsDataURL(f);
-        };
-        inp.click();
+        var i = +b.dataset.exdel;
+        confirmBox('حذف الإضافة', 'حذف «' + data.extras[curCat][i].name + '»؟')(
+          function () { data.extras[curCat].splice(i, 1); markDirty(); renderExtras(); });
       };
     });
-
-    $('#catEditor').querySelectorAll('[data-cdel]').forEach(function (b) {
-      b.onclick = function () {
-        var i = +b.dataset.cdel;
-        confirmBox('حذف الصنف', 'حذف «' + c.items[i].name + '»؟')(
-          function () { c.items.splice(i, 1); markDirty(); renderCatalog(); });
-      };
-    });
-    $('#addCatItem').onclick = function () {
-      c.items.push({
-        id: 'item' + Date.now(), name: 'صنف جديد', price: 0,
-        img: 'assets/webp/hero-pizza.webp', tag: 'جديد', desc: 'وصف الصنف'
-      });
-      markDirty(); renderCatalog();
-    };
-    $('#addCatField').onclick = function () {
-      var k = prompt('اسم الحقل المخصص (بالإنجليزي مثلاً: sauce)');
-      if (!k) return;
-      c.items.forEach(function (it) { it[k] = ''; });
-      c.__custom = c.__custom || [];
-      c.__custom.push(k);
-      markDirty(); renderCatalog();
+    $('#addExtra').onclick = function () {
+      data.extras[curCat].push({ name: 'إضافة جديدة', price: 0 });
+      markDirty(); renderExtras();
     };
   }
 
