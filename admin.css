@@ -171,7 +171,7 @@ textarea.inp{min-height:78px;resize:vertical;line-height:1.6}
 .it-row{
   display:grid;gap:9px;align-items:center;padding:10px 13px;
   border-bottom:1px solid #ffffff0a;
-  grid-template-columns:minmax(150px,2.4fr) repeat(3,minmax(72px,1fr)) 40px;
+  grid-template-columns:minmax(150px,2.2fr) repeat(3,minmax(70px,1fr)) minmax(170px,1.5fr) 40px;
 }
 .it-row:last-child{border-bottom:0}
 .it-row.head{
@@ -351,10 +351,12 @@ textarea.inp{min-height:78px;resize:vertical;line-height:1.6}
   /* اسم الصنف فوق، والأسعار 3 أعمدة متساوية + زر حذف في صف واحد */
   .it-row{grid-template-columns:1fr 1fr 1fr 34px;gap:6px;padding:10px}
   .it-row .nm{grid-column:1/-1;grid-row:1}
-  .it-row>div:not(.nm){grid-row:2}
+  .it-row>div:not(.nm):not(.it-img-cell){grid-row:2}
+  .it-row .it-img-cell{grid-column:1/-1;grid-row:3;margin-top:4px}
   .it-row .it-del{grid-row:2;align-self:center;justify-self:center}
   .it-row .inp.num{width:100%;min-width:0;text-align:center;padding:8px 4px}
   .it-head{font-size:11px}
+  .it-row.head>div:nth-last-child(2){display:none}
   .scale-row{grid-template-columns:1fr;gap:8px}
   .dims{grid-template-columns:1fr 1fr}
   .tb-actions .btn{padding:7px 10px;font-size:12px}
@@ -363,4 +365,23 @@ textarea.inp{min-height:78px;resize:vertical;line-height:1.6}
   .it-row{grid-template-columns:1fr 1fr 38px}
   .dims{grid-template-columns:1fr}
   .tb-actions .btn span{display:none}
+}
+
+/* ═══════════ منتقي صورة للمنتج ═══════════ */
+.it-img-cell{display:flex;align-items:center;gap:7px;min-width:0}
+.it-img-cell .img-sel{flex:1;min-width:0;max-width:none;width:100%}
+.it-img-cell .img-up{flex-shrink:0;padding:7px 9px;font-size:12px}
+.it-thumb{width:44px;height:44px;object-fit:cover;border-radius:9px;border:1px solid var(--line);
+          background:#0d0b09;flex-shrink:0;cursor:pointer;transition:.15s}
+.it-thumb:hover{border-color:var(--orange);transform:scale(1.06)}
+.it-thumb-empty{display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--muted)}
+.img-sel{max-width:150px;font-size:12px;padding:6px 8px}
+.img-up{padding:6px 10px;font-size:12px;white-space:nowrap}
+.cat-img-ctl{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.cat-img-ctl .img-sel{max-width:160px}
+
+@media(max-width:860px){
+  .it-img-cell{grid-column:1/-1}
+  .img-sel{flex:1;max-width:none}
+  .it-row.head div:nth-last-child(2){display:none}
 }

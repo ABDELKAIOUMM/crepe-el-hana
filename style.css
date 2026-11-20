@@ -353,3 +353,20 @@ body{font-size:calc(15px * var(--sc-base))}
   .page-head h1{font-size:calc(42px * var(--sc-sectionTitle))}
   .product-showcase h1{font-size:calc(36px * var(--sc-menuTitle))}
 }
+
+/* ═══════════ صورة المنتج في صفحة القائمة ═══════════ */
+.mi-thumb{display:inline-block;width:42px;height:42px;border-radius:11px;overflow:hidden;
+          vertical-align:middle;margin-inline-end:10px;background:#171412;border:1px solid var(--line);
+          flex-shrink:0}
+.mi-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+td.pz-name{white-space:nowrap}
+td.pz-name b{vertical-align:middle}
+
+.card-img{display:block;width:100%;aspect-ratio:4/3;overflow:hidden;margin:-8px -8px 12px;
+          border-radius:14px 14px 0 0;background:#171412}
+.card-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .45s ease}
+.menu-card:hover .card-img img{transform:scale(1.06)}
+
+@media(max-width:560px){
+  .mi-thumb{width:34px;height:34px;border-radius:9px;margin-inline-end:8px}
+}

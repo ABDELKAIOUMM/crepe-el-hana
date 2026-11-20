@@ -120,11 +120,22 @@
 
   /* ═══════════ 5) التبويبات ═══════════ */
   function renderTabs() {
+    // كل تبويب يرسم نفسه لما تفتحه — عشان التعديلات تظهر فوراً
+    var onOpen = {
+      sections: renderSections,
+      items: renderMenu,
+      catalog: renderCatalog,
+      images: renderImages,
+      content: renderContent,
+      info: renderInfo
+    };
     $$('#tabs .tb-tab').forEach(function (b) {
       b.onclick = function () {
         $$('#tabs .tb-tab').forEach(function (x) { x.classList.remove('active'); });
         b.classList.add('active');
         $$('.panel').forEach(function (p) { p.hidden = p.dataset.panel !== b.dataset.tab; });
+        var fn = onOpen[b.dataset.tab];
+        if (fn) { try { fn(); } catch (e) { console.error('render ' + b.dataset.tab, e); } }
         window.scrollTo({ top: 0, behavior: 'smooth' });
       };
     });
@@ -208,6 +219,37 @@
     return sk[label] || label;
   }
 
+
+  /* ═══════════ منتقي صورة للمنتج ═══════════ */
+  /* بنبني dropdown اختيار من الصور المتاحة */
+  function imgOptions(cur) {
+    var opts = ['<option value="">— بدون صورة —</option>'];
+    images.forEach(function (im) {
+      var sel = (im.path === cur) ? ' selected' : '';
+      opts.push('<option value="' + esc(im.path) + '"' + sel + '>' + esc(im.name || im.path) + '</option>');
+    });
+    return opts.join('');
+  }
+
+  /* حقل اختيار صورة جاهز (select) */
+  function imgField(cur, attr) {
+    return '<select class="inp sm img-sel" ' + attr + '>' + imgOptions(cur) + '</select>';
+  }
+
+  /* زر رفع صورة مباشرة للمنتج */
+  function imgUploadBtn(attr) {
+    return '<button type="button" class="btn ghost sm img-up" ' + attr + '>📤 رفع</button>';
+  }
+
+  /* لما نرفع صورة للمنتج: نضيفها للقائمة ونختارها */
+  function pickUploadedFor(target, dataUrl, name) {
+    var path = 'assets/upload/' + String(name).replace(/[^\w.\-]/g, '_');
+    images.push({ path: path, name: name, dataUrl: dataUrl });
+    target.value = path;
+    markDirty();
+    toast('✅ اتحدّثت صورة المنتج', 'ok');
+  }
+
   /* ═══════════ 7) الأصناف والأسعار ═══════════ */
   function renderMenu() {
     var tabs = $('#menuTabs');
@@ -235,7 +277,7 @@
 
     var head = '<div class="it-row head"><div>اسم الصنف</div>' +
       cols.map(function (c) { return '<div>' + esc(c) + '</div>'; }).join('') +
-      '<div></div></div>';
+      '<div>الصورة</div><div></div></div>';
 
     var rows = m.items.map(function (it, i) {
       var inputs = cols.map(function (c) {
@@ -244,9 +286,19 @@
         return '<div><input class="inp num" data-c="' + esc(c) + '" data-k="' + esc(k) + '" data-i="' + i + '" type="number" min="0" step="1" value="' +
           (v == null ? '' : v) + '"></div>';
       }).join('');
+
+      // عمود الصورة: معاينة + اختيار + رفع
+      var thumb = it.img
+        ? '<img class="it-thumb" src="' + esc(it.img) + '" alt="">'
+        : '<span class="it-thumb it-thumb-empty">📷</span>';
+      var imgCell = '<div class="it-img-cell">' + thumb +
+        imgField(it.img || '', 'data-img-i="' + i + '"') +
+        imgUploadBtn('data-imgup-i="' + i + '"') +
+        '</div>';
       return '<div class="it-row">' +
         '<div class="nm"><input class="inp" data-c="name" data-i="' + i + '" value="' + esc(it.name) + '"></div>' +
         inputs +
+        imgCell +
         '<div><button class="it-del" data-del="' + i + '" title="حذف">✕</button></div>' +
       '</div>';
     }).join('');
@@ -262,6 +314,42 @@
         markDirty();
       };
     });
+    // منتقي صورة الصنف (menu)
+    $('#itemsTable').querySelectorAll('[data-img-i]').forEach(function (sel) {
+      sel.onchange = function () {
+        var i = +sel.dataset.imgI;
+        m.items[i].img = sel.value;
+        if (!sel.value) delete m.items[i].img;
+        markDirty();
+        renderMenu();
+      };
+    });
+    // رفع صورة للصنف (menu)
+    $('#itemsTable').querySelectorAll('[data-imgup-i]').forEach(function (b) {
+      b.onclick = function () {
+        var i = +b.dataset.imgupI;
+        var inp = document.createElement('input');
+        inp.type = 'file';
+        inp.accept = 'image/*';
+        inp.onchange = function () {
+          var f = inp.files[0];
+          if (!f) return;
+          var rd = new FileReader();
+          rd.onload = function (e) {
+            var path = 'assets/upload/' + String(f.name).replace(/[^\w.\-]/g, '_');
+            images.push({ path: path, name: f.name, dataUrl: e.target.result });
+            m.items[i].img = path;
+            markDirty();
+            renderMenu();
+            toast('✅ اتحدّثت صورة المنتج', 'ok');
+          };
+          rd.readAsDataURL(f);
+        };
+        inp.click();
+      };
+    });
+
+    // الحذف
     $('#itemsTable').querySelectorAll('[data-del]').forEach(function (b) {
       b.onclick = function () {
         var i = +b.dataset.del;
@@ -322,7 +410,7 @@
 
     var list = c.items.map(function (it, i) {
       return '<div class="cat-item">' +
-        '<img src="' + esc(it.img) + '" alt="" loading="lazy">' +
+        '<img src="' + esc(it.img || 'assets/webp/hero-pizza.webp') + '" alt="" loading="lazy" data-catimg="' + i + '">' +
         '<div class="ci-main">' +
           '<b>' + esc(it.name) + '</b>' +
           '<span>' + esc(it.desc || '') + '</span>' +
@@ -332,6 +420,10 @@
           '</div>' +
         '</div>' +
         '<input class="inp sm" data-p="name" data-i="' + i + '" value="' + esc(it.name) + '">' +
+        '<div class="cat-img-ctl">' +
+          imgField(it.img || '', 'data-cimg-i="' + i + '"') +
+          imgUploadBtn('data-cimgup-i="' + i + '"') +
+        '</div>' +
         '<button class="it-del" data-cdel="' + i + '">✕</button>' +
       '</div>';
     }).join('');
@@ -365,6 +457,40 @@
         markDirty();
       };
     });
+    // منتقي صورة catalog
+    $('#catEditor').querySelectorAll('[data-cimg-i]').forEach(function (sel) {
+      sel.onchange = function () {
+        var i = +sel.dataset.cimgI;
+        c.items[i].img = sel.value;
+        markDirty();
+        renderCatalog();
+      };
+    });
+    // رفع صورة catalog
+    $('#catEditor').querySelectorAll('[data-cimgup-i]').forEach(function (b) {
+      b.onclick = function () {
+        var i = +b.dataset.cimgupI;
+        var inp = document.createElement('input');
+        inp.type = 'file';
+        inp.accept = 'image/*';
+        inp.onchange = function () {
+          var f = inp.files[0];
+          if (!f) return;
+          var rd = new FileReader();
+          rd.onload = function (e) {
+            var path = 'assets/upload/' + String(f.name).replace(/[^\w.\-]/g, '_');
+            images.push({ path: path, name: f.name, dataUrl: e.target.result });
+            c.items[i].img = path;
+            markDirty();
+            renderCatalog();
+            toast('✅ اتحدّثت صورة المنتج', 'ok');
+          };
+          rd.readAsDataURL(f);
+        };
+        inp.click();
+      };
+    });
+
     $('#catEditor').querySelectorAll('[data-cdel]').forEach(function (b) {
       b.onclick = function () {
         var i = +b.dataset.cdel;
@@ -453,6 +579,7 @@
           : '✅ حجم مناسب'));
         var path = 'assets/upload/' + file.name.replace(/[^\w.\-]/g, '_');
         images.push({ path: path, name: file.name, dim: w + '×' + h, dataUrl: e.target.result });
+        data._images = images.slice();
         selImg = path;
         markDirty();
         $('#upPreview').hidden = false;
