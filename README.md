@@ -3,6 +3,14 @@
 موقع مطعم كريب الهنا: بيتزا، ساندوتشات سوري، باستا، كريب حلو ووافل.
 مبني بـ HTML/CSS/JS خالص — بدون أي مكتبات أو build step.
 
+## 🌐 الموقع الحيّ
+
+| | |
+|---|---|
+| **الموقع** | https://abdelkaioumm.github.io/crepe-el-hana/ |
+| **المستودع** | https://github.com/ABDELKAIOUMM/crepe-el-hana |
+| **لوحة التحكم** | https://abdelkaioumm.github.io/crepe-el-hana/admin.html — كلمة السر: `hana2026` |
+
 ## 🚀 التشغيل
 
 الموقع ثابت (Static) — أي استضافة ملفات هتشتغل. للنشر على GitHub Pages:
