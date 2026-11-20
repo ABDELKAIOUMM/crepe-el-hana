@@ -281,14 +281,14 @@
   /* ============================================================
      7) زر + بجانب كل سعر
      ============================================================ */
-  function injectAddButtons() {
+  window.injectAddButtons=function injectAddButtons() {
     // أزرار الأسعار في البيتزا
     document.querySelectorAll('.menu-table tbody td[data-label]:not(.pz-name)').forEach(td => {
       if (td.querySelector('.wa-add')) return;
       const pill = td.querySelector('.price-pill');
       if (!pill) return;
       const row = td.closest('tr');
-      const nameEl = row ? row.querySelector('.pz-name b') : null;
+      const nameEl = row ? row.querySelector('.pz-name .mi-name, .pz-name b') : null;
       const name = nameEl ? nameEl.textContent : '';
       const size = td.dataset.label;
       const price = (pill.textContent.match(/\d+/) || ['0'])[0];

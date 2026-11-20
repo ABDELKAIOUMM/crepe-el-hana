@@ -32,7 +32,7 @@
     <nav class="tb-tabs" id="tabs">
       <button class="tb-tab active" data-tab="sections"><span>📂</span>الأقسام</button>
       <button class="tb-tab" data-tab="items"><span>🍽️</span>الأصناف والأسعار</button>
-      <button class="tb-tab" data-tab="catalog"><span>🏷️</span>صفحات المنتجات</button>
+      <button class="tb-tab" data-tab="extras"><span>🧾</span>الإضافات</button>
       <button class="tb-tab" data-tab="images"><span>🖼️</span>الصور</button>
       <button class="tb-tab" data-tab="content"><span>✏️</span>النصوص</button>
       <button class="tb-tab" data-tab="info"><span>📞</span>بيانات المطعم</button>
@@ -85,13 +85,12 @@
     </section>
 
     <!-- ═══════ صفحات المنتجات ═══════ -->
-    <section class="panel" data-panel="catalog" hidden>
+    <section class="panel" data-panel="extras" hidden>
       <div class="panel-head">
-        <h2>صفحات المنتجات (Catalog)</h2>
-        <p>الأصناف اللي ليها صفحة تفصيلية: المقاسات، الإضافات، الوصف والصورة.</p>
+        <h2>🧾 الإضافات</h2>
+        <p>الإضافات اللي بتظهر في صفحة المنتج — لكل قسم قائمته. السعر بيتحسب مع سعر الأكلة.</p>
       </div>
-      <div class="subtabs" id="catTabs"></div>
-      <div id="catEditor"></div>
+      <div id="extrasEditor" class="content-editor"></div>
     </section>
 
     <!-- ═══════ الصور ═══════ -->
