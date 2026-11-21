@@ -338,7 +338,7 @@
 
     var html = '<button type="button" class="ip-cell ip-none' +
       (!cur ? ' sel' : '') + '" data-pick="">' +
-      '<span class="ip-th none">🖼️</span><span class="ip-name">بدون صورة</span></button>';
+      '<span class="ip-th none"><b class="ip-none-mark">Ø</b></span><span class="ip-name">بدون صورة</span></button>';
 
     list.forEach(function (o) {
       var im = o.im;
@@ -370,7 +370,7 @@
 
   /* معاينة الصورة الحالية */
   function currentPreview(cur) {
-    if (!cur) return '<span class="ip-th none">🖼️</span><span class="ip-name">بدون صورة</span>';
+    if (!cur) return '<span class="ip-th none"><b class="ip-none-mark">Ø</b></span><span class="ip-name">بدون صورة</span>';
     var im = null;
     for (var i = 0; i < images.length; i++) { if (images[i].path === cur) { im = images[i]; break; } }
     var src = im ? (im.dataUrl || im.path) : cur;
