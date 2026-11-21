@@ -351,6 +351,11 @@
         const price = (pill.querySelector('.pr-price')||pill).textContent.match(/\d+/);
         const item = { cat: cat, name: name, size: size, price: +(price ? price[0] : 0), qty: 1 };
 
+        /* مهم: الزر ممكن يتربط أكتر من مرة (لما injectAddButtons يتنادى تاني).
+           بدون الحارس ده، الضغطة الواحدة بتضيف الأكلة مرتين. */
+        if (btn.dataset.bound === '1') return;
+        btn.dataset.bound = '1';
+
         btn.addEventListener('click', e => {
           e.stopPropagation();
           addToCart(item, { silent: true });

@@ -135,21 +135,88 @@
       applyScale(sc);
     } catch (e) {}
 
-    // نعطّل الـ hardcoded ونستخدم المحفوظ
-    if (saved.menu) {
-      window.__MENU_OVERRIDE = saved.menu;
-      window.__CONTENT_OVERRIDE = saved.content;
-      window.__RESTAURANT_OVERRIDE = saved.restaurant;
-      window.__CATALOG_OVERRIDE = saved.catalog;
-    }
-    if (saved.sizeKeys) window.__SIZEKEYS_OVERRIDE = saved.sizeKeys;
-    if (saved.extras) window.__EXTRAS_OVERRIDE = saved.extras;
-    if (saved._images) window.__IMAGES_MANIFEST = saved._images;
-    applyContent(saved.content);
+    /* ══ ندمج المحفوظ فوق الأحدث (data.json) ══
+      原因: لو استبدلنا بالكامل، الحقول الجديدة (extras/sizeKeys/_images)
+       هتضيع خالص والمستخدم مش هيشوف أي تعديل جديد. */
+    fetch('data.json?v=' + Date.now())
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        var base = d || {};
 
-    if (saved.restaurant) {
-      try { window.__REST_OVERRIDE = saved.restaurant; } catch (e) {}
-    }
+        /* 1) قائمة الأصناف: item-wise merge
+              - اللي في المحفوظ (تعديل المستخدم) → يفضل
+              - اللي ناقص في المحفوظ但在 base → يتضاف */
+        var mergedMenu = base.menu ? JSON.parse(JSON.stringify(base.menu)) : [];
+        if (saved.menu && saved.menu.length) {
+          mergedMenu = mergedMenu.map(function (bm) {
+            var sm = null;
+            for (var i = 0; i < saved.menu.length; i++) {
+              if (saved.menu[i].key === bm.key) { sm = saved.menu[i]; break; }
+            }
+            if (!sm) return bm;   // القسم ده مش موجود في المحفوظ → خده من base
+            var out = JSON.parse(JSON.stringify(bm));
+            // كل صنف: لو موجود في المحفوظ → نأخذ تعديلاته، ونضيف أي حقل ناقص من base
+            out.items = bm.items.map(function (bi) {
+              var si = null;
+              for (var j = 0; j < (sm.items || []).length; j++) {
+                if ((sm.items[j].id && sm.items[j].id === bi.id) || sm.items[j].name === bi.name) {
+                  si = sm.items[j]; break;
+                }
+              }
+              if (!si) return bi;   // صنف جديد في base → خده
+              var merged = JSON.parse(JSON.stringify(bi));
+              // تعديلات المستخدم (الصورة/الاسم/الأسعار) هي اللي ليها الأولوية
+              for (var k in si) {
+                if (Object.prototype.hasOwnProperty.call(si, k)) merged[k] = si[k];
+              }
+              // بس لو المحفوظ كان قديم ومش فيه حقول جديدة (زي id) نكملها من base
+              if (!merged.id) merged.id = bi.id;
+              return merged;
+            });
+            // أصناف موجودة في المحفوظ ومش في base (المستخدم زاد صنف) → نضيفها
+            (sm.items || []).forEach(function (si) {
+              var exists = out.items.some(function (x) {
+                return (si.id && x.id === si.id) || x.name === si.name;
+              });
+              if (!exists) out.items.push(JSON.parse(JSON.stringify(si)));
+            });
+            return out;
+          });
+        }
+
+        window.__MENU_OVERRIDE = mergedMenu.length ? mergedMenu : saved.menu;
+        window.__CONTENT_OVERRIDE = (saved.content && Object.keys(saved.content).length)
+          ? saved.content : base.content;
+        window.__RESTAURANT_OVERRIDE = (saved.restaurant && Object.keys(saved.restaurant).length)
+          ? saved.restaurant : base.restaurant;
+        window.__CATALOG_OVERRIDE = (saved.catalog && saved.catalog.length)
+          ? saved.catalog : base.catalog;
+
+        /* 2) الحقول الجديدة: لو مش في المحفوظ → من base (وده اللي كان ناقص) */
+        window.__SIZEKEYS_OVERRIDE = (saved.sizeKeys && Object.keys(saved.sizeKeys).length)
+          ? saved.sizeKeys : base.sizeKeys;
+        window.__EXTRAS_OVERRIDE = (saved.extras && Object.keys(saved.extras).length)
+          ? saved.extras : base.extras;
+        window.__IMAGES_MANIFEST = (saved._images && saved._images.length)
+          ? saved._images : base._images;
+
+        applyContent(window.__CONTENT_OVERRIDE);
+        if (window.__reapplyData) window.__reapplyData();
+      })
+      .catch(function () {
+        /* فشل الـfetch → نرجع للمحفوظ زي ما كان */
+        if (saved.menu) {
+          window.__MENU_OVERRIDE = saved.menu;
+          window.__CONTENT_OVERRIDE = saved.content;
+          window.__RESTAURANT_OVERRIDE = saved.restaurant;
+          window.__CATALOG_OVERRIDE = saved.catalog;
+        }
+        if (saved.sizeKeys) window.__SIZEKEYS_OVERRIDE = saved.sizeKeys;
+        if (saved.extras) window.__EXTRAS_OVERRIDE = saved.extras;
+        if (saved._images) window.__IMAGES_MANIFEST = saved._images;
+        applyContent(saved.content);
+        if (window.__reapplyData) window.__reapplyData();
+      });
   } else {
     // مفيش تعديلات — نحمّل data.json الأصلي (عشان يدعم التعديلات المحفوظة على جهاز تاني)
     fetch('data.json?v=' + Date.now())
