@@ -1,22 +1,22 @@
 const __catalog_default={
 "pizza":{title:"البيتزا",crumb:"البيتزا",eyebrow:"",intro:"بيتزا طازة بثلاث أحجام",items:[
-{id:"pizza-بيتزا-مارجريتا",name:"بيتزا مارجريتا",price:90,img:"assets/webp/professional-overhead-pizza-isolated-dar-2.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
-{id:"pizza-بيتزا-خضار",name:"بيتزا خضار",price:90,img:"assets/webp/professional-overhead-pizza-isolated-dar-4.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
-{id:"pizza-بيتزا-سوسيس",name:"بيتزا سوسيس",price:110,img:"assets/webp/professional-overhead-pizza-isolated-dar-3.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
-{id:"pizza-بيتزا-ميكس-جبن",name:"بيتزا ميكس جبن",price:100,img:"assets/webp/professional-overhead-pizza-isolated-dar-5.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
-{id:"pizza-بيتزا-سجق",name:"بيتزا سجق",price:110,img:"assets/webp/hero-pizza.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
-{id:"pizza-بيتزا-فراخ",name:"بيتزا فراخ",price:110,img:"assets/webp/professional-overhead-pizza-isolated-dar-1.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
-{id:"pizza-بيتزا-مشروم",name:"بيتزا مشروم",price:105,img:"assets/webp/professional-overhead-pizza-isolated-dar-1.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
-{id:"pizza-بيتزا-بسطرمة",name:"بيتزا بسطرمة",price:110,img:"assets/webp/professional-overhead-pizza-isolated-dar-4.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
-{id:"pizza-بيتزا-تونة",name:"بيتزا تونة",price:110,img:"assets/webp/professional-overhead-pizza-isolated-dar-2.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
-{id:"pizza-بيتزا-فراخ-كرسبى",name:"بيتزا فراخ كرسبى",price:110,img:"assets/webp/professional-overhead-pizza-isolated-dar-3.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
-{id:"pizza-بيتزا-سلامى",name:"بيتزا سلامى",price:110,img:"assets/webp/professional-overhead-pizza-isolated-dar-5.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
-{id:"pizza-بيتزا-سوبر-سوبريم",name:"بيتزا سوبر سوبريم",price:110,img:"assets/webp/hero-pizza.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
-{id:"pizza-بيتزا-فراخ-بانيه-ناجتس",name:"بيتزا فراخ بانيه ناجتس",price:110,img:"assets/webp/professional-overhead-pizza-isolated-dar-1.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
-{id:"pizza-بيتزا-فراخ-رانش",name:"بيتزا فراخ رانش",price:115,img:"assets/webp/professional-overhead-pizza-isolated-dar-4.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
-{id:"pizza-بيتزا-فراخ-باربيكيو",name:"بيتزا فراخ باربيكيو",price:115,img:"assets/webp/professional-overhead-pizza-isolated-dar-2.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
-{id:"pizza-بيتزا-مكس-فراخ",name:"بيتزا مكس فراخ",price:155,img:"assets/webp/professional-overhead-pizza-isolated-dar-3.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
-{id:"pizza-بيتزا-مكس-لحوم",name:"بيتزا مكس لحوم",price:155,img:"assets/webp/professional-overhead-pizza-isolated-dar-5.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
+{id:"pizza-بيتزا-مارجريتا",name:"بيتزا مارجريتا",price:90,img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-3.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
+{id:"pizza-بيتزا-خضار",name:"بيتزا خضار",price:90,img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-4.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
+{id:"pizza-بيتزا-سوسيس",name:"بيتزا سوسيس",price:110,img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-2.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
+{id:"pizza-بيتزا-ميكس-جبن",name:"بيتزا ميكس جبن",price:100,img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-4.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
+{id:"pizza-بيتزا-سجق",name:"بيتزا سجق",price:110,img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-2.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
+{id:"pizza-بيتزا-فراخ",name:"بيتزا فراخ",price:110,img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-1.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
+{id:"pizza-بيتزا-مشروم",name:"بيتزا مشروم",price:105,img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-1.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
+{id:"pizza-بيتزا-بسطرمة",name:"بيتزا بسطرمة",price:110,img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-4.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
+{id:"pizza-بيتزا-تونة",name:"بيتزا تونة",price:110,img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-3.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
+{id:"pizza-بيتزا-فراخ-كرسبى",name:"بيتزا فراخ كرسبى",price:110,img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-2.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
+{id:"pizza-بيتزا-سلامى",name:"بيتزا سلامى",price:110,img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-4.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
+{id:"pizza-بيتزا-سوبر-سوبريم",name:"بيتزا سوبر سوبريم",price:110,img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-2.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
+{id:"pizza-بيتزا-فراخ-بانيه-ناجتس",name:"بيتزا فراخ بانيه ناجتس",price:110,img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-1.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
+{id:"pizza-بيتزا-فراخ-رانش",name:"بيتزا فراخ رانش",price:115,img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-4.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
+{id:"pizza-بيتزا-فراخ-باربيكيو",name:"بيتزا فراخ باربيكيو",price:115,img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-3.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
+{id:"pizza-بيتزا-مكس-فراخ",name:"بيتزا مكس فراخ",price:155,img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-2.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
+{id:"pizza-بيتزا-مكس-لحوم",name:"بيتزا مكس لحوم",price:155,img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-4.webp",tag:"مميز",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني."},
 ]},
 "syrian":{title:"السوري",crumb:"السوري",eyebrow:"",intro:"ساندوتشات سوري بخلطات مميزة",items:[
 {id:"syrian-سوري-بطاطس-فارم",name:"سوري بطاطس فارم",price:30,img:"assets/webp/burger.webp",tag:"مميز",desc:"خبز طازج، fillings مميزة وصلصة البيت."},
@@ -83,23 +83,23 @@ const restaurant=Object.assign({}, __restaurant_default, window.__RESTAURANT_OVE
 // ===== قائمة الأكل =====
 const __menu_default=[
 {key:"pizza",title:"البيتزا",emoji:"🍕",desc:"بيتزا طازة بثلاث أحجام",sizes:["صغير", "وسط", "كبير"],items:[
-{id:"pizza-بيتزا-مارجريتا",name:"بيتزا مارجريتا",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/professional-overhead-pizza-isolated-dar-2.webp",small:80,medium:90,large:135},
-{id:"pizza-بيتزا-خضار",name:"بيتزا خضار",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/professional-overhead-pizza-isolated-dar-4.webp",small:80,medium:90,large:135},
-{id:"pizza-بيتزا-سوسيس",name:"بيتزا سوسيس",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/professional-overhead-pizza-isolated-dar-3.webp",small:95,medium:110,large:170},
-{id:"pizza-بيتزا-ميكس-جبن",name:"بيتزا ميكس جبن",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/professional-overhead-pizza-isolated-dar-5.webp",small:90,medium:100,large:150},
-{id:"pizza-بيتزا-سجق",name:"بيتزا سجق",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/hero-pizza.webp",small:95,medium:110,large:170},
-{id:"pizza-بيتزا-فراخ",name:"بيتزا فراخ",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/professional-overhead-pizza-isolated-dar-1.webp",small:95,medium:110,large:170},
-{id:"pizza-بيتزا-مشروم",name:"بيتزا مشروم",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/professional-overhead-pizza-isolated-dar-1.webp",small:95,medium:105,large:160},
-{id:"pizza-بيتزا-بسطرمة",name:"بيتزا بسطرمة",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/professional-overhead-pizza-isolated-dar-4.webp",small:95,medium:110,large:170},
-{id:"pizza-بيتزا-تونة",name:"بيتزا تونة",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/professional-overhead-pizza-isolated-dar-2.webp",small:95,medium:110,large:170},
-{id:"pizza-بيتزا-فراخ-كرسبى",name:"بيتزا فراخ كرسبى",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/professional-overhead-pizza-isolated-dar-3.webp",small:95,medium:110,large:170},
-{id:"pizza-بيتزا-سلامى",name:"بيتزا سلامى",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/professional-overhead-pizza-isolated-dar-5.webp",small:95,medium:110,large:170},
-{id:"pizza-بيتزا-سوبر-سوبريم",name:"بيتزا سوبر سوبريم",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/hero-pizza.webp",small:100,medium:110,large:170},
-{id:"pizza-بيتزا-فراخ-بانيه-ناجتس",name:"بيتزا فراخ بانيه ناجتس",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/professional-overhead-pizza-isolated-dar-1.webp",small:95,medium:110,large:170},
-{id:"pizza-بيتزا-فراخ-رانش",name:"بيتزا فراخ رانش",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/professional-overhead-pizza-isolated-dar-4.webp",small:100,medium:115,large:175},
-{id:"pizza-بيتزا-فراخ-باربيكيو",name:"بيتزا فراخ باربيكيو",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/professional-overhead-pizza-isolated-dar-2.webp",small:100,medium:115,large:175},
-{id:"pizza-بيتزا-مكس-فراخ",name:"بيتزا مكس فراخ",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/professional-overhead-pizza-isolated-dar-3.webp",small:115,medium:155,large:205},
-{id:"pizza-بيتزا-مكس-لحوم",name:"بيتزا مكس لحوم",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/professional-overhead-pizza-isolated-dar-5.webp",small:130,medium:155,large:210},
+{id:"pizza-بيتزا-مارجريتا",name:"بيتزا مارجريتا",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-3.webp",small:80,medium:90,large:135},
+{id:"pizza-بيتزا-خضار",name:"بيتزا خضار",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-4.webp",small:80,medium:90,large:135},
+{id:"pizza-بيتزا-سوسيس",name:"بيتزا سوسيس",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-2.webp",small:95,medium:110,large:170},
+{id:"pizza-بيتزا-ميكس-جبن",name:"بيتزا ميكس جبن",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-4.webp",small:90,medium:100,large:150},
+{id:"pizza-بيتزا-سجق",name:"بيتزا سجق",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-2.webp",small:95,medium:110,large:170},
+{id:"pizza-بيتزا-فراخ",name:"بيتزا فراخ",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-1.webp",small:95,medium:110,large:170},
+{id:"pizza-بيتزا-مشروم",name:"بيتزا مشروم",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-1.webp",small:95,medium:105,large:160},
+{id:"pizza-بيتزا-بسطرمة",name:"بيتزا بسطرمة",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-4.webp",small:95,medium:110,large:170},
+{id:"pizza-بيتزا-تونة",name:"بيتزا تونة",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-3.webp",small:95,medium:110,large:170},
+{id:"pizza-بيتزا-فراخ-كرسبى",name:"بيتزا فراخ كرسبى",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-2.webp",small:95,medium:110,large:170},
+{id:"pizza-بيتزا-سلامى",name:"بيتزا سلامى",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-4.webp",small:95,medium:110,large:170},
+{id:"pizza-بيتزا-سوبر-سوبريم",name:"بيتزا سوبر سوبريم",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-2.webp",small:100,medium:110,large:170},
+{id:"pizza-بيتزا-فراخ-بانيه-ناجتس",name:"بيتزا فراخ بانيه ناجتس",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-1.webp",small:95,medium:110,large:170},
+{id:"pizza-بيتزا-فراخ-رانش",name:"بيتزا فراخ رانش",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-4.webp",small:100,medium:115,large:175},
+{id:"pizza-بيتزا-فراخ-باربيكيو",name:"بيتزا فراخ باربيكيو",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-3.webp",small:100,medium:115,large:175},
+{id:"pizza-بيتزا-مكس-فراخ",name:"بيتزا مكس فراخ",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-2.webp",small:115,medium:155,large:205},
+{id:"pizza-بيتزا-مكس-لحوم",name:"بيتزا مكس لحوم",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-4.webp",small:130,medium:155,large:210},
 ]},
 {key:"syrian",title:"سوري",emoji:"🥙",desc:"ساندوتشات سوري بخلطات مميزة",items:[
 {id:"syrian-سوري-بطاطس-فارم",name:"سوري بطاطس فارم",desc:"خبز طازج، fillings مميزة وصلصة البيت.",img:"assets/webp/burger.webp",price:30},
@@ -246,11 +246,16 @@ function panelHTML(m){
         </div>`;
       }).join('');
       return `<article class="menu-card menu-card-sizes reveal" style="transition-delay:${i*0.03}s">
-        <a class="card-link" href="product.html?cat=${m.key}&id=${encodeURIComponent(it.id)}">
-          ${it.img?`<span class="card-img" data-emoji="${m.emoji}"><img src="${it.img}" alt="${it.name}" loading="lazy" decoding="async"${cardSrcset(it.img)?` srcset="${cardSrcset(it.img)}" sizes="(max-width:640px) 46vw, 180px"`:''} onerror="imgFallback(this)"></span>`:`<span class="card-emoji">${m.emoji}</span>`}
-          <h3>${it.name}</h3>
+        <a class="card-link card-link-img" href="product.html?cat=${m.key}&id=${encodeURIComponent(it.id)}" aria-label="${it.name}">
+          ${it.img?`<span class="card-img" data-emoji="${m.emoji}"><img src="${it.img}" alt="${it.name}" loading="lazy" decoding="async"${cardSrcset(it.img)?` srcset="${cardSrcset(it.img)}" sizes="(max-width:640px) 44vw, 300px"`:''} onerror="imgFallback(this)"></span>`:`<span class="card-emoji">${m.emoji}</span>`}
         </a>
-        <div class="card-sizes">${rows}</div>
+        <div class="card-body">
+          <div class="card-sizes">${rows}</div>
+          <a class="card-name" href="product.html?cat=${m.key}&id=${encodeURIComponent(it.id)}">
+            <h3>${it.name}</h3>
+            ${it.desc?`<p class="card-desc">${it.desc}</p>`:''}
+          </a>
+        </div>
       </article>`;
     }).join('');
     return head+`<div class="menu-cards menu-cards-sizes">${cards}</div>`;
@@ -285,20 +290,20 @@ function orderItem(cat,name,size,price){
 
 /* ══════════ رقم إصدار التطبيق ══════════
    بنستخدمه للتأكد إن المتصفح ماسكش نسخة قديمة من الكود */
-window.__APP_VERSION='20261121c';
+window.__APP_VERSION='20261121d';
 
 function params(){return new URLSearchParams(location.search)}
 
 /* بنى srcset للصورة: بنستخدم بس الملفات الموجودة فعلاً (من manifest) */
 function productImageVariants(path){
-  const imagePaths=getImagePaths();
-  if(!path||!imagePaths[path]) return null;
+  const meta=getImageMeta();
+  if(!path||!meta[path]) return null;
   var out=[];
   [400,800,1200].forEach(function(w){
     var v=path.replace(/\.webp$/,'-'+w+'.webp');
-    if(v!==path && imagePaths[v]) out.push(v+' '+w+'w');
+    if(v!==path && meta[v]) out.push(v+' '+meta[v]+'w');
   });
-  out.push(path+' 1200w');
+  out.push(path+' '+meta[path]+'w');
   return out.length>1 ? out.join(', ') : null;
 }
 
@@ -320,7 +325,7 @@ function renderProduct(){
       if(this.dataset.fallbackDone) return;
       this.dataset.fallbackDone='1';
       this.removeAttribute('srcset');
-      this.src='assets/webp/hero-pizza.webp';
+      this.src='assets/webp/sq-professional-overhead-pizza-isolated-dar-2.webp';
     };
     // srcset ديناميكي: لو الصورة عندنا نسخ 400/800 بنستخدمها، وإلا نلغيه
     // (لازم نلغيه الأول وإلا الـbrowser هيلغي الطلب القديم = ERR_ABORTED)
