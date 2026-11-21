@@ -156,6 +156,21 @@ const __menu_default=[
 {id:"waffle-وافل-شيكولاتة-ميكس-صوصات",name:"وافل شيكولاتة ميكس صوصات",desc:"وافل ساخن مقرمش بالحلى.",img:"assets/webp/sweet-crepe.webp",price:85},
 ]},
 ];
+
+/* لو الصورة فشل تحميلها → نستبدلها بالـemoji بدل أيقونة صورة مكسورة */
+function imgFallback(el){
+  try{
+    if(!el || el.dataset.fallbackDone) return;
+    el.dataset.fallbackDone='1';
+    var holder=el.closest('.card-img');
+    if(!holder) return;
+    var em=document.createElement('span');
+    em.className='card-emoji';
+    em.textContent=holder.getAttribute('data-emoji')||'🍽️';
+    holder.replaceWith(em);
+  }catch(e){}
+}
+
 function getMenu(){const m=window.__MENU_OVERRIDE;return (m&&m.length)?m:__menu_default;}
 const __sizeKeys_default={pizza:{'\u0635\u063a\u064a\u0631':'small','\u0648\u0633\u0637':'medium','\u0643\u0628\u064a\u0631':'large'}};
 function getSizeKeys(){const k=window.__SIZEKEYS_OVERRIDE;return (k&&Object.keys(k).length)?k:__sizeKeys_default;}
@@ -184,6 +199,33 @@ function sizeKeysOf(cat){
   return k;
 }
 
+
+/* بنية srcset لصور الكروت:
+   بنستخدم الأبعاد الحقيقية من manifest (dim) — مش أرقام مفترضة،
+   عشان المتصفح مايختارش نسخة غلط. */
+function getImageMeta(){
+  var map={};
+  (window.__IMAGES_MANIFEST||[]).forEach(function(i){
+    if(!i||!i.path) return;
+    var w=0;
+    if(i.dim){var mm=String(i.dim).match(/(\d+)\D+(\d+)/); if(mm) w=+mm[1];}
+    if(!w && i.w) w=+i.w;
+    map[i.path]=w||0;
+  });
+  return map;
+}
+function cardSrcset(path){
+  var meta=getImageMeta();
+  if(!meta[path]) return '';
+  var out=[];
+  [400,800].forEach(function(w){
+    var v=path.replace(/\.webp$/,'-'+w+'.webp');
+    if(v!==path && meta[v]) out.push(v+' '+meta[v]+'w');
+  });
+  if(meta[path]) out.push(path+' '+meta[path]+'w');
+  return out.join(', ');
+}
+
 function panelHTML(m){
   const head=`<div class="menu-head"><span class="menu-head-emoji">${m.emoji}</span><div><h2>${m.title}</h2><p>${m.desc}</p></div></div>`;
   if(m.sizes){
@@ -205,7 +247,7 @@ function panelHTML(m){
       }).join('');
       return `<article class="menu-card menu-card-sizes reveal" style="transition-delay:${i*0.03}s">
         <a class="card-link" href="product.html?cat=${m.key}&id=${encodeURIComponent(it.id)}">
-          ${it.img?`<span class="card-img"><img src="${it.img}" alt="" loading="lazy"></span>`:`<span class="card-emoji">${m.emoji}</span>`}
+          ${it.img?`<span class="card-img" data-emoji="${m.emoji}"><img src="${it.img}" alt="${it.name}" loading="lazy" decoding="async"${cardSrcset(it.img)?` srcset="${cardSrcset(it.img)}" sizes="(max-width:640px) 46vw, 180px"`:''} onerror="imgFallback(this)"></span>`:`<span class="card-emoji">${m.emoji}</span>`}
           <h3>${it.name}</h3>
         </a>
         <div class="card-sizes">${rows}</div>
@@ -213,7 +255,7 @@ function panelHTML(m){
     }).join('');
     return head+`<div class="menu-cards menu-cards-sizes">${cards}</div>`;
   }
-  const cards=m.items.map((it,i)=>`<article class="menu-card reveal" style="transition-delay:${i*0.03}s"><a class="card-link" href="product.html?cat=${m.key}&id=${encodeURIComponent(it.id)}">${it.img?`<span class="card-img"><img src="${it.img}" alt="" loading="lazy"></span>`:`<span class="card-emoji">${m.emoji}</span>`}<h3>${it.name}</h3></a><div class="card-bottom"><span class="card-price">${it.price} <i>ج.م</i></span><button class="button primary" onclick="orderItem('${m.key}','${it.name}','',${it.price})">اطلبها ←</button></div></article>`).join('');
+  const cards=m.items.map((it,i)=>`<article class="menu-card reveal" style="transition-delay:${i*0.03}s"><a class="card-link" href="product.html?cat=${m.key}&id=${encodeURIComponent(it.id)}">${it.img?`<span class="card-img" data-emoji="${m.emoji}"><img src="${it.img}" alt="${it.name}" loading="lazy" decoding="async"${cardSrcset(it.img)?` srcset="${cardSrcset(it.img)}" sizes="(max-width:640px) 46vw, 180px"`:''} onerror="imgFallback(this)"></span>`:`<span class="card-emoji">${m.emoji}</span>`}<h3>${it.name}</h3></a><div class="card-bottom"><span class="card-price">${it.price} <i>ج.م</i></span><button class="button primary" onclick="orderItem('${m.key}','${it.name}','',${it.price})">اطلبها ←</button></div></article>`).join('');
   return head+`<div class="menu-cards">${cards}</div>`;
 }
 function renderMenu(){
@@ -240,6 +282,11 @@ function orderItem(cat,name,size,price){
   const msg=`أهلاً، عايز أطلب من ${restaurant.name}:\n\n${line}\n💰 السعر: ${price} ج.م\n\nالاسم:\nالعنوان:\nملاحظات:`;
   window.open('https://wa.me/'+restaurant.whatsapp+'?text='+encodeURIComponent(msg),'_blank','noopener');
 }
+
+/* ══════════ رقم إصدار التطبيق ══════════
+   بنستخدمه للتأكد إن المتصفح ماسكش نسخة قديمة من الكود */
+window.__APP_VERSION='20261121c';
+
 function params(){return new URLSearchParams(location.search)}
 
 /* بنى srcset للصورة: بنستخدم بس الملفات الموجودة فعلاً (من manifest) */
