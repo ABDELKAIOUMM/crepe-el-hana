@@ -290,7 +290,7 @@ function orderItem(cat,name,size,price){
 
 /* ══════════ رقم إصدار التطبيق ══════════
    بنستخدمه للتأكد إن المتصفح ماسكش نسخة قديمة من الكود */
-window.__APP_VERSION='20261121c';
+window.__APP_VERSION='20261121d';
 
 function params(){return new URLSearchParams(location.search)}
 
