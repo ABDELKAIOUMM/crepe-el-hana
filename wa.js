@@ -337,8 +337,32 @@
       });
     });
 
+    // ═══ كروت بأحجام (البيتزا): ربط زر + الموجود بالسلة ═══
+    document.querySelectorAll('.menu-card-sizes').forEach(card => {
+      const panel = card.closest('.menu-panel');
+      const cat = panel ? panel.id.replace('panel-', '') : '';
+      const nameEl = card.querySelector('h3');
+      const name = nameEl ? nameEl.textContent.trim() : '';
+      card.querySelectorAll('.price-row').forEach(row => {
+        const pill = row.querySelector('.price-pill');
+        const btn = row.querySelector('.wa-add');
+        if (!pill || !btn) return;
+        const size = pill.dataset.size || '';
+        const price = (pill.querySelector('.pr-price')||pill).textContent.match(/\d+/);
+        const item = { cat: cat, name: name, size: size, price: +(price ? price[0] : 0), qty: 1 };
+
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          addToCart(item, { silent: true });
+          toastAdded(name);
+          row.classList.add('wa-added');
+          setTimeout(() => row.classList.remove('wa-added'), 700);
+        });
+      });
+    });
+
     // بطاقات السعر الواحد
-    document.querySelectorAll('.menu-card').forEach(card => {
+    document.querySelectorAll('.menu-card:not(.menu-card-sizes)').forEach(card => {
       if (card.querySelector('.wa-add')) return;
       const h3 = card.querySelector('h3');
       const priceEl = card.querySelector('.card-price');

@@ -177,11 +177,41 @@ window.__reapplyData=function(){
 };
 
 // ===== عرض قائمة الأكل (تبويبات) =====
+
+/* مفاتيح الأحجام: من sizeKeys لو موجودة، وإلا الاسم نفسه */
+function sizeKeysOf(cat){
+  const k=getSizeKeys()[cat]||{};
+  return k;
+}
+
 function panelHTML(m){
   const head=`<div class="menu-head"><span class="menu-head-emoji">${m.emoji}</span><div><h2>${m.title}</h2><p>${m.desc}</p></div></div>`;
   if(m.sizes){
-    const rows=m.items.map((it,i)=>`<tr class="reveal" style="transition-delay:${i*0.03}s"><td class="pz-name" data-label="الأكلة"><a class="mi-thumb" href="product.html?cat=${m.key}&id=${encodeURIComponent(it.id)}" aria-label="تفاصيل ${it.name}">${it.img?`<img src="${it.img}" alt="" loading="lazy">`:'<span class="it-thumb-empty">📷</span>'}</a><a class="mi-name" href="product.html?cat=${m.key}&id=${encodeURIComponent(it.id)}">${it.name}</a></td><td data-label="صغير"><button class="price-pill" onclick="orderItem('${m.key}','${it.name}','صغير',${it.small})">${it.small}<i>ج.م</i></button></td><td data-label="وسط"><button class="price-pill" onclick="orderItem('${m.key}','${it.name}','وسط',${it.medium})">${it.medium}<i>ج.م</i></button></td><td data-label="كبير"><button class="price-pill" onclick="orderItem('${m.key}','${it.name}','كبير',${it.large})">${it.large}<i>ج.م</i></button></td></tr>`).join('');
-    return head+`<div class="table-wrap"><table class="menu-table"><thead><tr><th>الأكلة</th><th>صغير</th><th>وسط</th><th>كبير</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+    // ═══ كارت بصورة + أسعار جنب بعض (البيتزا) ═══
+    const sk=sizeKeysOf(m.key);
+    const sizeList=m.sizes.map(x=>sk[x]||x);
+    const cards=m.items.map((it,i)=>{
+      const rows=sizeList.map((k,si)=>{
+        const price=it[k];
+        if(price==null) return '';
+        const label=m.sizes[si];
+        return `<div class="price-row">
+          <button class="price-pill wa-clickable" data-size="${label}" onclick="orderItem('${m.key}','${it.name}','${label}',${price})">
+            <span class="pr-size">${label}</span>
+            <span class="pr-price">${price}<i>ج.م</i></span>
+          </button>
+          <button type="button" class="wa-add" aria-label="ضيف ${it.name} ${label} للسلة">+</button>
+        </div>`;
+      }).join('');
+      return `<article class="menu-card menu-card-sizes reveal" style="transition-delay:${i*0.03}s">
+        <a class="card-link" href="product.html?cat=${m.key}&id=${encodeURIComponent(it.id)}">
+          ${it.img?`<span class="card-img"><img src="${it.img}" alt="" loading="lazy"></span>`:`<span class="card-emoji">${m.emoji}</span>`}
+          <h3>${it.name}</h3>
+        </a>
+        <div class="card-sizes">${rows}</div>
+      </article>`;
+    }).join('');
+    return head+`<div class="menu-cards menu-cards-sizes">${cards}</div>`;
   }
   const cards=m.items.map((it,i)=>`<article class="menu-card reveal" style="transition-delay:${i*0.03}s"><a class="card-link" href="product.html?cat=${m.key}&id=${encodeURIComponent(it.id)}">${it.img?`<span class="card-img"><img src="${it.img}" alt="" loading="lazy"></span>`:`<span class="card-emoji">${m.emoji}</span>`}<h3>${it.name}</h3></a><div class="card-bottom"><span class="card-price">${it.price} <i>ج.م</i></span><button class="button primary" onclick="orderItem('${m.key}','${it.name}','',${it.price})">اطلبها ←</button></div></article>`).join('');
   return head+`<div class="menu-cards">${cards}</div>`;
