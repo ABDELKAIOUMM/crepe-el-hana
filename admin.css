@@ -168,10 +168,24 @@ textarea.inp{min-height:78px;resize:vertical;line-height:1.6}
   background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
   overflow:hidden;
 }
+/* الأعمدة dynamic: عدد الأعمدة بيتحدد من المحتوى
+   (عمود لكل سعر + عمود الصورة + عمود الحذف)
+   عشان مفيش تداخل ولا زحمة */
 .it-row{
   display:grid;gap:9px;align-items:center;padding:10px 13px;
   border-bottom:1px solid #ffffff0a;
-  grid-template-columns:minmax(150px,2.2fr) repeat(3,minmax(70px,1fr)) minmax(170px,1.5fr) 40px;
+  grid-template-columns:var(--it-cols,minmax(130px,2fr) repeat(3,minmax(62px,1fr)) minmax(150px,1.6fr) 40px);
+}
+/* العمود الأخير (زر الحذف) ثابت */
+.it-row>div:last-child{justify-self:end}
+/* عمود الصورة: فيه thumbnail + منتقي + زر رفع — لازم يفضل على سطره */
+.it-row .it-img-cell{
+  display:flex;align-items:center;gap:8px;min-width:0;
+  grid-column:auto;
+}
+/* رأس الجدول: نفس عدد الأعمدة */
+.it-row.head{
+  grid-template-columns:var(--it-cols,minmax(130px,2fr) repeat(3,minmax(62px,1fr)) minmax(150px,1.6fr) 40px);
 }
 .it-row:last-child{border-bottom:0}
 .it-row.head{
@@ -349,11 +363,11 @@ textarea.inp{min-height:78px;resize:vertical;line-height:1.6}
   .content{padding:18px 13px 50px}
   .panel-head h2{font-size:21px}
   /* اسم الصنف فوق، والأسعار 3 أعمدة متساوية + زر حذف في صف واحد */
-  .it-row{grid-template-columns:1fr 1fr 1fr 34px;gap:6px;padding:10px}
+  .it-row{grid-template-columns:repeat(3,1fr) 34px;gap:6px;padding:10px}
   .it-row .nm{grid-column:1/-1;grid-row:1}
-  .it-row>div:not(.nm):not(.it-img-cell){grid-row:2}
+  .it-row>div:not(.nm):not(.it-img-cell):not(:last-child){grid-row:2}
   .it-row .it-img-cell{grid-column:1/-1;grid-row:3;margin-top:4px}
-  .it-row .it-del{grid-row:2;align-self:center;justify-self:center}
+  .it-row>div:last-child{grid-row:2;grid-column:4;align-self:center;justify-self:center}
   .it-row .inp.num{width:100%;min-width:0;text-align:center;padding:8px 4px}
   .it-head{font-size:11px}
   .it-row.head>div:nth-last-child(2){display:none}
@@ -394,3 +408,130 @@ textarea.inp{min-height:78px;resize:vertical;line-height:1.6}
 }
 .size-hint b{color:var(--orange);font-weight:800}
 .size-hint .sh-dim{color:var(--muted);font-size:12px}
+
+/* ══════════════════════════════════════════════════════
+   إصلاح: الخيارات في القوائم المنسدلة كانت بيضاء على أبيض
+   (لأن option مش بياخد background من الـselect)
+   ══════════════════════════════════════════════════════ */
+select option,
+select.inp option,
+option{
+  background:#1d1815 !important;
+  color:#f4eadc !important;
+  font-family:Tajawal,sans-serif;
+  font-size:14px;
+  padding:7px 9px;
+}
+select.inp option:checked,
+select option:checked{
+  background:#3a2c22 !important;
+  color:#ffc478 !important;
+}
+
+/* ══════════════════════════════════════════════════════
+   منتقي الصور (img-picker)
+   شبكة صور حقيقية بصور مصغّرة — بديل الـselect
+   ══════════════════════════════════════════════════════ */
+.img-picker{position:relative;flex:1;min-width:200px}
+
+.ip-current{
+  display:flex;align-items:center;gap:9px;
+  background:#ffffff06;border:1px solid var(--line2);border-radius:11px;
+  padding:6px 9px;min-height:56px;
+}
+.ip-current .ip-th{
+  width:42px;height:42px;border-radius:9px;overflow:hidden;flex-shrink:0;
+  background:#171412;border:1px solid var(--line2);display:grid;place-items:center;
+}
+.ip-current .ip-th img{width:100%;height:100%;object-fit:cover;display:block}
+.ip-current .ip-th.none{font-size:19px}
+.ip-current .ip-name{
+  font-size:12.5px;font-weight:700;color:var(--cream);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.45;
+}
+.ip-current .ip-name small{color:var(--muted);font-weight:500;font-size:11px}
+
+.ip-open{
+  margin-top:6px;width:100%;
+  background:#efa4491a;border:1px dashed #efa44955;border-radius:10px;
+  color:var(--orange);font:700 12.5px Tajawal;padding:7px 9px;cursor:pointer;
+  transition:.2s;
+}
+.ip-open:hover{background:#efa4492e;border-color:var(--orange)}
+
+/* النافذة */
+/* النافذة: fixed عشان ما تتقصش، ونت calcula مكانها جوه */
+.ip-modal{
+  position:fixed;z-index:9000;
+  width:min(620px,94vw);max-width:94vw;
+  max-height:min(78vh,620px);
+  background:#171412;border:1px solid var(--line2);border-radius:16px;
+  box-shadow:0 22px 60px #000000b8;overflow:hidden;
+  display:flex;flex-direction:column;
+}
+/* خلفية معتمة ورا النافذة */
+.ip-backdrop{
+  position:fixed;inset:0;z-index:8999;background:#000000b0;
+  backdrop-filter:blur(3px);
+}
+
+.ip-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:11px 13px;border-bottom:1px solid var(--line2);
+  background:#1f1a17;
+}
+.ip-head b{font-size:14px;color:var(--cream)}
+.ip-close{
+  background:#ffffff10;border:1px solid var(--line2);border-radius:8px;
+  width:28px;height:28px;color:var(--cream);cursor:pointer;font-size:13px;line-height:1;
+}
+.ip-close:hover{background:#e9473622;border-color:#e9473666}
+
+.ip-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));
+  gap:9px;padding:12px;flex:1;min-height:0;overflow:auto;
+  background:#141110;
+}
+.ip-cell{
+  background:#ffffff06;border:1px solid var(--line2);border-radius:11px;
+  padding:6px;cursor:pointer;text-align:center;transition:.18s;color:inherit;
+  display:flex;flex-direction:column;gap:5px;align-items:center;
+}
+.ip-cell:hover{border-color:var(--orange);background:#efa44912}
+.ip-cell.sel{border-color:var(--orange);background:#efa44926;box-shadow:0 0 0 2px #efa44933}
+.ip-cell .ip-th{
+  width:100%;aspect-ratio:1/1;border-radius:8px;overflow:hidden;
+  background:#0e0c0b;display:grid;place-items:center;
+}
+.ip-cell .ip-th img{width:100%;height:100%;object-fit:cover;display:block}
+.ip-cell .ip-th.none{font-size:26px}
+.ip-cell .ip-name{
+  font-size:10.5px;font-weight:700;color:var(--cream);line-height:1.35;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;
+}
+.ip-cell .ip-meta{font-size:9.5px;color:var(--muted);line-height:1.3}
+.ip-cell .ip-meta b{color:var(--orange)}
+
+/* عدد الأصناف اللي بيستخدموا الصورة */
+.img-used{color:var(--orange);font-weight:700}
+
+/* شريط تمرير */
+.ip-grid::-webkit-scrollbar{width:8px}
+.ip-grid::-webkit-scrollbar-track{background:#0e0c0b;border-radius:4px}
+.ip-grid::-webkit-scrollbar-thumb{background:#3a322c;border-radius:4px}
+.ip-grid::-webkit-scrollbar-thumb:hover{background:var(--orange)}
+
+/* ═══ عمود الصورة في جدول الأصناف ═══ */
+.it-img-cell{display:flex;align-items:center;gap:8px}
+.it-img-cell .it-thumb{width:44px;height:44px;flex-shrink:0}
+.it-img-cell .img-picker{flex:1;min-width:180px}
+.it-up{flex-shrink:0}
+
+/* علامة عدد الأصناف اللي بتستخدم الصورة (تداخل) */
+.ip-meta .ip-use{
+  color:var(--orange);font-weight:800;
+}
+.ip-meta .ip-use.hot{
+  color:#ff9c8f;background:#e9473626;border:1px solid #e9473655;
+  border-radius:6px;padding:1px 6px;
+}

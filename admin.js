@@ -139,6 +139,9 @@
           for (var k in si) {
             if (Object.prototype.hasOwnProperty.call(si, k)) bi[k] = si[k];
           }
+          // حذف الصورة (img فارغ) → تفضل بدون صورة، مش ترجع الأصلية
+          if (si.img === '' || si.img === null) { bi.img = ''; bi.__noImg = 1; }
+          else { delete bi.__noImg; }
           if (!bi.id) bi.id = si.id;
         });
         // أصناف زادها المستخدم
@@ -291,34 +294,104 @@
   /* بنبني dropdown اختيار من الصور المتاحة */
   function imgOptions(cur) {
     var opts = ['<option value="">— بدون صورة —</option>'];
+    images.forEach(function (im) {
+      var sel = (im.path === cur) ? ' selected' : '';
+      var dims = im.dim ? im.dim : (im.w && im.h ? (im.w + '×' + im.h) : '');
+      opts.push('<option value="' + esc(im.path) + '"' + sel + '>' +
+        esc(im.name || im.path) + (dims ? ' (' + dims + ')' : '') + '</option>');
+    });
+    return opts.join('');
+  }
 
-    /* نرتّب: المربعة (sq-*) الأول لأنها الأنسب لبطاقات المنتجات،
-       وبعدها الباقي. ونحسب نوع كل صورة من أبعادها. */
+  /* ═══ منتقي الصور (grid بصور حقيقية) ═══
+     بديل الـselect: شبكة صور فيها thumbnail لكل صورة + اسم + مقاس.
+     الضغط على صورة بيختارها (من غير إعادة بناء الجدول). */
+  function imgPicker(cur, attr) {
+    var id = 'imgpk' + Math.random().toString(36).slice(2, 8);
+    return '<div class="img-picker" id="' + id + '" ' + attr + ' data-current="' + esc(cur || '') + '">' +
+      '<div class="ip-current" data-role="current"></div>' +
+      '<button type="button" class="ip-open" data-role="open">🖼️ اختار صورة…</button>' +
+      '<div class="ip-modal" data-role="modal" hidden>' +
+        '<div class="ip-head"><b>اختار الصورة</b>' +
+          '<button type="button" class="ip-close" data-role="close">✕</button></div>' +
+        '<div class="ip-grid" data-role="grid"></div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  /* بناء محتوى شبكة الصور للمنتقي */
+  function renderPickerGrid(pk, cur) {
+    var grid = pk.querySelector('[data-role="grid"]');
+    if (!grid) return;
+
     var list = images.map(function (im) {
       var w = im.w || 0, h = im.h || 0;
       var square = w && h && Math.abs(w - h) < 40;
       var landscape = w && h && w > h * 1.3;
-      return { im: im, square: square, landscape: landscape };
+      var used = countItemsUsing(im.path);
+      return { im: im, square: square, landscape: landscape, used: used };
     });
     list.sort(function (a, b) {
       if (a.square !== b.square) return a.square ? -1 : 1;
       return (a.im.name || '').localeCompare(b.im.name || '');
     });
 
+    var html = '<button type="button" class="ip-cell ip-none' +
+      (!cur ? ' sel' : '') + '" data-pick="">' +
+      '<span class="ip-th none">🖼️</span><span class="ip-name">بدون صورة</span></button>';
+
     list.forEach(function (o) {
       var im = o.im;
-      var sel = (im.path === cur) ? ' selected' : '';
-      var dims = im.dim ? im.dim : (im.w && im.h ? (im.w + '×' + im.h) : '');
-      var badge = o.square ? '🟩 مربعة' : (o.landscape ? '🟨 أفقية' : '⬜');
-      var label = (im.name || im.path) + (dims ? '  (' + dims + ')' : '') + '  ' + badge;
-      opts.push('<option value="' + esc(im.path) + '"' + sel + '>' + esc(label) + '</option>');
+      var src = im.dataUrl || im.path;
+      var dims = im.dim ? im.dim : (im.w && im.h ? (im.w + '×' + im.h) : '—');
+      var badge = o.square ? '🟩' : (o.landscape ? '🟨' : '⬜');
+      html += '<button type="button" class="ip-cell' + (im.path === cur ? ' sel' : '') +
+        '" data-pick="' + esc(im.path) + '" title="' + esc(im.path) + '">' +
+        '<span class="ip-th"><img src="' + esc(src) + '" alt="" loading="lazy"></span>' +
+        '<span class="ip-name">' + esc(im.name || im.path) + '</span>' +
+        '<span class="ip-meta">' + esc(dims) + ' ' + badge +
+          (o.used > 1 ? ' · <b class="ip-use' + (o.used >= 5 ? ' hot' : '') + '">📌 ' + o.used + ' صنف</b>' : '') + '</span>' +
+        '</button>';
     });
-    return opts.join('');
+    grid.innerHTML = html;
+
+    grid.querySelectorAll('[data-pick]').forEach(function (b) {
+      b.onclick = function () {
+        var v = b.dataset.pick;
+        pk.dataset.current = v;
+        pk.querySelector('[data-role="current"]').innerHTML = currentPreview(v);
+        grid.querySelectorAll('.ip-cell').forEach(function (x) { x.classList.remove('sel'); });
+        b.classList.add('sel');
+        closePickerModal(pk, pk._modal || pk.querySelector('[data-role="modal"]'));
+        pk.dispatchEvent(new CustomEvent('imgpick', { bubbles: true, detail: { value: v } }));
+      };
+    });
   }
 
-  /* حقل اختيار صورة جاهز (select) */
+  /* معاينة الصورة الحالية */
+  function currentPreview(cur) {
+    if (!cur) return '<span class="ip-th none">🖼️</span><span class="ip-name">بدون صورة</span>';
+    var im = null;
+    for (var i = 0; i < images.length; i++) { if (images[i].path === cur) { im = images[i]; break; } }
+    var src = im ? (im.dataUrl || im.path) : cur;
+    var nm = im ? (im.name || im.path) : cur;
+    var dims = im && im.dim ? im.dim : '';
+    return '<span class="ip-th"><img src="' + esc(src) + '" alt=""></span>' +
+      '<span class="ip-name">' + esc(nm) + (dims ? ' <small>' + esc(dims) + '</small>' : '') + '</span>';
+  }
+
+  /* كام صنف بيستخدم الصورة دي */
+  function countItemsUsing(path) {
+    var n = 0;
+    (data.menu || []).forEach(function (m) {
+      (m.items || []).forEach(function (it) { if (it.img === path) n++; });
+    });
+    return n;
+  }
+
+  /* حقل اختيار صورة (نستعمل الـpicker الجديد) */
   function imgField(cur, attr) {
-    return '<select class="inp sm img-sel" ' + attr + '>' + imgOptions(cur) + '</select>';
+    return imgPicker(cur, attr);
   }
 
   /* زر رفع صورة مباشرة للمنتج */
@@ -333,6 +406,137 @@
     target.value = path;
     markDirty();
     toast('✅ اتحدّثت صورة المنتج', 'ok');
+  }
+
+
+  /* ═══ ربط أحداث منتقي الصور ═══ */
+  function bindPicker(pk) {
+    if (pk.dataset.bound === '1') return;
+    pk.dataset.bound = '1';
+
+    var modal = pk.querySelector('[data-role="modal"]');
+    pk._modal = modal;
+    var grid  = pk.querySelector('[data-role="grid"]');
+    var open  = pk.querySelector('[data-role="open"]');
+    var close = pk.querySelector('[data-role="close"]');
+    var cur   = pk.querySelector('[data-role="current"]');
+
+    // المعاينة الحالية
+    if (cur) cur.innerHTML = currentPreview(pk.dataset.current || '');
+
+    if (open) open.onclick = function (ev) {
+      ev.stopPropagation();
+      renderPickerGrid(pk, pk.dataset.current || '');
+      openPickerModal(pk, modal);
+    };
+    if (close) close.onclick = function (ev) {
+      ev.stopPropagation();
+      closePickerModal(pk, modal);
+    };
+    if (modal) {
+      modal.onclick = function (ev) { ev.stopPropagation(); };
+    }
+  }
+
+  /* ═══ اختيار ملف صورة + قراءته كـ dataUrl مع أبعادها ═══ */
+  function pickImageFile(cb) {
+    var inp = document.createElement('input');
+    inp.type = 'file';
+    inp.accept = 'image/*';
+    inp.onchange = function () {
+      var f = inp.files[0];
+      if (!f) return;
+      if (f.size > 6 * 1024 * 1024) {
+        toast('❌ الصورة كبيرة أوي (الحد 6 ميجا)', 'err');
+        return;
+      }
+      var rd = new FileReader();
+      rd.onload = function (e) {
+        var dataUrl = e.target.result;
+        var path = 'assets/upload/' + String(f.name).replace(/[^\w.\-]/g, '_');
+        // نحسب الأبعاد عشان نعرف لو مربعة
+        var im = new Image();
+        im.onload = function () {
+          cb({
+            path: path, name: f.name, dataUrl: dataUrl,
+            dim: im.naturalWidth + '×' + im.naturalHeight,
+            w: im.naturalWidth, h: im.naturalHeight
+          });
+        };
+        im.onerror = function () {
+          cb({ path: path, name: f.name, dataUrl: dataUrl });
+        };
+        im.src = dataUrl;
+      };
+      rd.readAsDataURL(f);
+    };
+    inp.click();
+  }
+
+
+  /* ═══ فتح نافذة المنتقي ═══
+     بننقل النافذة لـ document.body عشان ما تتقصش بـ overflow الجدول،
+     وبنحسب مكانها: تحت الزر لو فيه مساحة، فوقه لو مفيش. */
+  function openPickerModal(pk, modal) {
+    if (!modal) return;
+
+    var back = document.createElement('div');
+    back.className = 'ip-backdrop';
+    back.addEventListener('click', function () { closePickerModal(pk, modal); });
+    document.body.appendChild(back);
+    modal._backdrop = back;
+    // نوقف الـclick عشان الضغطة على الزر ما تقفلش النافذة فوراً
+    back.addEventListener('mousedown', function (e) { e.preventDefault(); e.stopPropagation(); });
+
+    if (!modal._home) modal._home = modal.parentNode;
+    document.body.appendChild(modal);
+    modal.classList.add('is-floating');
+    modal.hidden = false;
+
+    var r = pk.getBoundingClientRect();
+    var mw = Math.min(620, window.innerWidth - 32);
+    var mh = Math.min(window.innerHeight - 48, 620);
+    var left = Math.max(16, Math.min(window.innerWidth - mw - 16, r.left + r.width / 2 - mw / 2));
+    var top = r.top + r.height + 10;
+    if (top + mh > window.innerHeight - 16) {
+      var above = r.top - mh - 10;
+      top = above > 16 ? above : Math.max(16, window.innerHeight - mh - 16);
+    }
+    modal.style.left = left + 'px';
+    modal.style.top = top + 'px';
+    modal.style.width = mw + 'px';
+    modal.style.maxHeight = mh + 'px';
+    modal.style.transform = 'none';
+
+    pk.classList.add('open');
+
+    modal._esc = function (e) {
+      if (e.key === 'Escape') closePickerModal(pk, modal);
+    };
+    document.addEventListener('keydown', modal._esc);
+  }
+
+  function closePickerModal(pk, modal) {
+    if (!modal && pk) modal = pk.querySelector('[data-role="modal"]');
+    if (!modal) return;
+    modal.hidden = true;
+    modal.classList.remove('is-floating');
+    if (pk) pk.classList.remove('open');
+    if (modal._home && modal.parentNode !== modal._home) modal._home.appendChild(modal);
+    if (modal._backdrop) { modal._backdrop.remove(); modal._backdrop = null; }
+    if (modal._esc) { document.removeEventListener('keydown', modal._esc); modal._esc = null; }
+  }
+
+
+  /* ═══ تخطيط جدول الأصناف: نحسب عدد الأعمدة ونحدّدها ═══
+     الأعمدة: [اسم][سعر×N][صورة][حذف]
+     (من غير كده الأعمدة بيزحلقوا فوق بعض وبيركبوا) */
+  function applyRowColumns(rows, nPrices) {
+    var cols = 'minmax(120px,2fr) '
+             + 'repeat(' + nPrices + ',minmax(58px,1fr)) '
+             + 'minmax(150px,1.6fr) '
+             + '38px';
+    rows.forEach(function (r) { r.style.setProperty('--it-cols', cols); });
   }
 
   /* ═══════════ 7) الأصناف والأسعار ═══════════ */
@@ -399,7 +603,13 @@
         'علامة 🟩 — أو أي مقاس بيشتغل، الموقع بيظبطها تلقائي. ' +
         '<span class="sh-dim">الأفضل 800×800 للصفحة الرئيسية و 400×400 للهاتف.</span></div>';
 
-    $('#itemsTable').innerHTML = sizeHint + head + (rows || '<div class="it-empty">مفيش أصناف — اضغط «+ صنف جديد»</div>');
+    $('#itemsTable').innerHTML = sizeHint + head + (rows || '<div class="it-empty">مفيش أصنف — اضغط «+ صنف جديد»</div>');
+
+    /* نحدّد أعمدة الجدول حسب عدد الأسعار (عشان مفيش تداخل) */
+    applyRowColumns(
+      Array.prototype.slice.call($('#itemsTable').querySelectorAll('.it-row')),
+      hasSizes ? m.sizes.length : 1
+    );
 
     $('#itemsTable').querySelectorAll('[data-c]').forEach(function (inp) {
       inp.oninput = function () {
@@ -410,38 +620,43 @@
         markDirty();
       };
     });
-    // منتقي صورة الصنف (menu)
-    $('#itemsTable').querySelectorAll('[data-img-i]').forEach(function (sel) {
-      sel.onchange = function () {
-        var i = +sel.dataset.imgI;
-        m.items[i].img = sel.value;
-        if (!sel.value) delete m.items[i].img;
+    /* منتقي صورة الصنف (menu)
+       ملاحظة: بنستمع على حدث imgpick المخصص بدل change،
+       عشان ما نعيدش بناء الجدول أثناء الاختيار (كان بيبوظ الـselect). */
+    $('#itemsTable').querySelectorAll('[data-img-i]').forEach(function (pk) {
+      var i = +pk.dataset.imgI;
+      bindPicker(pk);
+      pk.addEventListener('imgpick', function (ev) {
+        var v = ev.detail.value;
+        // القيمة الفارغة = بدون صورة (بنتخزنها صراحة عشان ما ترجعش الأصلية)
+        m.items[i].img = v || '';
         markDirty();
-        renderMenu();
-      };
+        toast(v ? '✅ اتغيّرت الصورة' : '✅ اتشالت الصورة', 'ok');
+        // بنحدّث الـthumbnail بس — من غير إعادة بناء الجدول
+        var thumb = pk.closest('.it-img-cell') ? pk.closest('.it-img-cell').querySelector('.it-thumb') : null;
+        if (thumb) {
+          if (v) {
+            var im = null;
+            for (var q = 0; q < images.length; q++) { if (images[q].path === v) { im = images[q]; break; } }
+            thumb.outerHTML = '<img class="it-thumb" src="' + esc(im ? (im.dataUrl || im.path) : v) + '" alt="">';
+          } else {
+            thumb.outerHTML = '<span class="it-thumb it-thumb-empty">📷</span>';
+          }
+        }
+      });
     });
-    // رفع صورة للصنف (menu)
+    // رفع صورة للصنف (menu) — النظام الجديد: بنخزن dataUrl فيتشتغل فوراً
     $('#itemsTable').querySelectorAll('[data-imgup-i]').forEach(function (b) {
       b.onclick = function () {
         var i = +b.dataset.imgupI;
-        var inp = document.createElement('input');
-        inp.type = 'file';
-        inp.accept = 'image/*';
-        inp.onchange = function () {
-          var f = inp.files[0];
-          if (!f) return;
-          var rd = new FileReader();
-          rd.onload = function (e) {
-            var path = 'assets/upload/' + String(f.name).replace(/[^\w.\-]/g, '_');
-            images.push({ path: path, name: f.name, dataUrl: e.target.result });
-            m.items[i].img = path;
-            markDirty();
-            renderMenu();
-            toast('✅ اتحدّثت صورة المنتج', 'ok');
-          };
-          rd.readAsDataURL(f);
-        };
-        inp.click();
+        pickImageFile(function (rec) {
+          images.push(rec);
+          data._images = images.slice();     // لازم نحفظ الـmanifest (فيه الـdataUrl)
+          m.items[i].img = rec.path;
+          markDirty();
+          toast('✅ اتحدّثت صورة المنتج', 'ok');
+          renderMenu();   // هنا بنعيد البناء عشان الشبكة تع是新 الصورة
+        });
       };
     });
 
@@ -551,10 +766,14 @@
       return;
     }
     g.innerHTML = images.map(function (im, i) {
+      var used = countItemsUsing(im.path);
       return '<div class="img-card' + (selImg === im.path ? ' sel' : '') + '" data-i="' + i + '">' +
-        '<img src="' + esc(im.path) + '" alt="" loading="lazy">' +
+        '<img src="' + esc(im.dataUrl || im.path) + '" alt="" loading="lazy">' +
         (im.dim ? '<span class="img-dim">' + esc(im.dim) + '</span>' : '') +
-        '<div class="img-meta"><b>' + esc(im.name) + '</b><small>' + esc(im.path) + '</small></div>' +
+        '<div class="img-meta"><b>' + esc(im.name) + '</b>' +
+        '<small>' + esc(im.path) + '</small>' +
+        (used ? '<small class="img-used">مستخدمة في ' + used + ' صنف</small>' : '') +
+        '</div>' +
       '</div>';
     }).join('');
     g.querySelectorAll('.img-card').forEach(function (c) {
@@ -562,7 +781,7 @@
         var im = images[+c.dataset.i];
         selImg = im.path;
         renderImages();
-        $('#lbImg').src = im.path;
+        $('#lbImg').src = im.dataUrl || im.path;
         $('#lbCap').textContent = im.name + ' — ' + im.path + (im.dim ? ' — ' + im.dim : '');
         $('#lightbox').hidden = false;
       };
@@ -606,7 +825,7 @@
           : (w > 1600 ? '⚠️ العرض كبير — يفضل أقل من 1200 بكسل'
           : '✅ حجم مناسب'));
         var path = 'assets/upload/' + file.name.replace(/[^\w.\-]/g, '_');
-        images.push({ path: path, name: file.name, dim: w + '×' + h, dataUrl: e.target.result });
+        images.push({ path: path, name: file.name, dim: w + '×' + h, w: w, h: h, dataUrl: e.target.result });
         data._images = images.slice();
         selImg = path;
         markDirty();
