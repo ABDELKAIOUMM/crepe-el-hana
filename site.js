@@ -97,6 +97,14 @@ function imgFallback(el){
   }catch(e){}
 }
 
+/* تهريب HTML — عشان الأسماء والأوصاف ما تكسّرش الكارت */
+function esc(s){
+  return String(s==null?'':s).replace(/[&<>"']/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+window.__escHTML=esc;
+
 function getMenu(){const m=window.__MENU_OVERRIDE;return (m&&m.length)?m:__menu_default;}
 const __sizeKeys_default={pizza:{'\u0635\u063a\u064a\u0631':'small','\u0648\u0633\u0637':'medium','\u0643\u0628\u064a\u0631':'large'}};
 function getSizeKeys(){const k=window.__SIZEKEYS_OVERRIDE;return (k&&Object.keys(k).length)?k:__sizeKeys_default;}
@@ -189,17 +197,17 @@ function panelHTML(m){
         if(price==null) return '';
         const label=m.sizes[si];
         return `<div class="price-row">
-          <button class="price-pill wa-clickable" data-size="${label}" onclick="orderItem('${m.key}','${it.name}','${label}',${price})">
+          <button type="button" class="price-pill wa-clickable" data-size="${label}" data-qv-price="${label}" aria-label="ضيف ${it.name} ${label} للسلة">
             <span class="pr-size">${label}</span>
             <span class="pr-price">${price}<i>ج.م</i></span>
           </button>
-          <button type="button" class="wa-add" aria-label="ضيف ${it.name} ${label} للسلة">+</button>
+          <button type="button" class="wa-add" aria-label="زيد ${it.name} ${label}">+</button>
         </div>`;
       }).join('');
-      return `<article class="menu-card menu-card-sizes reveal" style="transition-delay:${i*0.03}s">
-        <a class="card-link card-link-img" href="product.html?cat=${m.key}&id=${encodeURIComponent(it.id)}" aria-label="${it.name}">
+      return `<article class="menu-card menu-card-sizes reveal" style="transition-delay:${i*0.03}s" data-qv-item="${esc(it.id||'')}">
+        <button type="button" class="card-link card-link-img" data-qv-img aria-label="${it.name}">
           ${it.img?`<span class="card-img" data-emoji="${m.emoji}"><img src="${imageSrc(it.img)}" alt="${it.name}" loading="lazy" decoding="async"${cardSrcset(it.img)?` srcset="${cardSrcset(it.img)}" sizes="(max-width:640px) 44vw, 300px"`:''} onerror="imgFallback(this)"></span>`:`<span class="card-emoji">${m.emoji}</span>`}
-        </a>
+        </button>
         <div class="card-body">
           <div class="card-sizes">${rows}</div>
           <a class="card-name" href="product.html?cat=${m.key}&id=${encodeURIComponent(it.id)}">
@@ -211,7 +219,7 @@ function panelHTML(m){
     }).join('');
     return head+`<div class="menu-cards menu-cards-sizes">${cards}</div>`;
   }
-  const cards=m.items.map((it,i)=>`<article class="menu-card reveal" style="transition-delay:${i*0.03}s"><a class="card-link" href="product.html?cat=${m.key}&id=${encodeURIComponent(it.id)}">${it.img?`<span class="card-img" data-emoji="${m.emoji}"><img src="${imageSrc(it.img)}" alt="${it.name}" loading="lazy" decoding="async"${cardSrcset(it.img)?` srcset="${cardSrcset(it.img)}" sizes="(max-width:640px) 46vw, 180px"`:''} onerror="imgFallback(this)"></span>`:`<span class="card-emoji">${m.emoji}</span>`}<h3>${it.name}</h3></a><div class="card-bottom"><span class="card-price">${it.price} <i>ج.م</i></span><button class="button primary" onclick="orderItem('${m.key}','${it.name}','',${it.price})">اطلبها ←</button></div></article>`).join('');
+  const cards=m.items.map((it,i)=>`<article class="menu-card reveal" style="transition-delay:${i*0.03}s" data-qv-item="${esc(it.id||'')}"><button type="button" class="card-link" data-qv-img aria-label="${it.name}">${it.img?`<span class="card-img" data-emoji="${m.emoji}"><img src="${imageSrc(it.img)}" alt="${it.name}" loading="lazy" decoding="async"${cardSrcset(it.img)?` srcset="${cardSrcset(it.img)}" sizes="(max-width:640px) 46vw, 180px"`:''} onerror="imgFallback(this)"></span>`:`<span class="card-emoji">${m.emoji}</span>`}<h3>${it.name}</h3></button><div class="card-bottom"><span class="card-price">${it.price} <i>ج.م</i></span><button type="button" class="button primary" data-qv-price="" data-qv-price-one="1">اطلبها ←</button></div></article>`).join('');
   return head+`<div class="menu-cards">${cards}</div>`;
 }
 function renderMenu(){

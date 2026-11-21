@@ -318,23 +318,11 @@
       }
       wrap.appendChild(btn);
 
-      // الضغط على بطاقة السعر كاملة يضيف للسلة
-      // نُزيل الـ onclick القديم حتى لا يُنفَّذ مرتين
+      /* ═══ السلوك الجديد (qv.js) ═══
+         الضغط على السعر → يضيف للسلة + يفتح نافذة العرض السريع (75%).
+         فبنشيل الربط القديم بتاع زر السعر (كان بيعمل إضافة صامتة بس). */
       pill.removeAttribute('onclick');
       pill.classList.add('wa-clickable');
-      pill.setAttribute('role', 'button');
-      pill.setAttribute('tabindex', '0');
-      pill.setAttribute('aria-label', 'ضيف ' + name + ' ' + size + ' للسلة');
-      pill.addEventListener('click', e => {
-        e.stopPropagation();
-        addToCart(item, { silent: true });
-        toastAdded(name + (size ? ' (' + size + ')' : ''));
-        pill.classList.add('wa-added');
-        setTimeout(() => pill.classList.remove('wa-added'), 700);
-      });
-      pill.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pill.click(); }
-      });
     });
 
     // ═══ كروت بأحجام (البيتزا): ربط زر + الموجود بالسلة ═══
@@ -392,33 +380,14 @@
       });
       card.appendChild(btn);
 
-      // الضغط على البطاقة كاملة يضيف للسلة
-      // زر "اطلب" داخل البطاقة: نُبقيه لكن بلا onclick قديم
+      /* ═══ السلوك الجديد (qv.js) ═══
+         • الضغط على السعر (زر "اطلبها") → يضيف للسلة + يفتح نافذة 75%
+         • الضغط على الصورة → يفتح نافذة 75% ( وفيها زر صفحة المنتج)
+         فبنشيل ربط الكارت كله (كان بيخلي أي مكان بالكارت يضيف للسلة). */
       const orderBtn = card.querySelector('.button');
       if (orderBtn) {
         orderBtn.removeAttribute('onclick');
-        orderBtn.addEventListener('click', e => {
-          e.stopPropagation();
-          addToCart(item, { silent: true });
-          toastAdded(name);
-        });
       }
-      card.classList.add('wa-clickable');
-      card.setAttribute('role', 'button');
-      card.setAttribute('tabindex', '0');
-      card.setAttribute('aria-label', 'ضيف ' + name + ' للسلة');
-      card.addEventListener('click', e => {
-        // لا نُفعّلها إن ضغط المستخدم زر «اطلب» الخاص
-        if (e.target.closest('.button')) return;
-        e.stopPropagation();
-        addToCart(item, { silent: true });
-        toastAdded(name);
-        card.classList.add('wa-added');
-        setTimeout(() => card.classList.remove('wa-added'), 700);
-      });
-      card.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
-      });
     });
   }
 

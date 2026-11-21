@@ -530,3 +530,136 @@ a.mi-thumb:hover{transform:scale(1.06)}
     grid-template-areas:"img body";
   }
 }
+
+/* ============================================================
+   نافذة العرض السريع (Quick View) — 75% من مساحة الشاشة
+   ============================================================ */
+.qv-open{overflow:hidden}
+.qv-backdrop{
+  position:fixed;inset:0;z-index:350;
+  background:#07050399;backdrop-filter:blur(7px);
+  opacity:0;pointer-events:none;transition:opacity .28s ease;
+}
+.qv-backdrop.on{opacity:1;pointer-events:auto}
+.qv-sheet{
+  position:fixed;z-index:351;
+  /* ═══ 75% من مساحة الشاشة ═══ */
+  top:12.5%;left:12.5%;
+  width:75%;height:75%;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;
+  transform:scale(.94) translateY(10px);
+  transition:opacity .28s ease,transform .32s cubic-bezier(.2,.8,.2,1);
+}
+.qv-sheet.on{opacity:1;pointer-events:auto;transform:scale(1) translateY(0)}
+.qv-close{
+  position:absolute;top:-14px;left:-14px;z-index:5;
+  width:42px;height:42px;border-radius:50%;
+  border:1px solid var(--line);background:var(--panel);color:var(--cream);
+  font-size:22px;line-height:1;cursor:pointer;
+  display:grid;place-items:center;transition:.22s;
+  box-shadow:0 8px 24px #0006;
+}
+.qv-close:hover{background:#ffffff14;transform:rotate(90deg)}
+.qv-grid{
+  width:100%;height:100%;
+  display:grid;grid-template-columns:1fr 1fr;gap:0;
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:26px;overflow:hidden;
+  box-shadow:0 30px 90px #00000080;
+}
+.qv-media{
+  display:flex;flex-direction:column;gap:12px;
+  padding:22px;min-width:0;
+  background:#ffffff05;border-left:1px solid var(--line);
+}
+.qv-imgwrap{
+  flex:1;min-height:0;border-radius:18px;overflow:hidden;
+  background:#0d0c0b;border:1px solid var(--line);
+  display:grid;place-items:center;
+}
+.qv-imgwrap img{width:100%;height:100%;object-fit:contain;display:block}
+.qv-emoji{font-size:84px;opacity:.85}
+.qv-openpage{
+  width:100%;flex-shrink:0;
+  background:#ffffff08;color:var(--cream);
+  border:1px solid var(--line);border-radius:15px;
+  padding:14px;font:800 14.5px Tajawal;cursor:pointer;transition:.25s;
+}
+.qv-openpage:hover{background:#ffffff14;border-color:#efa44955;color:var(--orange)}
+.qv-info{
+  padding:26px 28px;overflow-y:auto;min-width:0;
+  display:flex;flex-direction:column;gap:15px;
+}
+.qv-cat{font-size:12px;font-weight:800;color:var(--orange);letter-spacing:.4px}
+.qv-title{margin:0;font-size:27px;font-weight:900;line-height:1.25}
+.qv-desc{margin:0;color:var(--muted);font-size:14px;line-height:1.75}
+.qv-lab{display:block;font-size:13px;font-weight:800;color:#c3b9ae;margin-bottom:9px}
+.qv-lab i{color:var(--muted);font-style:normal;font-weight:600;font-size:11.5px}
+.qv-opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:9px}
+.qv-opts.ex{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+.qv-opt{
+  display:flex;flex-direction:column;gap:3px;
+  background:#ffffff06;border:1px solid var(--line);border-radius:13px;
+  padding:11px 13px;cursor:pointer;transition:.22s;position:relative;
+}
+.qv-opt input{position:absolute;opacity:0;width:0;height:0}
+.qv-opt b{font-size:13.5px;font-weight:800}
+.qv-opt span{font-size:12px;color:var(--orange);font-weight:700}
+.qv-opt:hover{background:#ffffff0d}
+.qv-opt.on{background:#efa44914;border-color:#efa44966}
+.qv-opt.on::after{
+  content:'✓';position:absolute;top:8px;left:9px;
+  width:19px;height:19px;border-radius:50%;
+  background:var(--orange);color:#17110b;
+  font-size:12px;font-weight:900;display:grid;place-items:center;
+}
+.qv-foot{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  background:#ffffff05;border:1px solid var(--line);border-radius:16px;
+  padding:13px 16px;margin-top:auto;
+}
+.qv-qty{display:flex;align-items:center;gap:11px;background:#ffffff0d;border-radius:999px;padding:3px}
+.qv-qty button{
+  width:32px;height:32px;border:0;border-radius:50%;
+  background:#ffffff14;color:#fff;font-size:18px;cursor:pointer;line-height:1;
+}
+.qv-qty button:hover{background:#ffffff26}
+.qv-qty b{font-size:15px;font-weight:900;min-width:18px;text-align:center}
+.qv-total{text-align:left}
+.qv-total span{display:block;font-size:11.5px;color:var(--muted);font-weight:700}
+.qv-total b{font-size:21px;font-weight:900;color:var(--orange)}
+.qv-add{
+  width:100%;border:0;border-radius:16px;padding:16px;
+  font:900 16px Tajawal;cursor:pointer;
+  background:linear-gradient(135deg,#efa449,#e08b2c);color:#17110b;
+  box-shadow:0 12px 30px #efa44930;transition:.25s;
+}
+.qv-add:hover{transform:translateY(-2px);box-shadow:0 18px 40px #efa44945}
+.qv-add.added{background:linear-gradient(135deg,#25d366,#128c4a);color:#071d0e;box-shadow:0 12px 30px #25d36630}
+.qv-hint{margin:0;text-align:center;font-size:11.5px;color:#7d746c;line-height:1.6}
+
+/* ═══ الموبايل: النافذة تاخد الشاشة almost بالكامل ═══ */
+@media(max-width:760px){
+  .qv-sheet{top:4%;left:4%;width:92%;height:92%}
+  .qv-grid{grid-template-columns:1fr;grid-template-rows:minmax(0,26%) minmax(0,1fr);border-radius:20px}
+  .qv-media{padding:12px;border-left:0;border-bottom:1px solid var(--line);flex-direction:row;align-items:center}
+  .qv-imgwrap{border-radius:13px;flex:0 0 44%}
+  .qv-openpage{width:auto;flex:1;padding:12px;font-size:13px}
+  .qv-info{padding:16px 15px;gap:12px}
+  .qv-title{font-size:21px}
+  .qv-desc{font-size:13px;line-height:1.65}
+  .qv-close{top:-10px;left:-10px;width:36px;height:36px;font-size:19px}
+  .qv-foot{padding:11px 13px}
+  .qv-total b{font-size:18px}
+  .qv-add{padding:14px;font-size:15px}
+}
+
+/* ═══ زر السعر بقى button — نرجّع شكله ═══ */
+button.card-link{
+  width:100%;background:none;border:0;padding:0;margin:0;
+  font:inherit;color:inherit;text-align:inherit;cursor:pointer;
+}
+button.card-link:focus-visible{outline:2px solid var(--orange);outline-offset:3px;border-radius:10px}
+.price-pill{font-family:inherit}
+button.price-pill{cursor:pointer}
