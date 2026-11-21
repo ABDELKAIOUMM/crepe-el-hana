@@ -93,14 +93,81 @@
 
   function boot() {
     loadAll();
-    var chain = data ? Promise.resolve() : fetchDefaults();
-    chain.then(function () {
-      applyScale();
-      renderAll();
-      setSaveState('saved');
-    }).catch(function (e) {
-      toast('❌ فشل تحميل البيانات: ' + e.message, 'err');
-    });
+    /* دايماً بنجيب الأحدث من data.json وبندمج فوقه المحفوظ.
+       Reason: لو اعتمدنا على المحفوظ بس، الحقول الجديدة (extras/صور جديدة)
+       هتفضل ناقصة والمستخدم مش هيشوفها. */
+    fetch('data.json?v=' + Date.now())
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        data = mergeDefaults(d);
+        scanImages();
+        saveData(true);
+        applyScale();
+        renderAll();
+        setSaveState('saved');
+      })
+      .catch(function (e) {
+        // فشل الشبكة → نكمّل بالمحفوظ
+        if (!data) { toast('❌ فشل تحميل البيانات: ' + e.message, 'err'); return; }
+        scanImages();
+        applyScale();
+        renderAll();
+        setSaveState('saved');
+      });
+  }
+
+  /* ═══ دمج الأحدث (data.json) مع المحفوظ (تعديلات المستخدم) ═══ */
+  function mergeDefaults(base) {
+    var saved = null;
+    try { saved = JSON.parse(localStorage.getItem(LS_KEY) || 'null'); } catch (e) { saved = null; }
+    if (!saved) return base;
+
+    var out = JSON.parse(JSON.stringify(base));
+
+    // القائمة: item-wise merge (تعديلات المستخدم ليها الأولوية)
+    if (saved.menu && saved.menu.length && out.menu) {
+      out.menu.forEach(function (bm) {
+        var sm = null;
+        saved.menu.forEach(function (x) { if (x.key === bm.key) sm = x; });
+        if (!sm) return;
+        bm.items.forEach(function (bi) {
+          var si = null;
+          (sm.items || []).forEach(function (x) {
+            if ((x.id && x.id === bi.id) || x.name === bi.name) si = x;
+          });
+          if (!si) return;
+          for (var k in si) {
+            if (Object.prototype.hasOwnProperty.call(si, k)) bi[k] = si[k];
+          }
+          if (!bi.id) bi.id = si.id;
+        });
+        // أصناف زادها المستخدم
+        (sm.items || []).forEach(function (si) {
+          var exists = bm.items.some(function (x) {
+            return (si.id && x.id === si.id) || x.name === si.name;
+          });
+          if (!exists) bm.items.push(JSON.parse(JSON.stringify(si)));
+        });
+      });
+    }
+
+    // محتوى/مطعم/كتالوج: لو المحفوظ فيه شغل، يفضّل
+    if (saved.content && Object.keys(saved.content).length) out.content = saved.content;
+    if (saved.restaurant && Object.keys(saved.restaurant).length) out.restaurant = saved.restaurant;
+    if (saved.catalog && saved.catalog.length) out.catalog = saved.catalog;
+
+    // الحقول الجديدة: لو المحفوظ قديم وفاضي → من base
+    if (!saved.extras || !Object.keys(saved.extras).length) out.extras = base.extras;
+    if (!saved.sizeKeys || !Object.keys(saved.sizeKeys).length) out.sizeKeys = base.sizeKeys;
+    if (!saved._images || !saved._images.length) out._images = base._images;
+
+    // لو المحفوظ فيه extras ناقصة (قسم مش موجود) → نكمّل من base
+    if (out.extras && base.extras) {
+      for (var k2 in base.extras) {
+        if (!out.extras[k2]) out.extras[k2] = base.extras[k2];
+      }
+    }
+    return out;
   }
 
   /* ═══════════ 4) التصيير العام ═══════════ */
@@ -224,9 +291,27 @@
   /* بنبني dropdown اختيار من الصور المتاحة */
   function imgOptions(cur) {
     var opts = ['<option value="">— بدون صورة —</option>'];
-    images.forEach(function (im) {
+
+    /* نرتّب: المربعة (sq-*) الأول لأنها الأنسب لبطاقات المنتجات،
+       وبعدها الباقي. ونحسب نوع كل صورة من أبعادها. */
+    var list = images.map(function (im) {
+      var w = im.w || 0, h = im.h || 0;
+      var square = w && h && Math.abs(w - h) < 40;
+      var landscape = w && h && w > h * 1.3;
+      return { im: im, square: square, landscape: landscape };
+    });
+    list.sort(function (a, b) {
+      if (a.square !== b.square) return a.square ? -1 : 1;
+      return (a.im.name || '').localeCompare(b.im.name || '');
+    });
+
+    list.forEach(function (o) {
+      var im = o.im;
       var sel = (im.path === cur) ? ' selected' : '';
-      opts.push('<option value="' + esc(im.path) + '"' + sel + '>' + esc(im.name || im.path) + '</option>');
+      var dims = im.dim ? im.dim : (im.w && im.h ? (im.w + '×' + im.h) : '');
+      var badge = o.square ? '🟩 مربعة' : (o.landscape ? '🟨 أفقية' : '⬜');
+      var label = (im.name || im.path) + (dims ? '  (' + dims + ')' : '') + '  ' + badge;
+      opts.push('<option value="' + esc(im.path) + '"' + sel + '>' + esc(label) + '</option>');
     });
     return opts.join('');
   }
@@ -303,7 +388,18 @@
       '</div>';
     }).join('');
 
-    $('#itemsTable').innerHTML = head + (rows || '<div class="it-empty">مفيش أصناف — اضغط «+ صنف جديد»</div>');
+    /* شرح المقاس المناسب — حسب نوع القسم */
+    var isPizza = (m.key === 'pizza');
+    var sizeHint = isPizza
+      ? '<div class="size-hint"><b>🖼️ المقاس المناسب للبيتزا:</b> صورة <b>مربعة</b> (الأبعاد متساوية) — ' +
+        'علامة 🟩 في القائمة. الكارت بيعرض الصورة كاملة من غير قص. ' +
+        '<br><span class="sh-dim">المقاس المثالي: <b>800×800</b> أو على الأقل <b>400×400</b> بكسل. ' +
+        'لو رفعت صورة أكبر يبقى الموقع بيصغّرها أوتوماتيك.</span></div>'
+      : '<div class="size-hint"><b>🖼️ المقاس المناسب:</b> صورة <b>مربعة</b> 800×800 أو 400×400 بكسل ' +
+        'علامة 🟩 — أو أي مقاس بيشتغل، الموقع بيظبطها تلقائي. ' +
+        '<span class="sh-dim">الأفضل 800×800 للصفحة الرئيسية و 400×400 للهاتف.</span></div>';
+
+    $('#itemsTable').innerHTML = sizeHint + head + (rows || '<div class="it-empty">مفيش أصناف — اضغط «+ صنف جديد»</div>');
 
     $('#itemsTable').querySelectorAll('[data-c]').forEach(function (inp) {
       inp.oninput = function () {

@@ -81,81 +81,7 @@ let currentProduct=null,currentCat='pizza',qty=1;
 const __restaurant_default={name:'كريب الهنا',english:'Crepe El Hana',phones:['01004388613','01147157120','0223656975'],address:'16 ش عبد الهادي متفرع من ش عبد العزيز آل سعود - المنيل',facebook:'crepeelhana',whatsapp:'201004388613'};
 const restaurant=Object.assign({}, __restaurant_default, window.__RESTAURANT_OVERRIDE||{});
 // ===== قائمة الأكل =====
-const __menu_default=[
-{key:"pizza",title:"البيتزا",emoji:"🍕",desc:"بيتزا طازة بثلاث أحجام",sizes:["صغير", "وسط", "كبير"],items:[
-{id:"pizza-بيتزا-مارجريتا",name:"بيتزا مارجريتا",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-3.webp",small:80,medium:90,large:135},
-{id:"pizza-بيتزا-خضار",name:"بيتزا خضار",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-4.webp",small:80,medium:90,large:135},
-{id:"pizza-بيتزا-سوسيس",name:"بيتزا سوسيس",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-2.webp",small:95,medium:110,large:170},
-{id:"pizza-بيتزا-ميكس-جبن",name:"بيتزا ميكس جبن",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-4.webp",small:90,medium:100,large:150},
-{id:"pizza-بيتزا-سجق",name:"بيتزا سجق",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-2.webp",small:95,medium:110,large:170},
-{id:"pizza-بيتزا-فراخ",name:"بيتزا فراخ",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-1.webp",small:95,medium:110,large:170},
-{id:"pizza-بيتزا-مشروم",name:"بيتزا مشروم",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-1.webp",small:95,medium:105,large:160},
-{id:"pizza-بيتزا-بسطرمة",name:"بيتزا بسطرمة",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-4.webp",small:95,medium:110,large:170},
-{id:"pizza-بيتزا-تونة",name:"بيتزا تونة",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-3.webp",small:95,medium:110,large:170},
-{id:"pizza-بيتزا-فراخ-كرسبى",name:"بيتزا فراخ كرسبى",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-2.webp",small:95,medium:110,large:170},
-{id:"pizza-بيتزا-سلامى",name:"بيتزا سلامى",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-4.webp",small:95,medium:110,large:170},
-{id:"pizza-بيتزا-سوبر-سوبريم",name:"بيتزا سوبر سوبريم",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-2.webp",small:100,medium:110,large:170},
-{id:"pizza-بيتزا-فراخ-بانيه-ناجتس",name:"بيتزا فراخ بانيه ناجتس",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-1.webp",small:95,medium:110,large:170},
-{id:"pizza-بيتزا-فراخ-رانش",name:"بيتزا فراخ رانش",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-4.webp",small:100,medium:115,large:175},
-{id:"pizza-بيتزا-فراخ-باربيكيو",name:"بيتزا فراخ باربيكيو",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-3.webp",small:100,medium:115,large:175},
-{id:"pizza-بيتزا-مكس-فراخ",name:"بيتزا مكس فراخ",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-2.webp",small:115,medium:155,large:205},
-{id:"pizza-بيتزا-مكس-لحوم",name:"بيتزا مكس لحوم",desc:"مكونات طازجة، موزاريلا وصوص طماطم غني.",img:"assets/webp/sq-professional-overhead-pizza-isolated-dar-4.webp",small:130,medium:155,large:210},
-]},
-{key:"syrian",title:"سوري",emoji:"🥙",desc:"ساندوتشات سوري بخلطات مميزة",items:[
-{id:"syrian-سوري-بطاطس-فارم",name:"سوري بطاطس فارم",desc:"خبز طازج، fillings مميزة وصلصة البيت.",img:"assets/webp/burger.webp",price:30},
-{id:"syrian-سوري-برجر-سادة",name:"سوري برجر سادة",desc:"خبز طازج، fillings مميزة وصلصة البيت.",img:"assets/webp/burger.webp",price:65},
-{id:"syrian-سوري-برجر-بيض",name:"سوري برجر بيض",desc:"خبز طازج، fillings مميزة وصلصة البيت.",img:"assets/webp/burger.webp",price:80},
-{id:"syrian-سوري-برجر-جبنة",name:"سوري برجر جبنة",desc:"خبز طازج، fillings مميزة وصلصة البيت.",img:"assets/webp/burger.webp",price:80},
-{id:"syrian-سوري-برجر-ميكس",name:"سوري برجر ميكس",desc:"خبز طازج، fillings مميزة وصلصة البيت.",img:"assets/webp/burger.webp",price:90},
-{id:"syrian-سوري-سوسيس-ميكسكانو",name:"سوري سوسيس ميكسكانو",desc:"خبز طازج، fillings مميزة وصلصة البيت.",img:"assets/webp/burger.webp",price:80},
-{id:"syrian-سوري-هوت-دوج",name:"سوري هوت دوج",desc:"خبز طازج، fillings مميزة وصلصة البيت.",img:"assets/webp/burger.webp",price:80},
-{id:"syrian-سوري-كفتة-جريل",name:"سوري كفتة جريل",desc:"خبز طازج، fillings مميزة وصلصة البيت.",img:"assets/webp/burger.webp",price:80},
-{id:"syrian-سوري-تونة",name:"سوري تونة",desc:"خبز طازج، fillings مميزة وصلصة البيت.",img:"assets/webp/burger.webp",price:80},
-{id:"syrian-سوري-فراخ-بانيه",name:"سوري فراخ بانيه",desc:"خبز طازج، fillings مميزة وصلصة البيت.",img:"assets/webp/burger.webp",price:80},
-{id:"syrian-سوري-فراخ-الأجريك",name:"سوري فراخ الأجريك",desc:"خبز طازج، fillings مميزة وصلصة البيت.",img:"assets/webp/burger.webp",price:90},
-{id:"syrian-سوري-فراخ-شيش-طاووق",name:"سوري فراخ شيش طاووق",desc:"خبز طازج، fillings مميزة وصلصة البيت.",img:"assets/webp/burger.webp",price:90},
-{id:"syrian-سوري-سوبر-كرانشي",name:"سوري سوبر كرانشي",desc:"خبز طازج، fillings مميزة وصلصة البيت.",img:"assets/webp/burger.webp",price:90},
-{id:"syrian-سوري-كرسبى",name:"سوري كرسبى",desc:"خبز طازج، fillings مميزة وصلصة البيت.",img:"assets/webp/burger.webp",price:90},
-{id:"syrian-سوري-زنجر",name:"سوري زنجر",desc:"خبز طازج، fillings مميزة وصلصة البيت.",img:"assets/webp/burger.webp",price:90},
-{id:"syrian-سوري-تشيكن-إسبشال-موتزاريلا",name:"سوري تشيكن إسبشال موتزاريلا",desc:"خبز طازج، fillings مميزة وصلصة البيت.",img:"assets/webp/burger.webp",price:100},
-{id:"syrian-سوري-كوردن-بلو",name:"سوري كوردن بلو",desc:"خبز طازج، fillings مميزة وصلصة البيت.",img:"assets/webp/burger.webp",price:100},
-{id:"syrian-سوري-فاهيتا-فراخ",name:"سوري فاهيتا فراخ",desc:"خبز طازج، fillings مميزة وصلصة البيت.",img:"assets/webp/burger.webp",price:95},
-{id:"syrian-سوري-شاورما-فراخ",name:"سوري شاورما فراخ",desc:"خبز طازج، fillings مميزة وصلصة البيت.",img:"assets/webp/burger.webp",price:90},
-]},
-{key:"pasta",title:"الباستا",emoji:"🍝",desc:"باستا طازة بالصوصات المختلفة",items:[
-{id:"pasta-باستا-نجرسكو-فراخ",name:"باستا نجرسكو فراخ",desc:"باستا إيطاليّة مع صوص كريمي طازج.",img:"assets/webp/crepe.webp",price:75},
-{id:"pasta-باستا-الفريدو-فراخ",name:"باستا الفريدو فراخ",desc:"باستا إيطاليّة مع صوص كريمي طازج.",img:"assets/webp/crepe.webp",price:75},
-{id:"pasta-باستا-بلونيز-مفروم",name:"باستا بلونيز مفروم",desc:"باستا إيطاليّة مع صوص كريمي طازج.",img:"assets/webp/crepe.webp",price:75},
-{id:"pasta-باستا-سجق",name:"باستا سجق",desc:"باستا إيطاليّة مع صوص كريمي طازج.",img:"assets/webp/crepe.webp",price:75},
-{id:"pasta-باستا-سوسيس",name:"باستا سوسيس",desc:"باستا إيطاليّة مع صوص كريمي طازج.",img:"assets/webp/crepe.webp",price:75},
-{id:"pasta-باستا-زنجر",name:"باستا زنجر",desc:"باستا إيطاليّة مع صوص كريمي طازج.",img:"assets/webp/crepe.webp",price:75},
-{id:"pasta-باستا-إستربس",name:"باستا إستربس",desc:"باستا إيطاليّة مع صوص كريمي طازج.",img:"assets/webp/crepe.webp",price:75},
-{id:"pasta-باستا-بانيه",name:"باستا بانيه",desc:"باستا إيطاليّة مع صوص كريمي طازج.",img:"assets/webp/crepe.webp",price:75},
-{id:"pasta-باستا-كرسبى",name:"باستا كرسبى",desc:"باستا إيطاليّة مع صوص كريمي طازج.",img:"assets/webp/crepe.webp",price:75},
-]},
-{key:"sweet_crepe",title:"الكريب الحلو",emoji:"🥞",desc:"كريب حلو بالشوكولا والكريمة",items:[
-{id:"sweet_crepe-كريب-شيكولاتة-نوتيلا",name:"كريب شيكولاتة نوتيلا",desc:"كريب حلو بالشوكولاتة والفواكه.",img:"assets/webp/sweet-crepe.webp",price:45},
-{id:"sweet_crepe-كريب-شيكولاتة-نيو-كريمة",name:"كريب شيكولاتة نيو كريمة",desc:"كريب حلو بالشوكولاتة والفواكه.",img:"assets/webp/sweet-crepe.webp",price:45},
-{id:"sweet_crepe-كريب-ميكس-تيلا",name:"كريب ميكس تيلا",desc:"كريب حلو بالشوكولاتة والفواكه.",img:"assets/webp/sweet-crepe.webp",price:65},
-{id:"sweet_crepe-كريب-شيكولاتة-بيضاء",name:"كريب شيكولاتة بيضاء",desc:"كريب حلو بالشوكولاتة والفواكه.",img:"assets/webp/sweet-crepe.webp",price:50},
-{id:"sweet_crepe-كريب-كراميل",name:"كريب كراميل",desc:"كريب حلو بالشوكولاتة والفواكه.",img:"assets/webp/sweet-crepe.webp",price:45},
-{id:"sweet_crepe-كريب-لوتس",name:"كريب لوتس",desc:"كريب حلو بالشوكولاتة والفواكه.",img:"assets/webp/sweet-crepe.webp",price:50},
-]},
-{key:"waffle",title:"الوافل",emoji:"🧇",desc:"وافل طازة بالشوكولا والفاكهة",items:[
-{id:"waffle-وافل-شيكولاتة",name:"وافل شيكولاتة",desc:"وافل ساخن مقرمش بالحلى.",img:"assets/webp/sweet-crepe.webp",price:50},
-{id:"waffle-وافل-كراميل",name:"وافل كراميل",desc:"وافل ساخن مقرمش بالحلى.",img:"assets/webp/sweet-crepe.webp",price:70},
-{id:"waffle-وافل-شيكولاتة-نيو-كريمة",name:"وافل شيكولاتة نيو كريمة",desc:"وافل ساخن مقرمش بالحلى.",img:"assets/webp/sweet-crepe.webp",price:70},
-{id:"waffle-وافل-شيكولاتة-بيضاء",name:"وافل شيكولاتة بيضاء",desc:"وافل ساخن مقرمش بالحلى.",img:"assets/webp/sweet-crepe.webp",price:50},
-{id:"waffle-وافل-شيكولاتة-موز",name:"وافل شيكولاتة موز",desc:"وافل ساخن مقرمش بالحلى.",img:"assets/webp/sweet-crepe.webp",price:85},
-{id:"waffle-وافل-لوتس",name:"وافل لوتس",desc:"وافل ساخن مقرمش بالحلى.",img:"assets/webp/sweet-crepe.webp",price:75},
-{id:"waffle-وافل-شيكولاتة-نوعين-فاكهة",name:"وافل شيكولاتة نوعين فاكهة",desc:"وافل ساخن مقرمش بالحلى.",img:"assets/webp/sweet-crepe.webp",price:85},
-{id:"waffle-وافل-شيكولاتة-مارس",name:"وافل شيكولاتة مارس",desc:"وافل ساخن مقرمش بالحلى.",img:"assets/webp/sweet-crepe.webp",price:85},
-{id:"waffle-وافل-مالتيزرز",name:"وافل مالتيزرز",desc:"وافل ساخن مقرمش بالحلى.",img:"assets/webp/sweet-crepe.webp",price:85},
-{id:"waffle-وافل-اسنيكرز",name:"وافل اسنيكرز",desc:"وافل ساخن مقرمش بالحلى.",img:"assets/webp/sweet-crepe.webp",price:85},
-{id:"waffle-وافل-شيكولاتة-مورو",name:"وافل شيكولاتة مورو",desc:"وافل ساخن مقرمش بالحلى.",img:"assets/webp/sweet-crepe.webp",price:80},
-{id:"waffle-وافل-شيكولاتة-ميكس-صوصات",name:"وافل شيكولاتة ميكس صوصات",desc:"وافل ساخن مقرمش بالحلى.",img:"assets/webp/sweet-crepe.webp",price:85},
-]},
-];
+const __menu_default=[{"key":"pizza","title":"البيتزا","emoji":"🍕","desc":"بيتزا طازة بثلاث أحجام","sizes":["صغير","وسط","كبير"],"items":[{"id":"pizza-بيتزا-مارجريتا","name":"بيتزا مارجريتا","desc":"مكونات طازجة، موزاريلا وصوص طماطم غني.","img":"assets/webp/sq-professional-overhead-pizza-isolated-dar-5.webp","small":80,"medium":90,"large":135},{"id":"pizza-بيتزا-خضار","name":"بيتزا خضار","desc":"مكونات طازجة، موزاريلا وصوص طماطم غني.","img":"assets/webp/sq-professional-overhead-pizza-isolated-dar-1.webp","small":80,"medium":90,"large":135},{"id":"pizza-بيتزا-سوسيس","name":"بيتزا سوسيس","desc":"مكونات طازجة، موزاريلا وصوص طماطم غني.","img":"assets/webp/sq-professional-overhead-pizza-isolated-dar-3.webp","small":95,"medium":110,"large":170},{"id":"pizza-بيتزا-ميكس-جبن","name":"بيتزا ميكس جبن","desc":"مكونات طازجة، موزاريلا وصوص طماطم غني.","img":"assets/webp/sq-professional-overhead-pizza-isolated-dar-4.webp","small":90,"medium":100,"large":150},{"id":"pizza-بيتزا-سجق","name":"بيتزا سجق","desc":"مكونات طازجة، موزاريلا وصوص طماطم غني.","img":"assets/webp/sq-professional-overhead-pizza-isolated-dar-3.webp","small":95,"medium":110,"large":170},{"id":"pizza-بيتزا-فراخ","name":"بيتزا فراخ","desc":"مكونات طازجة، موزاريلا وصوص طماطم غني.","img":"assets/webp/sq-professional-overhead-pizza-isolated-dar-2.webp","small":95,"medium":110,"large":170},{"id":"pizza-بيتزا-مشروم","name":"بيتزا مشروم","desc":"مكونات طازجة، موزاريلا وصوص طماطم غني.","img":"assets/webp/sq-professional-overhead-pizza-isolated-dar-5.webp","small":95,"medium":105,"large":160},{"id":"pizza-بيتزا-بسطرمة","name":"بيتزا بسطرمة","desc":"مكونات طازجة، موزاريلا وصوص طماطم غني.","img":"assets/webp/sq-professional-overhead-pizza-isolated-dar-4.webp","small":95,"medium":110,"large":170},{"id":"pizza-بيتزا-تونة","name":"بيتزا تونة","desc":"مكونات طازجة، موزاريلا وصوص طماطم غني.","img":"assets/webp/sq-professional-overhead-pizza-isolated-dar-2.webp","small":95,"medium":110,"large":170},{"id":"pizza-بيتزا-فراخ-كرسبى","name":"بيتزا فراخ كرسبى","desc":"مكونات طازجة، موزاريلا وصوص طماطم غني.","img":"assets/webp/sq-professional-overhead-pizza-isolated-dar-4.webp","small":95,"medium":110,"large":170},{"id":"pizza-بيتزا-سلامى","name":"بيتزا سلامى","desc":"مكونات طازجة، موزاريلا وصوص طماطم غني.","img":"assets/webp/sq-professional-overhead-pizza-isolated-dar-2.webp","small":95,"medium":110,"large":170},{"id":"pizza-بيتزا-سوبر-سوبريم","name":"بيتزا سوبر سوبريم","desc":"مكونات طازجة، موزاريلا وصوص طماطم غني.","img":"assets/webp/sq-professional-overhead-pizza-isolated-dar-2.webp","small":100,"medium":110,"large":170},{"id":"pizza-بيتزا-فراخ-بانيه-ناجتس","name":"بيتزا فراخ بانيه ناجتس","desc":"مكونات طازجة، موزاريلا وصوص طماطم غني.","img":"assets/webp/sq-professional-overhead-pizza-isolated-dar-1.webp","small":95,"medium":110,"large":170},{"id":"pizza-بيتزا-فراخ-رانش","name":"بيتزا فراخ رانش","desc":"مكونات طازجة، موزاريلا وصوص طماطم غني.","img":"assets/webp/sq-professional-overhead-pizza-isolated-dar-4.webp","small":100,"medium":115,"large":175},{"id":"pizza-بيتزا-فراخ-باربيكيو","name":"بيتزا فراخ باربيكيو","desc":"مكونات طازجة، موزاريلا وصوص طماطم غني.","img":"assets/webp/sq-professional-overhead-pizza-isolated-dar-3.webp","small":100,"medium":115,"large":175},{"id":"pizza-بيتزا-مكس-فراخ","name":"بيتزا مكس فراخ","desc":"مكونات طازجة، موزاريلا وصوص طماطم غني.","img":"assets/webp/sq-professional-overhead-pizza-isolated-dar-2.webp","small":115,"medium":155,"large":205},{"id":"pizza-بيتزا-مكس-لحوم","name":"بيتزا مكس لحوم","desc":"مكونات طازجة، موزاريلا وصوص طماطم غني.","img":"assets/webp/sq-professional-overhead-pizza-isolated-dar-4.webp","small":130,"medium":155,"large":210}]},{"key":"syrian","title":"سوري","emoji":"🥙","desc":"ساندوتشات سوري بخلطات مميزة","sizes":[],"items":[{"id":"syrian-سوري-بطاطس-فارم","name":"سوري بطاطس فارم","desc":"خبز طازج، fillings مميزة وصلصة البيت.","img":"assets/webp/burger.webp","price":30},{"id":"syrian-سوري-برجر-سادة","name":"سوري برجر سادة","desc":"خبز طازج، fillings مميزة وصلصة البيت.","img":"assets/webp/burger.webp","price":65},{"id":"syrian-سوري-برجر-بيض","name":"سوري برجر بيض","desc":"خبز طازج، fillings مميزة وصلصة البيت.","img":"assets/webp/burger.webp","price":80},{"id":"syrian-سوري-برجر-جبنة","name":"سوري برجر جبنة","desc":"خبز طازج، fillings مميزة وصلصة البيت.","img":"assets/webp/burger.webp","price":80},{"id":"syrian-سوري-برجر-ميكس","name":"سوري برجر ميكس","desc":"خبز طازج، fillings مميزة وصلصة البيت.","img":"assets/webp/burger.webp","price":90},{"id":"syrian-سوري-سوسيس-ميكسكانو","name":"سوري سوسيس ميكسكانو","desc":"خبز طازج، fillings مميزة وصلصة البيت.","img":"assets/webp/burger.webp","price":80},{"id":"syrian-سوري-هوت-دوج","name":"سوري هوت دوج","desc":"خبز طازج، fillings مميزة وصلصة البيت.","img":"assets/webp/burger.webp","price":80},{"id":"syrian-سوري-كفتة-جريل","name":"سوري كفتة جريل","desc":"خبز طازج، fillings مميزة وصلصة البيت.","img":"assets/webp/burger.webp","price":80},{"id":"syrian-سوري-تونة","name":"سوري تونة","desc":"خبز طازج، fillings مميزة وصلصة البيت.","img":"assets/webp/burger.webp","price":80},{"id":"syrian-سوري-فراخ-بانيه","name":"سوري فراخ بانيه","desc":"خبز طازج، fillings مميزة وصلصة البيت.","img":"assets/webp/burger.webp","price":80},{"id":"syrian-سوري-فراخ-الأجريك","name":"سوري فراخ الأجريك","desc":"خبز طازج، fillings مميزة وصلصة البيت.","img":"assets/webp/burger.webp","price":90},{"id":"syrian-سوري-فراخ-شيش-طاووق","name":"سوري فراخ شيش طاووق","desc":"خبز طازج، fillings مميزة وصلصة البيت.","img":"assets/webp/burger.webp","price":90},{"id":"syrian-سوري-سوبر-كرانشي","name":"سوري سوبر كرانشي","desc":"خبز طازج، fillings مميزة وصلصة البيت.","img":"assets/webp/burger.webp","price":90},{"id":"syrian-سوري-كرسبى","name":"سوري كرسبى","desc":"خبز طازج، fillings مميزة وصلصة البيت.","img":"assets/webp/burger.webp","price":90},{"id":"syrian-سوري-زنجر","name":"سوري زنجر","desc":"خبز طازج، fillings مميزة وصلصة البيت.","img":"assets/webp/burger.webp","price":90},{"id":"syrian-سوري-تشيكن-إسبشال-موتزاريلا","name":"سوري تشيكن إسبشال موتزاريلا","desc":"خبز طازج، fillings مميزة وصلصة البيت.","img":"assets/webp/burger.webp","price":100},{"id":"syrian-سوري-كوردن-بلو","name":"سوري كوردن بلو","desc":"خبز طازج، fillings مميزة وصلصة البيت.","img":"assets/webp/burger.webp","price":100},{"id":"syrian-سوري-فاهيتا-فراخ","name":"سوري فاهيتا فراخ","desc":"خبز طازج، fillings مميزة وصلصة البيت.","img":"assets/webp/burger.webp","price":95},{"id":"syrian-سوري-شاورما-فراخ","name":"سوري شاورما فراخ","desc":"خبز طازج، fillings مميزة وصلصة البيت.","img":"assets/webp/burger.webp","price":90}]},{"key":"pasta","title":"الباستا","emoji":"🍝","desc":"باستا طازة بالصوصات المختلفة","sizes":[],"items":[{"id":"pasta-باستا-نجرسكو-فراخ","name":"باستا نجرسكو فراخ","desc":"باستا إيطاليّة مع صوص كريمي طازج.","img":"assets/webp/crepe.webp","price":75},{"id":"pasta-باستا-الفريدو-فراخ","name":"باستا الفريدو فراخ","desc":"باستا إيطاليّة مع صوص كريمي طازج.","img":"assets/webp/crepe.webp","price":75},{"id":"pasta-باستا-بلونيز-مفروم","name":"باستا بلونيز مفروم","desc":"باستا إيطاليّة مع صوص كريمي طازج.","img":"assets/webp/crepe.webp","price":75},{"id":"pasta-باستا-سجق","name":"باستا سجق","desc":"باستا إيطاليّة مع صوص كريمي طازج.","img":"assets/webp/crepe.webp","price":75},{"id":"pasta-باستا-سوسيس","name":"باستا سوسيس","desc":"باستا إيطاليّة مع صوص كريمي طازج.","img":"assets/webp/crepe.webp","price":75},{"id":"pasta-باستا-زنجر","name":"باستا زنجر","desc":"باستا إيطاليّة مع صوص كريمي طازج.","img":"assets/webp/crepe.webp","price":75},{"id":"pasta-باستا-إستربس","name":"باستا إستربس","desc":"باستا إيطاليّة مع صوص كريمي طازج.","img":"assets/webp/crepe.webp","price":75},{"id":"pasta-باستا-بانيه","name":"باستا بانيه","desc":"باستا إيطاليّة مع صوص كريمي طازج.","img":"assets/webp/crepe.webp","price":75},{"id":"pasta-باستا-كرسبى","name":"باستا كرسبى","desc":"باستا إيطاليّة مع صوص كريمي طازج.","img":"assets/webp/crepe.webp","price":75}]},{"key":"sweet_crepe","title":"الكريب الحلو","emoji":"🥞","desc":"كريب حلو بالشوكولا والكريمة","sizes":[],"items":[{"id":"sweet_crepe-كريب-شيكولاتة-نوتيلا","name":"كريب شيكولاتة نوتيلا","desc":"كريب حلو بالشوكولاتة والفواكه.","img":"assets/webp/sweet-crepe.webp","price":45},{"id":"sweet_crepe-كريب-شيكولاتة-نيو-كريمة","name":"كريب شيكولاتة نيو كريمة","desc":"كريب حلو بالشوكولاتة والفواكه.","img":"assets/webp/sweet-crepe.webp","price":45},{"id":"sweet_crepe-كريب-ميكس-تيلا","name":"كريب ميكس تيلا","desc":"كريب حلو بالشوكولاتة والفواكه.","img":"assets/webp/sweet-crepe.webp","price":65},{"id":"sweet_crepe-كريب-شيكولاتة-بيضاء","name":"كريب شيكولاتة بيضاء","desc":"كريب حلو بالشوكولاتة والفواكه.","img":"assets/webp/sweet-crepe.webp","price":50},{"id":"sweet_crepe-كريب-كراميل","name":"كريب كراميل","desc":"كريب حلو بالشوكولاتة والفواكه.","img":"assets/webp/sweet-crepe.webp","price":45},{"id":"sweet_crepe-كريب-لوتس","name":"كريب لوتس","desc":"كريب حلو بالشوكولاتة والفواكه.","img":"assets/webp/sweet-crepe.webp","price":50}]},{"key":"waffle","title":"الوافل","emoji":"🧇","desc":"وافل طازة بالشوكولا والفاكهة","sizes":[],"items":[{"id":"waffle-وافل-شيكولاتة","name":"وافل شيكولاتة","desc":"وافل ساخن مقرمش بالحلى.","img":"assets/webp/sweet-crepe.webp","price":50},{"id":"waffle-وافل-كراميل","name":"وافل كراميل","desc":"وافل ساخن مقرمش بالحلى.","img":"assets/webp/sweet-crepe.webp","price":70},{"id":"waffle-وافل-شيكولاتة-نيو-كريمة","name":"وافل شيكولاتة نيو كريمة","desc":"وافل ساخن مقرمش بالحلى.","img":"assets/webp/sweet-crepe.webp","price":70},{"id":"waffle-وافل-شيكولاتة-بيضاء","name":"وافل شيكولاتة بيضاء","desc":"وافل ساخن مقرمش بالحلى.","img":"assets/webp/sweet-crepe.webp","price":50},{"id":"waffle-وافل-شيكولاتة-موز","name":"وافل شيكولاتة موز","desc":"وافل ساخن مقرمش بالحلى.","img":"assets/webp/sweet-crepe.webp","price":85},{"id":"waffle-وافل-لوتس","name":"وافل لوتس","desc":"وافل ساخن مقرمش بالحلى.","img":"assets/webp/sweet-crepe.webp","price":75},{"id":"waffle-وافل-شيكولاتة-نوعين-فاكهة","name":"وافل شيكولاتة نوعين فاكهة","desc":"وافل ساخن مقرمش بالحلى.","img":"assets/webp/sweet-crepe.webp","price":85},{"id":"waffle-وافل-شيكولاتة-مارس","name":"وافل شيكولاتة مارس","desc":"وافل ساخن مقرمش بالحلى.","img":"assets/webp/sweet-crepe.webp","price":85},{"id":"waffle-وافل-مالتيزرز","name":"وافل مالتيزرز","desc":"وافل ساخن مقرمش بالحلى.","img":"assets/webp/sweet-crepe.webp","price":85},{"id":"waffle-وافل-اسنيكرز","name":"وافل اسنيكرز","desc":"وافل ساخن مقرمش بالحلى.","img":"assets/webp/sweet-crepe.webp","price":85},{"id":"waffle-وافل-شيكولاتة-مورو","name":"وافل شيكولاتة مورو","desc":"وافل ساخن مقرمش بالحلى.","img":"assets/webp/sweet-crepe.webp","price":80},{"id":"waffle-وافل-شيكولاتة-ميكس-صوصات","name":"وافل شيكولاتة ميكس صوصات","desc":"وافل ساخن مقرمش بالحلى.","img":"assets/webp/sweet-crepe.webp","price":85}]}];
 
 /* لو الصورة فشل تحميلها → نستبدلها بالـemoji بدل أيقونة صورة مكسورة */
 function imgFallback(el){
@@ -290,7 +216,7 @@ function orderItem(cat,name,size,price){
 
 /* ══════════ رقم إصدار التطبيق ══════════
    بنستخدمه للتأكد إن المتصفح ماسكش نسخة قديمة من الكود */
-window.__APP_VERSION='20261121d';
+window.__APP_VERSION='20261121e';
 
 function params(){return new URLSearchParams(location.search)}
 
@@ -327,12 +253,20 @@ function renderProduct(){
       this.removeAttribute('srcset');
       this.src='assets/webp/sq-professional-overhead-pizza-isolated-dar-2.webp';
     };
-    // srcset ديناميكي: لو الصورة عندنا نسخ 400/800 بنستخدمها، وإلا نلغيه
-    // (لازم نلغيه الأول وإلا الـbrowser هيلغي الطلب القديم = ERR_ABORTED)
-    productImage.removeAttribute('srcset');
+    /* srcset الأول وبعدين src — بالترتيب ده المتصفح بيطلب الصورة الصح مرة واحدة.
+       ولو الـsrc موجود بالفعل بنفس المسار → متغيرش (بتجنب طلب ملغي = ERR_ABORTED). */
     var variants=productImageVariants(item.img);
-    if(variants) productImage.setAttribute('srcset',variants);
-    if(productImage.getAttribute('src')!==item.img) productImage.src=item.img;
+    var curSrc=productImage.getAttribute('src');
+    var curSet=productImage.getAttribute('srcset');
+    if(variants){
+      if(curSet!==variants){
+        productImage.removeAttribute('srcset');
+        productImage.setAttribute('srcset',variants);
+      }
+    }else if(curSet){
+      productImage.removeAttribute('srcset');
+    }
+    if(curSrc!==item.img) productImage.src=item.img;
   }
 
   productName.textContent=item.name;
