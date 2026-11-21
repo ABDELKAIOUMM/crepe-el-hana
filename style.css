@@ -380,3 +380,119 @@ a.mi-thumb:hover{transform:scale(1.06)}
 .card-link h3{transition:color .18s}
 .card-link:hover h3{color:var(--orange)}
 .card-link:hover .card-img img{transform:scale(1.06)}
+/* ══════════════════════════════════════════════════════════
+   كارت المنتجات بأحجام (البيتزا): صورة كبيرة + أسعار بجانبها
+   التخطيط: الصورة يمين (RTL) · الأسعار شمال · كل سعر في صف
+   ══════════════════════════════════════════════════════════ */
+
+/* الشبكة: عمودان في الديسكتوب */
+.menu-cards-sizes{grid-template-columns:repeat(2,1fr);gap:18px;padding-bottom:20px}
+
+/* الكارت: شبكة — الصورة يمين، الأسعار شمال */
+.menu-card-sizes{
+  display:grid;
+  grid-template-columns:minmax(0,172px) minmax(0,1fr);
+  grid-template-areas:"img prices" "name prices";
+  align-items:start;
+  gap:0 18px;
+  padding:14px;
+  border-radius:24px;
+  position:relative;
+}
+.menu-card-sizes .card-link{grid-area:img;display:block;min-width:0}
+.menu-card-sizes .card-img{
+  display:block;width:100%;aspect-ratio:1/1;overflow:hidden;
+  margin:0;border-radius:18px;background:#171412;
+  border:1px solid var(--line);
+}
+.menu-card-sizes .card-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .45s ease}
+.menu-card-sizes .card-emoji{
+  display:grid;place-items:center;width:100%;aspect-ratio:1/1;
+  border-radius:18px;background:#171412;border:1px solid var(--line);font-size:46px;
+}
+.menu-card-sizes h3{
+  grid-area:name;font-size:17px;margin:12px 0 0;line-height:1.45;min-height:0;
+  padding-bottom:0;border:0;
+}
+.menu-card-sizes .card-sizes{
+  grid-area:prices;
+  display:flex;flex-direction:column;gap:8px;align-items:stretch;
+  min-width:0;
+}
+
+/* ── صف السعر: الحجم + السعر + زر + ── */
+.price-row{
+  display:flex;align-items:center;gap:8px;
+  background:#ffffff05;border:1px solid transparent;border-radius:13px;
+  padding:4px 6px 4px 4px;
+  transition:.25s;
+}
+.price-row:hover{background:#ffffff08;border-color:#ffffff14}
+.price-row.wa-added{border-color:var(--orange);background:#efa44914}
+
+/* زر السعر نفسه */
+.menu-card-sizes .price-pill{
+  flex:1;min-width:0;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  background:none;border:0;padding:9px 10px;
+  font:800 16px Tajawal;color:var(--cream);cursor:pointer;
+  border-radius:9px;
+}
+.menu-card-sizes .price-pill:hover{background:#ffffff0a}
+.pr-size{font-size:12.5px;font-weight:700;color:var(--muted);white-space:nowrap}
+.pr-price{font-size:17px;font-weight:900;color:var(--orange);white-space:nowrap;display:inline-flex;align-items:baseline;gap:5px}
+.pr-price i{font-style:normal;font-size:11.5px;font-weight:700;color:var(--muted)}
+
+/* زر + : يبان ويبقى قابل للنقر (لازم specificity أعلى من .wa-add العام) */
+.price-row .menu-card-sizes .wa-add,
+.menu-card-sizes .price-row .wa-add{
+  position:static;transform:none;
+  flex-shrink:0;width:30px;height:30px;
+  display:grid;place-items:center;
+  border:1px solid var(--line);border-radius:9px;
+  background:#ffffff0a;color:var(--orange);
+  font:800 17px Tajawal;line-height:1;cursor:pointer;
+  opacity:1;visibility:visible;pointer-events:auto;
+  z-index:auto;left:auto;top:auto;
+  transition:.22s;
+}
+.menu-card-sizes .price-row .wa-add:hover{
+  background:var(--orange);color:#1a1511;border-color:var(--orange);
+  transform:none;opacity:1;
+}
+.menu-card-sizes .price-row .wa-add:active{transform:scale(.9);opacity:1}
+
+/* الكارت عند المرور */
+.menu-card-sizes:hover .card-img img{transform:scale(1.07)}
+.menu-card-sizes:hover .wa-add{opacity:1}
+
+/* ══════════ الموبايل: صورة فوق والأسعار تحت ══════════ */
+@media(max-width:640px){
+  .menu-cards-sizes{grid-template-columns:1fr 1fr;gap:11px}
+  .menu-card-sizes{
+    grid-template-columns:1fr;
+    grid-template-areas:"img" "name" "prices";
+    gap:0;padding:11px;border-radius:20px;
+  }
+  .menu-card-sizes .card-img,.menu-card-sizes .card-emoji{border-radius:15px}
+  .menu-card-sizes h3{font-size:14.5px;margin:9px 0 11px;text-align:center;line-height:1.4}
+  .menu-card-sizes .card-sizes{gap:6px}
+  .price-row{padding:3px 4px;border-radius:11px}
+  .menu-card-sizes .price-pill{padding:7px 8px;font-size:14px;gap:6px}
+  .pr-size{font-size:11px}
+  .pr-price{font-size:14.5px}
+  .pr-price i{font-size:10.5px}
+  .menu-card-sizes .price-row .wa-add{width:26px;height:26px;font-size:15px;border-radius:8px}
+}
+@media(max-width:380px){
+  .menu-cards-sizes{grid-template-columns:1fr}
+}
+
+/* ══════════ تابلت: عمود واحد متوسط ══════════ */
+@media(min-width:641px) and (max-width:900px){
+  .menu-cards-sizes{grid-template-columns:1fr}
+  .menu-card-sizes{
+    grid-template-columns:minmax(0,150px) minmax(0,1fr);
+    grid-template-areas:"img prices" "name prices";
+  }
+}
