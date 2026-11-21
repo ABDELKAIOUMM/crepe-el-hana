@@ -1242,139 +1242,185 @@
       "path": "assets/webp/burger-400.webp",
       "name": "burger-400.webp",
       "dim": "400×400",
-      "kb": 28.4
+      "kb": 28.4,
+      "w": 400,
+      "h": 400
     },
     {
       "path": "assets/webp/burger-800.webp",
       "name": "burger-800.webp",
       "dim": "800×800",
-      "kb": 78.2
+      "kb": 78.2,
+      "w": 800,
+      "h": 800
     },
     {
       "path": "assets/webp/burger.webp",
       "name": "burger.webp",
       "dim": "1024×1024",
-      "kb": 113.3
+      "kb": 113.3,
+      "w": 1024,
+      "h": 1024
     },
     {
       "path": "assets/webp/crepe-400.webp",
       "name": "crepe-400.webp",
       "dim": "400×400",
-      "kb": 28.6
+      "kb": 28.6,
+      "w": 400,
+      "h": 400
     },
     {
       "path": "assets/webp/crepe-800.webp",
       "name": "crepe-800.webp",
       "dim": "800×800",
-      "kb": 76.5
+      "kb": 76.5,
+      "w": 800,
+      "h": 800
     },
     {
       "path": "assets/webp/crepe.webp",
       "name": "crepe.webp",
       "dim": "1024×1024",
-      "kb": 107.8
+      "kb": 107.8,
+      "w": 1024,
+      "h": 1024
     },
     {
       "path": "assets/webp/hero-pizza-1200.webp",
       "name": "hero-pizza-1200.webp",
       "dim": "1200×670",
-      "kb": 79.5
+      "kb": 79.5,
+      "w": 1200,
+      "h": 670
     },
     {
       "path": "assets/webp/hero-pizza-400.webp",
       "name": "hero-pizza-400.webp",
       "dim": "400×223",
-      "kb": 13.6
+      "kb": 13.6,
+      "w": 400,
+      "h": 223
     },
     {
       "path": "assets/webp/hero-pizza-800.webp",
       "name": "hero-pizza-800.webp",
       "dim": "800×447",
-      "kb": 43.0
+      "kb": 43.0,
+      "w": 800,
+      "h": 447
     },
     {
       "path": "assets/webp/hero-pizza.webp",
       "name": "hero-pizza.webp",
       "dim": "1376×768",
-      "kb": 100.3
+      "kb": 100.3,
+      "w": 1376,
+      "h": 768
     },
     {
       "path": "assets/webp/professional-overhead-pizza-isolated-dar-1-400.webp",
       "name": "professional-overhead-pizza-isolated-dar-1-400.webp",
       "dim": "400×180",
-      "kb": 10.3
+      "kb": 10.3,
+      "w": 400,
+      "h": 180
     },
     {
       "path": "assets/webp/professional-overhead-pizza-isolated-dar-1.webp",
       "name": "professional-overhead-pizza-isolated-dar-1.webp",
       "dim": "776×350",
-      "kb": 28.1
+      "kb": 28.1,
+      "w": 776,
+      "h": 350
     },
     {
       "path": "assets/webp/professional-overhead-pizza-isolated-dar-2-400.webp",
       "name": "professional-overhead-pizza-isolated-dar-2-400.webp",
       "dim": "400×180",
-      "kb": 10.2
+      "kb": 10.2,
+      "w": 400,
+      "h": 180
     },
     {
       "path": "assets/webp/professional-overhead-pizza-isolated-dar-2.webp",
       "name": "professional-overhead-pizza-isolated-dar-2.webp",
       "dim": "798×360",
-      "kb": 32.2
+      "kb": 32.2,
+      "w": 798,
+      "h": 360
     },
     {
       "path": "assets/webp/professional-overhead-pizza-isolated-dar-3-400.webp",
       "name": "professional-overhead-pizza-isolated-dar-3-400.webp",
       "dim": "400×232",
-      "kb": 20.8
+      "kb": 20.8,
+      "w": 400,
+      "h": 232
     },
     {
       "path": "assets/webp/professional-overhead-pizza-isolated-dar-3.webp",
       "name": "professional-overhead-pizza-isolated-dar-3.webp",
       "dim": "612×355",
-      "kb": 43.5
+      "kb": 43.5,
+      "w": 612,
+      "h": 355
     },
     {
       "path": "assets/webp/professional-overhead-pizza-isolated-dar-4-400.webp",
       "name": "professional-overhead-pizza-isolated-dar-4-400.webp",
       "dim": "400×225",
-      "kb": 13.1
+      "kb": 13.1,
+      "w": 400,
+      "h": 225
     },
     {
       "path": "assets/webp/professional-overhead-pizza-isolated-dar-4.webp",
       "name": "professional-overhead-pizza-isolated-dar-4.webp",
       "dim": "622×350",
-      "kb": 25.5
+      "kb": 25.5,
+      "w": 622,
+      "h": 350
     },
     {
       "path": "assets/webp/professional-overhead-pizza-isolated-dar-5-400.webp",
       "name": "professional-overhead-pizza-isolated-dar-5-400.webp",
       "dim": "400×175",
-      "kb": 18.2
+      "kb": 18.2,
+      "w": 400,
+      "h": 175
     },
     {
       "path": "assets/webp/professional-overhead-pizza-isolated-dar-5.webp",
       "name": "professional-overhead-pizza-isolated-dar-5.webp",
       "dim": "612×267",
-      "kb": 38.7
+      "kb": 38.7,
+      "w": 612,
+      "h": 267
     },
     {
       "path": "assets/webp/sweet-crepe-400.webp",
       "name": "sweet-crepe-400.webp",
       "dim": "400×400",
-      "kb": 25.0
+      "kb": 25.0,
+      "w": 400,
+      "h": 400
     },
     {
       "path": "assets/webp/sweet-crepe-800.webp",
       "name": "sweet-crepe-800.webp",
       "dim": "800×800",
-      "kb": 66.5
+      "kb": 66.5,
+      "w": 800,
+      "h": 800
     },
     {
       "path": "assets/webp/sweet-crepe.webp",
       "name": "sweet-crepe.webp",
       "dim": "1024×1024",
-      "kb": 95.8
+      "kb": 95.8,
+      "w": 1024,
+      "h": 1024
     }
   ],
   "extras": {
