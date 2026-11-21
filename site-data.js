@@ -169,6 +169,14 @@
               for (var k in si) {
                 if (Object.prototype.hasOwnProperty.call(si, k)) merged[k] = si[k];
               }
+              // لو المستخدم حذف الصورة (img = '' فارغ) → نخلّيها بدون صورة
+              // ومش نرجّع الصورة الأصلية من base
+              if (si.img === '' || si.img === null) {
+                merged.img = '';
+                merged.__noImg = 1;
+              } else {
+                delete merged.__noImg;
+              }
               // بس لو المحفوظ كان قديم ومش فيه حقول جديدة (زي id) نكملها من base
               if (!merged.id) merged.id = bi.id;
               return merged;
@@ -201,7 +209,16 @@
           ? saved._images : base._images;
 
         applyContent(window.__CONTENT_OVERRIDE);
-        if (window.__reapplyData) window.__reapplyData();
+        /* ═══ مهم: إعادة الرسم لازم تتم بعد ما site.js يجهّز دواله ═══
+           أحياناً الـfetch بيخلص قبل ما site.js يتحمّل → بنحفظ الدالة
+           ونتknظر لحد ما تكون جاهزة (poll خفيف) */
+        (function tryReapply(attempt) {
+          if (typeof window.__reapplyData === 'function') {
+            window.__reapplyData();
+            return;
+          }
+          if (attempt < 40) setTimeout(function () { tryReapply(attempt + 1); }, 50);
+        })(0);
       })
       .catch(function () {
         /* فشل الـfetch → نرجع للمحفوظ زي ما كان */
@@ -215,7 +232,13 @@
         if (saved.extras) window.__EXTRAS_OVERRIDE = saved.extras;
         if (saved._images) window.__IMAGES_MANIFEST = saved._images;
         applyContent(saved.content);
-        if (window.__reapplyData) window.__reapplyData();
+        (function tryReapply(attempt) {
+          if (typeof window.__reapplyData === 'function') {
+            window.__reapplyData();
+            return;
+          }
+          if (attempt < 40) setTimeout(function () { tryReapply(attempt + 1); }, 50);
+        })(0);
       });
   } else {
     // مفيش تعديلات — نحمّل data.json الأصلي (عشان يدعم التعديلات المحفوظة على جهاز تاني)

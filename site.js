@@ -129,6 +129,25 @@ function sizeKeysOf(cat){
 /* بنية srcset لصور الكروت:
    بنستخدم الأبعاد الحقيقية من manifest (dim) — مش أرقام مفترضة،
    عشان المتصفح مايختارش نسخة غلط. */
+
+/* ══════════════════════════════════════════════════════════
+   مسارات الصور
+   • صورة عادية: path عادي (assets/webp/...)
+   • صورة مرفوعة من اللوحة: dataUrl (base64) جوّه الـmanifest
+   بنرجّع القيمة المناسبة للاستخدام في src
+   ══════════════════════════════════════════════════════════ */
+function imageSrc(path){
+  if(!path) return '';
+  // لو المسار data URL جاهز
+  if(/^data:image\//.test(path)) return path;
+  // لو هو موجود في الـmanifest كـ dataUrl → نرجّع الـdataUrl
+  var man=window.__IMAGES_MANIFEST||[];
+  for(var i=0;i<man.length;i++){
+    if(man[i] && man[i].path===path && man[i].dataUrl) return man[i].dataUrl;
+  }
+  return path;
+}
+
 function getImageMeta(){
   var map={};
   (window.__IMAGES_MANIFEST||[]).forEach(function(i){
@@ -143,6 +162,12 @@ function getImageMeta(){
 function cardSrcset(path){
   var meta=getImageMeta();
   if(!meta[path]) return '';
+  /* صورة مرفوعة (dataUrl) → مفيش srcset
+     (لو حطينا srcset قديم الـbrowser هيختاره بدل الصورة الجديدة) */
+  if(/^data:image\//.test(path)) return '';
+  /* صورة مرفوعة من اللوحة (assets/upload/...) → مفيش ملفات variants حقيقية،
+     فممنوع نعمل srcset عشان الـ404 بيوقّع الصورة وبتتحوّل لـemoji */
+  if(/^assets\/upload\//.test(path)) return '';
   var out=[];
   [400,800].forEach(function(w){
     var v=path.replace(/\.webp$/,'-'+w+'.webp');
@@ -173,7 +198,7 @@ function panelHTML(m){
       }).join('');
       return `<article class="menu-card menu-card-sizes reveal" style="transition-delay:${i*0.03}s">
         <a class="card-link card-link-img" href="product.html?cat=${m.key}&id=${encodeURIComponent(it.id)}" aria-label="${it.name}">
-          ${it.img?`<span class="card-img" data-emoji="${m.emoji}"><img src="${it.img}" alt="${it.name}" loading="lazy" decoding="async"${cardSrcset(it.img)?` srcset="${cardSrcset(it.img)}" sizes="(max-width:640px) 44vw, 300px"`:''} onerror="imgFallback(this)"></span>`:`<span class="card-emoji">${m.emoji}</span>`}
+          ${it.img?`<span class="card-img" data-emoji="${m.emoji}"><img src="${imageSrc(it.img)}" alt="${it.name}" loading="lazy" decoding="async"${cardSrcset(it.img)?` srcset="${cardSrcset(it.img)}" sizes="(max-width:640px) 44vw, 300px"`:''} onerror="imgFallback(this)"></span>`:`<span class="card-emoji">${m.emoji}</span>`}
         </a>
         <div class="card-body">
           <div class="card-sizes">${rows}</div>
@@ -186,7 +211,7 @@ function panelHTML(m){
     }).join('');
     return head+`<div class="menu-cards menu-cards-sizes">${cards}</div>`;
   }
-  const cards=m.items.map((it,i)=>`<article class="menu-card reveal" style="transition-delay:${i*0.03}s"><a class="card-link" href="product.html?cat=${m.key}&id=${encodeURIComponent(it.id)}">${it.img?`<span class="card-img" data-emoji="${m.emoji}"><img src="${it.img}" alt="${it.name}" loading="lazy" decoding="async"${cardSrcset(it.img)?` srcset="${cardSrcset(it.img)}" sizes="(max-width:640px) 46vw, 180px"`:''} onerror="imgFallback(this)"></span>`:`<span class="card-emoji">${m.emoji}</span>`}<h3>${it.name}</h3></a><div class="card-bottom"><span class="card-price">${it.price} <i>ج.م</i></span><button class="button primary" onclick="orderItem('${m.key}','${it.name}','',${it.price})">اطلبها ←</button></div></article>`).join('');
+  const cards=m.items.map((it,i)=>`<article class="menu-card reveal" style="transition-delay:${i*0.03}s"><a class="card-link" href="product.html?cat=${m.key}&id=${encodeURIComponent(it.id)}">${it.img?`<span class="card-img" data-emoji="${m.emoji}"><img src="${imageSrc(it.img)}" alt="${it.name}" loading="lazy" decoding="async"${cardSrcset(it.img)?` srcset="${cardSrcset(it.img)}" sizes="(max-width:640px) 46vw, 180px"`:''} onerror="imgFallback(this)"></span>`:`<span class="card-emoji">${m.emoji}</span>`}<h3>${it.name}</h3></a><div class="card-bottom"><span class="card-price">${it.price} <i>ج.م</i></span><button class="button primary" onclick="orderItem('${m.key}','${it.name}','',${it.price})">اطلبها ←</button></div></article>`).join('');
   return head+`<div class="menu-cards">${cards}</div>`;
 }
 function renderMenu(){
@@ -252,6 +277,7 @@ function renderProduct(){
       this.dataset.fallbackDone='1';
       this.removeAttribute('srcset');
       this.src='assets/webp/sq-professional-overhead-pizza-isolated-dar-2.webp';
+      this.removeAttribute('srcset');
     };
     /* srcset الأول وبعدين src — بالترتيب ده المتصفح بيطلب الصورة الصح مرة واحدة.
        ولو الـsrc موجود بالفعل بنفس المسار → متغيرش (بتجنب طلب ملغي = ERR_ABORTED). */
@@ -266,7 +292,8 @@ function renderProduct(){
     }else if(curSet){
       productImage.removeAttribute('srcset');
     }
-    if(curSrc!==item.img) productImage.src=item.img;
+    var imgVal=imageSrc(item.img);
+    if(curSrc!==imgVal) productImage.src=imgVal;
   }
 
   productName.textContent=item.name;
