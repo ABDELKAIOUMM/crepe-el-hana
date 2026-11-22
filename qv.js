@@ -377,7 +377,7 @@
           });
         }
 
-        /* السعر → يضيف للسلة ويفتح النافذة */
+        /* السعر / «اطلبها» → يفتح النافذة بس (الإضافة جوّه النافذة) */
         card.querySelectorAll('[data-qv-price]').forEach(function (btn) {
           btn.addEventListener('click', function (e) {
             e.preventDefault();
