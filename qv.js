@@ -30,19 +30,26 @@
       '<button type="button" class="qv-close" aria-label="اقفل">&times;</button>' +
       '<div class="qv-grid">' +
         '<div class="qv-media"><div class="qv-imgwrap"></div>' +
-          '<button type="button" class="qv-openpage">افتح صفحة المنتج ←</button></div>' +
+          '<button type="button" class="qv-openpage">افتح صفحة المنتج \u2190</button></div>' +
         '<div class="qv-info">' +
           '<span class="qv-cat"></span>' +
           '<h3 class="qv-title"></h3>' +
           '<p class="qv-desc"></p>' +
           '<div class="qv-sizes"></div>' +
           '<div class="qv-extras"></div>' +
+          '<div class="qv-notes">' +
+            '<b class="qv-lab">ملاحظات للطلب <i>اختياري</i></b>' +
+            '<textarea class="qv-notestext" placeholder="مثال: دي لصاحبي محمد، من غير بصل..."></textarea>' +
+          '</div>' +
           '<div class="qv-foot">' +
-            '<div class="qv-qty"><button type="button" data-q="-1">−</button>' +
+            '<div class="qv-qty"><button type="button" data-q="-1">\u2212</button>' +
               '<b class="qv-qtyv">1</b><button type="button" data-q="1">+</button></div>' +
             '<div class="qv-total"><span>الإجمالي</span><b class="qv-totalv">0 ج.م</b></div>' +
           '</div>' +
-          '<button type="button" class="qv-add" hidden>ضيف للسلة</button>' +
+          '<div class="qv-actions">' +
+            '<button type="button" class="qv-add">ضيف للسلة</button>' +
+            '<button type="button" class="qv-addanother">+ ضيف صنف تاني</button>' +
+          '</div>' +
           '<p class="qv-hint"></p>' +
         '</div>' +
       '</div>';
@@ -53,6 +60,10 @@
     sheet.querySelector('.qv-close').addEventListener('click', close);
     sheet.querySelector('.qv-openpage').addEventListener('click', openProductPage);
     sheet.querySelector('.qv-add').addEventListener('click', addToCart);
+    sheet.querySelector('.qv-addanother').addEventListener('click', addAnother);
+    sheet.querySelector('.qv-notestext').addEventListener('input', function () {
+      if (state) state.notes = this.value;
+    });
     sheet.querySelectorAll('.qv-qty button').forEach(function (b) {
       b.addEventListener('click', function () { setQty(state.qty + (+b.dataset.q)); });
     });
@@ -145,7 +156,8 @@
       picked: [],
       extrasPrice: 0,
       fromPrice: !!opts.fromPrice,
-      addedSig: null
+      addedSig: null,
+      notes: ''
     };
 
     var sheet = document.getElementById(SHEET_ID);
@@ -224,18 +236,21 @@
       exBox.innerHTML = '';
     }
 
-    /* العرض بس — الإضافة للسلة من صفحة المنتج بس */
-    sheet.querySelector('.qv-add').hidden = true;
+    /* النافذة = صفحة المنتج: فيها كل حاجة وتقدر تضيف للسلة منها */
     sheet.querySelector('.qv-add').classList.remove('added');
+    sheet.querySelector('.qv-add').textContent = 'ضيف للسلة';
     sheet.querySelector('.qv-openpage').style.display = '';
-    sheet.querySelector('.qv-openpage').textContent = 'افتح صفحة المنتج واطلب ←';
+    sheet.querySelector('.qv-openpage').textContent = 'افتح صفحة المنتج \u2190';
     sheet.querySelector('.qv-hint').textContent =
-      'عشان تضيف للسلة، افتح صفحة المنتج — هناك تختار الحجم والإضافات والكمية.';
-    /* في وضع العرض: أدوات الكمية ملهاش لازمة — بس الإجمالي بيفيد */
+      'اختار الحجم والإضافات والكمية، وبعدين اضغط «ضيف للسلة».';
+    /* أدوات الكمية ظاهرة دلوقتي */
     var qtyBox = sheet.querySelector('.qv-qty');
-    if (qtyBox) qtyBox.style.display = 'none';
+    if (qtyBox) qtyBox.style.display = '';
     var totalBox = sheet.querySelector('.qv-total span');
-    if (totalBox) totalBox.textContent = 'السعر';
+    if (totalBox) totalBox.textContent = 'الإجمالي';
+    /* الملاحظات: نبدأ فاضية كل مرة */
+    var notesEl = sheet.querySelector('.qv-notestext');
+    if (notesEl) notesEl.value = '';
 
     renderTotal();
 
@@ -270,10 +285,7 @@
 
   /* ─────────────── الإضافة للسلة ─────────────── */
   function addToCart() {
-    /* الإضافة للسلة ممنوعة من النافذة — الطريقة الوحيدة هي صفحة المنتج. */
     if (!state) return;
-    window.openProductPage();
-    return;
 
     var addQty = state.qty;
 
@@ -290,7 +302,8 @@
       price: state.sizePrice || state.item.price || 0,
       qty: addQty,
       extras: state.picked.slice(),
-      extrasPrice: state.extrasPrice
+      extrasPrice: state.extrasPrice,
+      notes: (state.notes || '').trim()
     };
 
     /* لو الصنف ده بالظبط متضاف قبل كده بنفس الحجم والإضافات →
@@ -313,6 +326,13 @@
     btn.textContent = 'اتضاف للسلة ✓';
     if (window.__qvToast) window.__qvToast('اتضاف للسلة: ' + state.item.name);
     else if (typeof toast === 'function') toast('✅ اتضاف للسلة', 'ok');
+  }
+
+  /* ضيف صنف تاني — يضيف الحالي ويقفل النافذة (عشان تختار صنف تاني) */
+  function addAnother() {
+    if (!state) return;
+    addToCart();
+    setTimeout(function () { window.closeQuickView(); }, 120);
   }
 
   /* ─────────────── صفحة المنتج ─────────────── */
