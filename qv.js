@@ -11,6 +11,7 @@
   var SHEET_ID = 'qvSheet';
   var state = null;       // {cat, item, size, qty, extras, extrasPrice}
   var lastFocus = null;
+  var sheet = null;       // عنصر النافذة (بيتحدد مرة واحدة)
 
   /* ─────────────── بناء النافذة ─────────────── */
   function ensureShell() {
@@ -21,7 +22,7 @@
     bd.className = 'qv-backdrop';
     bd.addEventListener('click', close);
 
-    var sheet = document.createElement('div');
+    sheet = document.createElement('div');
     sheet.id = SHEET_ID;
     sheet.className = 'qv-sheet';
     sheet.setAttribute('role', 'dialog');
@@ -160,7 +161,7 @@
       notes: ''
     };
 
-    var sheet = document.getElementById(SHEET_ID);
+    sheet = document.getElementById(SHEET_ID);
     var bd = document.getElementById(BACKDROP_ID);
 
     /* الصورة */
@@ -196,8 +197,10 @@
         inp.addEventListener('change', function () {
           state.size = inp.value;
           state.sizePrice = +inp.dataset.price;
+          /* المقاس واحد بس — اللي مختار هو اللي ظاهر ✅ */
           sizeBox.querySelectorAll('.qv-opt').forEach(function (l) {
-            l.classList.toggle('on', l.contains(inp));
+            var cb = l.querySelector('input[name=qvsize]');
+            l.classList.toggle('on', !!(cb && cb.checked));
           });
           renderTotal();
         });
@@ -219,22 +222,27 @@
         }).join('') + '</div>';
       exBox.querySelectorAll('input[type=checkbox]').forEach(function (inp) {
         inp.addEventListener('change', function () {
+          /* إعادة حساب الاختيارات — الاختيار بيتشال لو دوست عليه تاني */
           state.picked = [];
           state.extrasPrice = 0;
           exBox.querySelectorAll('input:checked').forEach(function (c) {
             state.picked.push(c.value);
             state.extrasPrice += (+c.dataset.price || 0);
           });
+          /* تحديث شكل كل الكروت (المحدد ✅ وغير المحدد) */
           exBox.querySelectorAll('.qv-opt').forEach(function (l) {
-            l.classList.toggle('on', l.contains(inp));
+            var cb = l.querySelector('input[type=checkbox]');
+            l.classList.toggle('on', !!(cb && cb.checked));
           });
           renderTotal();
+          updateExtrasHint();
         });
       });
     } else {
       exBox.style.display = 'none';
       exBox.innerHTML = '';
     }
+    updateExtrasHint();
 
     /* النافذة = صفحة المنتج: فيها كل حاجة وتقدر تضيف للسلة منها */
     sheet.querySelector('.qv-add').classList.remove('added');
@@ -275,6 +283,23 @@
     var total = unit * state.qty;
     var el = document.querySelector('#' + SHEET_ID + ' .qv-totalv');
     if (el) el.textContent = total + ' ج.م';
+  }
+
+  /* تلميح الإضافات: يوضّح إن الدوس التاني على الإضافة المختارة بيشيلها */
+  function updateExtrasHint() {
+    var exBox = sheet.querySelector('.qv-extras');
+    if (!exBox || !state || !state.extras.length) return;
+    var n = state.picked.length;
+    var hint = exBox.querySelector('.qv-exhint');
+    if (!hint) {
+      hint = document.createElement('div');
+      hint.className = 'qv-exhint';
+      exBox.appendChild(hint);
+    }
+    hint.textContent = n
+      ? 'مختار: ' + n + ' — دوس عليها تاني لو عايز تشيلها.'
+      : 'مفيش إضافات مختارة. دوس على الإضافة عشان تختارها.';
+    hint.classList.toggle('none', n === 0);
   }
 
   /* بصمة الصنف: cat + name + size + extras — لتحديد نفس السطر */
