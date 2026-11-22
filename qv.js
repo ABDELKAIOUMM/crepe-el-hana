@@ -149,6 +149,7 @@
       item: found.item,
       sec: found.sec,
       rows: rows,
+      sizeRows: rows,
       extras: extraRows(cat),
       size: defRow ? defRow.label : '',
       sizePrice: defRow ? defRow.price : (found.item.price || 0),
@@ -325,6 +326,10 @@
       name: state.item.name,
       size: state.size,
       price: state.sizePrice || state.item.price || 0,
+      /* كل المقاسات بأسعارها — عشان نقدر نعدّل المقاس من السلة */
+      sizes: (state.sizeRows || state.rows || []).map(function (r) {
+        return { label: r.label, price: r.price };
+      }),
       qty: addQty,
       extras: state.picked.slice(),
       extrasPrice: state.extrasPrice,
