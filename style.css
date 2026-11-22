@@ -650,6 +650,25 @@ a.mi-thumb:hover{transform:scale(1.06)}
   background:var(--orange);color:#17110b;
   font-size:12px;font-weight:900;display:grid;place-items:center;
 }
+/* المختار: شكل واضح + علامة «دوس تاني يشيل» (فوق يمين الكرت) */
+.qv-opt.on{
+  background:#efa44914;border-color:#efa44966;
+  box-shadow:inset 0 0 0 1px #efa44933;
+}
+.qv-extras .qv-opt.on{padding-right:38px}   /* مكان لعلامة الإلغاء */
+/* علامة الإلغاء ✕ للإضافات بس (المقاس واحد فيتاخد) */
+.qv-extras .qv-opt.on::before{
+  content:'✕';position:absolute;top:9px;right:9px;
+  width:19px;height:19px;border-radius:50%;
+  background:#efa44922;border:1px solid #efa44988;color:var(--orange);
+  font-size:11px;font-weight:900;display:grid;place-items:center;
+}
+/* تلميح الإضافات */
+.qv-exhint{
+  font-size:12.5px;color:#c3b9ae;line-height:1.6;
+  padding:0 2px;margin-top:-2px;
+}
+.qv-exhint.none{color:#8a8078}
 .qv-foot{
   display:flex;align-items:center;justify-content:space-between;gap:14px;
   background:#ffffff05;border:1px solid var(--line);border-radius:16px;
