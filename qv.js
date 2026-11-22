@@ -121,19 +121,31 @@
     if (!found) return;
 
     var rows = sizeRows(found.sec, found.item);
+
+    /* المقاس المحدد سلفاً (اللي اتضغط عليه في السعر) — لو موجود بنستخدمه */
+    var preSize = opts.size || '';
+    var preRow = null;
+    if (preSize && rows.length) {
+      for (var ri = 0; ri < rows.length; ri++) {
+        if (rows[ri].label === preSize) { preRow = rows[ri]; break; }
+      }
+    }
+    var defRow = preRow || (rows.length ? rows[0] : null);
+
     state = {
       cat: cat,
       item: found.item,
       sec: found.sec,
       rows: rows,
       extras: extraRows(cat),
-      size: rows.length ? rows[0].label : '',
-      sizePrice: rows.length ? rows[0].price : (found.item.price || 0),
+      size: defRow ? defRow.label : '',
+      sizePrice: defRow ? defRow.price : (found.item.price || 0),
       onePrice: !rows.length,
       qty: 1,
       picked: [],
       extrasPrice: 0,
-      fromPrice: !!opts.fromPrice
+      fromPrice: !!opts.fromPrice,
+      addedSig: null
     };
 
     var sheet = document.getElementById(SHEET_ID);
@@ -160,10 +172,11 @@
     if (rows.length) {
       sizeBox.style.display = '';
       sizeBox.innerHTML = '<b class="qv-lab">اختار الحجم</b>' +
-        '<div class="qv-opts">' + rows.map(function (r, i) {
-          return '<label class="qv-opt' + (i === 0 ? ' on' : '') + '">' +
+        '<div class="qv-opts">' + rows.map(function (r) {
+          var on = (defRow && r.label === defRow.label);
+          return '<label class="qv-opt' + (on ? ' on' : '') + '">' +
             '<input type="radio" name="qvsize" value="' + esc(r.label) + '" ' +
-            (i === 0 ? 'checked' : '') + ' data-price="' + r.price + '">' +
+            (on ? 'checked' : '') + ' data-price="' + r.price + '">' +
             '<b>' + esc(r.label) + '</b>' +
             '<span>' + r.price + ' ج.م</span></label>';
         }).join('') + '</div>';
@@ -212,12 +225,12 @@
     }
 
     /* أزرار السلّة / صفحة المنتج */
-    sheet.querySelector('.qv-add').textContent =
-      opts.fromPrice ? 'تم الإضافة — ضيف أكتر' : 'ضيف للسلة';
-    sheet.querySelector('.qv-openpage').style.display = opts.fromPrice ? 'none' : '';
-    sheet.querySelector('.qv-hint').textContent = opts.fromPrice
-      ? 'الصنف اتضاف للسلة. تقدر تزود الكمية أو تشوف صفحة المنتج.'
-      : 'اضغط "ضيف للسلة" مباشرة، أو افتح صفحة المنتج للتفاصيل الكاملة.';
+    sheet.querySelector('.qv-add').textContent = 'ضيف للسلة';
+    sheet.querySelector('.qv-add').classList.remove('added');
+    sheet.querySelector('.qv-openpage').style.display = '';
+    sheet.querySelector('.qv-hint').textContent =
+      'اختار الإضافات والكمية، وبعدين اضغط "ضيف للسلة".' +
+      ' أو افتح صفحة المنتج للتفاصيل الكاملة.';
 
     renderTotal();
 
@@ -225,8 +238,6 @@
     document.body.classList.add('qv-open');
     bd.classList.add('on');
     sheet.classList.add('on');
-    var addBtn = sheet.querySelector('.qv-add');
-    if (opts.fromPrice) addBtn.classList.add('added');
     setTimeout(function () { sheet.querySelector('.qv-close').focus(); }, 60);
   };
 
@@ -246,25 +257,61 @@
     if (el) el.textContent = total + ' ج.م';
   }
 
+  /* بصمة الصنف: cat + name + size + extras — لتحديد نفس السطر */
+  function itemSignature() {
+    return state.cat + '|' + state.item.name + '|' + (state.size || '') +
+      '|' + state.picked.slice().join(',');
+  }
+
   /* ─────────────── الإضافة للسلة ─────────────── */
   function addToCart() {
     if (!state) return;
+
+    /* لو الصنف ده اتضاف قبل كده بنفس المقاس والإضافات بالظبط،
+       والزر بيقول «اتضاف» → معناها المستخدم عايز يزيد واحد.
+       بنزوّد الكمية المعروضة واحد (وبالتالي السطر في السلة بيزيد 1). */
+    var sig = itemSignature();
+    if (state.addedSig === sig) {
+      state.qty = state.qty + 1;
+      document.querySelector('#' + SHEET_ID + ' .qv-qtyv').textContent = state.qty;
+      renderTotal();
+    }
+    /* ملاحظة: qv.add بيبعت state.qty، و WAOrder.replace بيزوّد الكميةexisting.
+       عشان ما يحصلش مضاعفة: لو الصنف مضاف قبل كده بنفس البصمة،
+       بنبعت qty = 1 (يعني +1) مش state.qty كلها. */
+    var addQty = (state.addedSig === sig) ? 1 : state.qty;
+
     /* لو بنفتح نافذة السلة بعدين → نقفل دي الأول (عشان متبقاش فوقها) */
     setTimeout(function () {
       var m = document.getElementById('waModal');
       if (m && m.classList.contains('open')) window.closeQuickView();
     }, 0);
-    if (window.WAOrder && window.WAOrder.add) {
-      window.WAOrder.add({
-        cat: state.cat,
-        name: state.item.name,
-        size: state.size,
-        price: state.sizePrice || state.item.price || 0,
-        qty: state.qty,
-        extras: state.picked.slice(),
-        extrasPrice: state.extrasPrice
-      }, { silent: true });
+
+    var payload = {
+      cat: state.cat,
+      name: state.item.name,
+      size: state.size,
+      price: state.sizePrice || state.item.price || 0,
+      qty: addQty,
+      extras: state.picked.slice(),
+      extrasPrice: state.extrasPrice
+    };
+
+    /* لو الصنف ده بالظبط متضاف قبل كده بنفس الحجم والإضافات →
+       نحدّث كميته بدل ما نضيف سطر تاني (منع التكرار).
+       لو الإضافات اتغيّرت → السطر الجديد يبقى منفصل (عشان الإجمالي يبقى صح). */
+    var replaced = false;
+    try {
+      if (window.WAOrder && window.WAOrder.items && window.WAOrder.replace) {
+        replaced = !!window.WAOrder.replace(payload, { silent: true });
+      }
+    } catch (e) { replaced = false; }
+
+    if (!replaced && window.WAOrder && window.WAOrder.add) {
+      window.WAOrder.add(payload, { silent: true });
     }
+
+    state.addedSig = itemSignature();
     var btn = document.querySelector('#' + SHEET_ID + ' .qv-add');
     btn.classList.add('added');
     btn.textContent = 'اتضاف للسلة ✓';
@@ -321,31 +368,13 @@
             e.stopPropagation();
             var label = btn.dataset.qvPrice || '';
             var one = btn.dataset.qvPriceOne === '1';
-            var row = null;
-            var rows = sizeRows(sec, it);
-            if (!one) {
-              for (var i = 0; i < rows.length; i++) {
-                if (rows[i].label === label) { row = rows[i]; break; }
-              }
-            }
-            /* نضيف للسلة أولاً */
-            if (window.WAOrder && window.WAOrder.add) {
-              window.WAOrder.add({
-                cat: sec.key, name: it.name, size: one ? '' : label,
-                price: row ? row.price : (it.price || 0), qty: 1
-              }, { silent: true });
-            }
-            /* ونفتح النافذة على نفس الحجم */
-            window.openQuickView(sec.key, it.id, { fromPrice: true });
-            var sheet = document.getElementById(SHEET_ID);
-            if (sheet && row) {
-              var inp = sheet.querySelector('input[name=qvsize][value="' +
-                CSS.escape(label) + '"]');
-              if (inp) {
-                inp.checked = true;
-                inp.dispatchEvent(new Event('change', { bubbles: true }));
-              }
-            }
+
+            /* بنفتح النافذة على المقاس اللي اتضغط عليه (من غير إضافة للسلة).
+               الإضافة بتتم بس لما المستخدم يضغط "ضيف للسلة" جوّه النافذة. */
+            window.openQuickView(sec.key, it.id, {
+              fromPrice: true,
+              size: one ? '' : label
+            });
           });
         });
       });

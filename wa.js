@@ -136,6 +136,29 @@
     openModal();                        // فتح النافذة (سلوك سابق)
   }
 
+  /* تحديث صنف موجود بدل إضافته من جديد.
+     بتدور على نفس (cat + name + size + extras):
+       - لو السطر موجود → بتزوّد كميته (نفس الصنف بنفس الإضافات)
+       - لو مفيش → بترجع false (يبقى سطر جديد عادي)
+     السطر الجديد بيتعمل لما الإضافات تتغيّر (لأن المفتاح بيختلف).
+     بترجع true لو اتحدّث فعلاً. */
+  function replaceInCart(item, opts) {
+    opts = opts || {};
+    const qty = Math.max(1, +(item.qty || 1));
+    const extras = Array.isArray(item.extras) ? item.extras.slice() : [];
+    const extrasPrice = +(item.extrasPrice || 0);
+    const key = item.cat + '|' + item.name + '|' + (item.size || '') + '|' + extras.join(',');
+    const found = cart.find(x => x.key === key);
+    if (!found) return false;
+    found.qty += qty;
+    found.price = item.price;
+    found.extrasPrice = extrasPrice;
+    updateBar();
+    renderCart();
+    if (!opts.silent) openModal();
+    return true;
+  }
+
   function removeFromCart(key) {
     cart = cart.filter(x => x.key !== key);
     updateBar();
@@ -428,6 +451,7 @@
     open: openModal,
     close: closeModal,
     add: addToCart,
+    replace: replaceInCart,
     remove: removeFromCart,
     get count() { return cart.reduce((a, x) => a + (x.qty || 0), 0); },
     get total() { return cart.reduce((a, x) => a + unitPrice(x) * x.qty, 0); },
