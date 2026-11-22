@@ -417,6 +417,82 @@ let ticking=false;window.addEventListener('scroll',()=>{scrollPos=scrollY;if(!ti
 setTimeout(()=>wipe.classList.remove('exit'),760);document.addEventListener('click',e=>{const a=e.target.closest('a');if(!a||!a.href||a.target==='_blank'||a.href.startsWith('javascript:'))return;const u=new URL(a.href,location.href);if(u.origin===location.origin&&u.pathname.endsWith('.html')&&u.href!==location.href){e.preventDefault();wipe.className='page-wipe enter';setTimeout(()=>location.href=a.href,650)}});
 observe();
 
+
+/* ══════════════════════════════════════════════════════════════
+   ⭐ الأكثر طلباً — بيعرض أكتر الأصناف طلباً في الصفحة الرئيسية
+   ══════════════════════════════════════════════════════════════ */
+(function(){
+  function esc2(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+
+  /* الأصناف اللي بيتطلبها الناس أكتر — بتتظبط من لوحة التحكم */
+  function popularIds(){
+    var o = window.__POPULAR_OVERRIDE;
+    if (o && o.length) return o;
+    /* الافتراضي: أشهر بيتزا + سوري + باستا */
+    return ['pizza-بيتزا-مارجريتا','pizza-بيتزا-سجق','syrian-سوري-شاورما-فراخ','pasta-باستا-نجرسكو-فراخ'];
+  }
+
+  /* وصف مختصر — لو كل الأصناف ليها نفس الوصف بنقترح القسم بدلها */
+  function popDesc(it, sec){
+    var d = (it.desc||'').trim();
+    var generic = ['مكونات طازجة، موزاريلا وصوص طماطم غني.','خبز طازج، fillings مميزة وصلصة البيت.','باستا إيطاليّة مع صوص كريمي طازج.'];
+    if (!d || generic.indexOf(d)!==-1) return 'من قسم '+(sec.title||'');
+    return d.length>44 ? d.slice(0,44).replace(/\s+\S*$/,'')+'…' : d;
+  }
+
+  function build(){
+    var host = document.getElementById('popularRow');
+    if (!host) return;
+    var menu = (typeof getMenu==='function') ? getMenu() : [];
+    var ids = popularIds();
+    var cards = [];
+
+    ids.forEach(function(id){
+      for (var i=0;i<menu.length;i++){
+        var sec = menu[i];
+        for (var j=0;j<(sec.items||[]).length;j++){
+          var it = sec.items[j];
+          if (it.id !== id) continue;
+          var from = it.price != null ? it.price
+                   : (it.small != null ? it.small : (it.medium != null ? it.medium : it.large));
+          var img = it.img ? ('<span class="pop-img"><img alt="'+esc2(it.name)+'" loading="lazy" decoding="async" src="'+esc2(imageSrc(it.img))+'"></span>')
+                           : '<span class="pop-img pop-emoji">'+(sec.emoji||'🍽️')+'</span>';
+          var priceTxt = '';
+          if (it.small != null && it.medium != null){
+            priceTxt = '<span class="pop-from">من '+it.small+' ج.م</span>';
+          } else if (from != null){
+            priceTxt = '<span class="pop-from">'+from+' ج.م</span>';
+          }
+          cards.push(
+            '<a class="pop-card reveal" href="product.html?id='+encodeURIComponent(it.id)+'">'+
+              img+
+              '<span class="pop-body">'+
+                '<b class="pop-name">'+esc2(it.name)+'</b>'+
+                '<span class="pop-desc">'+esc2(popDesc(it, sec))+'</span>'+
+                priceTxt+
+              '</span>'+
+              '<span class="pop-cta">اطلب ←</span>'+
+            '</a>');
+          j = (sec.items||[]).length; break;
+        }
+        if (cards.length && cards.length >= ids.length) break;
+      }
+    });
+
+    if (!cards.length){ host.innerHTML=''; var sec2=document.getElementById('popularSection'); if(sec2) sec2.style.display='none'; return; }
+    host.innerHTML = cards.join('');
+
+    /* ربط أزرار العرض السريع (نفس اللي في القايمة) */
+    if (typeof window.bindPopularCards === 'function') window.bindPopularCards(host);
+    if (typeof observe === 'function') { try{ observe(); }catch(e){} }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',build);
+  else build();
+  window.addEventListener('hanaDataReady', build);
+})();
+
 /* ---------- زر الصعود للأعلى ---------- */
 (function(){
   function initToTop(){
