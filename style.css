@@ -169,6 +169,11 @@
 .wa-item-info b{display:block;font-size:15px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .wa-item-info span{display:block;color:var(--orange);font-size:11.5px;font-weight:700;margin-top:1px}
 .wa-item-info .wa-item-extras{color:#9d948c;font-weight:600;font-size:11px}
+.wa-item-info .wa-item-notes{color:#efa449;font-weight:600;font-size:11px;display:block;margin-top:2px}
+.product-actions{display:flex;gap:10px;margin:0 0 14px}
+.product-actions .button{flex:1}
+.product-actions .button.primary{width:100%}
+@media(max-width:560px){.product-actions{flex-direction:column}.product-actions .button{width:100%}}
 .wa-item-info em{display:block;color:var(--muted);font-style:normal;font-size:11.5px;margin-top:3px}
 .wa-item-side{display:flex;flex-direction:column;align-items:flex-end;gap:7px;flex-shrink:0}
 .wa-item-sum{color:var(--orange);font-size:15px;font-weight:900}

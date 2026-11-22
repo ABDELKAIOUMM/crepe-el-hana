@@ -42,7 +42,7 @@
               '<b class="qv-qtyv">1</b><button type="button" data-q="1">+</button></div>' +
             '<div class="qv-total"><span>الإجمالي</span><b class="qv-totalv">0 ج.م</b></div>' +
           '</div>' +
-          '<button type="button" class="qv-add">ضيف للسلة</button>' +
+          '<button type="button" class="qv-add" hidden>ضيف للسلة</button>' +
           '<p class="qv-hint"></p>' +
         '</div>' +
       '</div>';
@@ -224,13 +224,18 @@
       exBox.innerHTML = '';
     }
 
-    /* أزرار السلّة / صفحة المنتج */
-    sheet.querySelector('.qv-add').textContent = 'ضيف للسلة';
+    /* العرض بس — الإضافة للسلة من صفحة المنتج بس */
+    sheet.querySelector('.qv-add').hidden = true;
     sheet.querySelector('.qv-add').classList.remove('added');
     sheet.querySelector('.qv-openpage').style.display = '';
+    sheet.querySelector('.qv-openpage').textContent = 'افتح صفحة المنتج واطلب ←';
     sheet.querySelector('.qv-hint').textContent =
-      'اختار الإضافات والكمية، وبعدين اضغط "ضيف للسلة".' +
-      ' أو افتح صفحة المنتج للتفاصيل الكاملة.';
+      'عشان تضيف للسلة، افتح صفحة المنتج — هناك تختار الحجم والإضافات والكمية.';
+    /* في وضع العرض: أدوات الكمية ملهاش لازمة — بس الإجمالي بيفيد */
+    var qtyBox = sheet.querySelector('.qv-qty');
+    if (qtyBox) qtyBox.style.display = 'none';
+    var totalBox = sheet.querySelector('.qv-total span');
+    if (totalBox) totalBox.textContent = 'السعر';
 
     renderTotal();
 
@@ -265,21 +270,12 @@
 
   /* ─────────────── الإضافة للسلة ─────────────── */
   function addToCart() {
+    /* الإضافة للسلة ممنوعة من النافذة — الطريقة الوحيدة هي صفحة المنتج. */
     if (!state) return;
+    window.openProductPage();
+    return;
 
-    /* لو الصنف ده اتضاف قبل كده بنفس المقاس والإضافات بالظبط،
-       والزر بيقول «اتضاف» → معناها المستخدم عايز يزيد واحد.
-       بنزوّد الكمية المعروضة واحد (وبالتالي السطر في السلة بيزيد 1). */
-    var sig = itemSignature();
-    if (state.addedSig === sig) {
-      state.qty = state.qty + 1;
-      document.querySelector('#' + SHEET_ID + ' .qv-qtyv').textContent = state.qty;
-      renderTotal();
-    }
-    /* ملاحظة: qv.add بيبعت state.qty، و WAOrder.replace بيزوّد الكميةexisting.
-       عشان ما يحصلش مضاعفة: لو الصنف مضاف قبل كده بنفس البصمة،
-       بنبعت qty = 1 (يعني +1) مش state.qty كلها. */
-    var addQty = (state.addedSig === sig) ? 1 : state.qty;
+    var addQty = state.qty;
 
     /* لو بنفتح نافذة السلة بعدين → نقفل دي الأول (عشان متبقاش فوقها) */
     setTimeout(function () {
