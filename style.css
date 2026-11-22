@@ -548,10 +548,11 @@ a.mi-thumb:hover{transform:scale(1.06)}
 .qv-backdrop.on{opacity:1;pointer-events:auto}
 .qv-sheet{
   position:fixed;z-index:351;
-  /* ═══ 75% من مساحة الشاشة ═══ */
+  /* ═══ 75% من مساحة الشاشة — ثابتة، وما بتتقصش ═══ */
   top:12.5%;left:12.5%;
   width:75%;height:75%;
-  display:flex;align-items:center;justify-content:center;
+  max-width:1200px;max-height:900px;
+  display:flex;align-items:stretch;justify-content:stretch;
   opacity:0;pointer-events:none;
   transform:scale(.94) translateY(10px);
   transition:opacity .28s ease,transform .32s cubic-bezier(.2,.8,.2,1);
@@ -572,6 +573,7 @@ a.mi-thumb:hover{transform:scale(1.06)}
   background:var(--panel);border:1px solid var(--line);
   border-radius:26px;overflow:hidden;
   box-shadow:0 30px 90px #00000080;
+  min-height:0;min-width:0;
 }
 .qv-media{
   display:flex;flex-direction:column;gap:12px;
@@ -593,8 +595,37 @@ a.mi-thumb:hover{transform:scale(1.06)}
 }
 .qv-openpage:hover{background:#ffffff14;border-color:#efa44955;color:var(--orange)}
 .qv-info{
-  padding:26px 28px;overflow-y:auto;min-width:0;
+  padding:26px 28px;overflow-y:auto;overflow-x:hidden;min-width:0;min-height:0;
   display:flex;flex-direction:column;gap:15px;
+  overscroll-behavior:contain;
+}
+/* شريط التمرير خفيف */
+.qv-info::-webkit-scrollbar{width:8px}
+.qv-info::-webkit-scrollbar-track{background:transparent}
+.qv-info::-webkit-scrollbar-thumb{background:#ffffff1f;border-radius:10px}
+.qv-info::-webkit-scrollbar-thumb:hover{background:#ffffff33}
+/* خانة الملاحظات */
+.qv-notes{display:flex;flex-direction:column;gap:9px}
+.qv-notestext{
+  width:100%;min-height:66px;max-height:110px;resize:vertical;
+  background:#181818;border:1px solid var(--line);border-radius:13px;
+  padding:12px 14px;color:#fff;font:inherit;font-size:13.5px;line-height:1.6;
+  outline:none;transition:border-color .25s;
+}
+.qv-notestext:focus{border-color:#efa44966}
+.qv-notestext::placeholder{color:#6d655e}
+/* أزرار الإضافة */
+.qv-actions{display:flex;gap:10px;flex-wrap:wrap}
+.qv-actions .qv-add{flex:1;min-width:150px}
+.qv-actions .qv-addanother{
+  flex:0 0 auto;padding:13px 20px;border-radius:999px;
+  border:1px solid var(--line);background:#ffffff08;color:var(--cream);
+  font:800 14px Tajawal;cursor:pointer;transition:.3s;
+}
+.qv-actions .qv-addanother:hover{background:#ffffff12;border-color:#efa44955;color:var(--orange)}
+@media(max-width:560px){
+  .qv-actions{flex-direction:column}
+  .qv-actions .qv-add,.qv-actions .qv-addanother{width:100%;min-width:0}
 }
 .qv-cat{font-size:12px;font-weight:800;color:var(--orange);letter-spacing:.4px}
 .qv-title{margin:0;font-size:27px;font-weight:900;line-height:1.25}
@@ -646,11 +677,15 @@ a.mi-thumb:hover{transform:scale(1.06)}
 
 /* ═══ الموبايل: النافذة تاخد الشاشة almost بالكامل ═══ */
 @media(max-width:760px){
-  .qv-sheet{top:4%;left:4%;width:92%;height:92%}
-  .qv-grid{grid-template-columns:1fr;grid-template-rows:minmax(0,26%) minmax(0,1fr);border-radius:20px}
-  .qv-media{padding:12px;border-left:0;border-bottom:1px solid var(--line);flex-direction:row;align-items:center}
-  .qv-imgwrap{border-radius:13px;flex:0 0 44%}
-  .qv-openpage{width:auto;flex:1;padding:12px;font-size:13px}
+  /* على الموبايل: النافذة تاخد الشاشة تقريباً (92%) — مفيش قص */
+  .qv-sheet{top:4%;left:4%;width:92%;height:92%;max-width:none;max-height:none}
+  .qv-grid{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr);border-radius:20px}
+  .qv-media{
+    padding:12px;border-left:0;border-bottom:1px solid var(--line);
+    flex-direction:column;align-items:stretch;gap:10px;max-height:40vh;
+  }
+  .qv-imgwrap{border-radius:13px;flex:0 0 auto;max-height:28vh}
+  .qv-openpage{width:100%;flex:1;padding:11px;font-size:13px}
   .qv-info{padding:16px 15px;gap:12px}
   .qv-title{font-size:21px}
   .qv-desc{font-size:13px;line-height:1.65}
@@ -658,6 +693,7 @@ a.mi-thumb:hover{transform:scale(1.06)}
   .qv-foot{padding:11px 13px}
   .qv-total b{font-size:18px}
   .qv-add{padding:14px;font-size:15px}
+  .qv-notestext{min-height:56px}
 }
 
 /* ═══ زر السعر بقى button — نرجّع شكله ═══ */
