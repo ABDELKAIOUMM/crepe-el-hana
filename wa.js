@@ -87,6 +87,58 @@
 
         <button class="wa-continue" type="button" id="waContinue">+ ضيف أكلة تانية</button>
         <p class="wa-hint">لما تدوس «ابعت» هيتحل واتساب برسالة الطلب جاهزة تتبعت — مش محتاج رقمك، هنكلمك عليه</p>
+
+        <!-- ═══ نافذة تعديل صنف ═══ -->
+        <div class="wa-edit" id="waEdit" aria-hidden="true">
+          <div class="wa-edit-backdrop" data-wa-edit-close></div>
+          <div class="wa-edit-box" role="dialog" aria-modal="true" aria-labelledby="waEditTitle">
+            <button class="wa-edit-close" type="button" data-wa-edit-close aria-label="إغلاق">✕</button>
+
+            <div class="wa-edit-head">
+              <h4 id="waEditTitle">تعديل الطلب</h4>
+              <p class="wa-edit-sub">غيّر المقاس أو الإضافات أو الكمية أو الملاحظات</p>
+            </div>
+
+            <div class="wa-edit-scroll">
+              <div class="wa-edit-name"></div>
+
+              <div class="wa-edit-block" id="waEditSizes">
+                <b class="wa-edit-lab">الحجم</b>
+                <div class="wa-edit-opts" id="waEditSizesOpts"></div>
+              </div>
+
+              <div class="wa-edit-block" id="waEditExtras">
+                <b class="wa-edit-lab">الإضافات <i>دوس عليها تاني تشيلها</i></b>
+                <div class="wa-edit-opts" id="waEditExtrasOpts"></div>
+                <p class="wa-edit-hint" id="waEditExtrasHint"></p>
+              </div>
+
+              <div class="wa-edit-block">
+                <b class="wa-edit-lab">الكمية</b>
+                <div class="wa-edit-qty">
+                  <button type="button" data-wa-edit-q="-1" aria-label="نقص">−</button>
+                  <b id="waEditQty">1</b>
+                  <button type="button" data-wa-edit-q="1" aria-label="زوّد">+</button>
+                </div>
+              </div>
+
+              <div class="wa-edit-block">
+                <b class="wa-edit-lab">ملاحظات للطلب</b>
+                <textarea id="waEditNotes" placeholder="مثال: دي لصاحبي محمد، من غير بصل..."></textarea>
+              </div>
+            </div>
+
+            <div class="wa-edit-foot">
+              <div class="wa-edit-total">
+                <span>الإجمالي</span><b id="waEditTotal">0 ج.م</b>
+              </div>
+              <div class="wa-edit-actions">
+                <button type="button" class="wa-edit-save" id="waEditSave">احفظ التعديل</button>
+                <button type="button" class="wa-edit-cancel" data-wa-edit-close">إلغاء</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>`;
     document.body.appendChild(wrap);
     return wrap;
@@ -179,6 +231,220 @@
     return true;
   }
 
+  /* ============================================================
+     3ب) تعديل صنف من جوّه السلة
+     ============================================================ */
+  let editing = null;   // {index, size, sizePrice, picked[], extrasPrice, qty, notes}
+
+  /* المقاسات المتاحة للصنف ده + سعر كل مقاس.
+     الأول: البيانات المتسجلة مع الصنف (sizes).
+     الاحتياط: القايمة نفسها لو مش موجودة. */
+  function editSizeRows(item) {
+    const rows = [];
+
+    /* 1) متسجل مع الصنف — الأدق */
+    if (Array.isArray(item.sizes) && item.sizes.length) {
+      item.sizes.forEach(function (r) {
+        rows.push({ label: r.label, price: +r.price || 0 });
+      });
+      return rows;
+    }
+
+    /* 2) من القايمة */
+    if (typeof getMenu !== 'function') return rows;
+    let menu = [];
+    try { menu = getMenu(); } catch (e) { return rows; }
+    const sec = menu.find(m => m.key === item.cat);
+    if (!sec) return rows;
+    const sk = (typeof getSizeKeys === 'function' ? getSizeKeys() : {}) || {};
+    const keys = sk[sec.key] || {};
+    (sec.sizes || []).forEach(function (label) {
+      const k = keys[label] || label;
+      const src = (item && item[k] != null) ? item : (item && item.item ? item.item : null);
+      const price = src && src[k] != null ? src[k] : null;
+      if (price != null) rows.push({ label: label, price: +price });
+    });
+    return rows;
+  }
+
+  /* الإضافات المتاحة للفئة + سعر كل واحدة */
+  function editExtraRows(cat) {
+    const rows = [];
+    if (typeof getExtrasData !== 'function') return rows;
+    let ex = null;
+    try { ex = getExtrasData(); } catch (e) { return rows; }
+    if (!ex) return rows;
+    (ex[cat] || []).forEach(function (e) {
+      const name = Array.isArray(e) ? e[0] : e.name;
+      const price = Array.isArray(e) ? e[1] : e.price;
+      rows.push({ name: name, price: +price || 0 });
+    });
+    return rows;
+  }
+
+  function openEdit(index) {
+    if (!modal) return;
+    const item = cart[index];
+    if (!item) return;
+
+    editing = {
+      index: index,
+      size: item.size || '',
+      sizePrice: +(item.price || 0),
+      picked: Array.isArray(item.extras) ? item.extras.slice() : [],
+      extrasPrice: +(item.extrasPrice || 0),
+      qty: Math.max(1, +(item.qty || 1)),
+      notes: item.notes || ''
+    };
+
+    const box = modal.querySelector('#waEdit');
+    if (!box) return;
+
+    /* الاسم */
+    const nameEl = box.querySelector('.wa-edit-name');
+    if (nameEl) nameEl.innerHTML = '<b>' + escapeHtml(item.name) + '</b>';
+
+    /* المقاسات */
+    const sizeRows = editSizeRows(item);
+    const sizeBlock = box.querySelector('#waEditSizes');
+    const sizeOpts = box.querySelector('#waEditSizesOpts');
+    if (sizeBlock && sizeOpts) {
+      if (sizeRows.length) {
+        sizeBlock.style.display = '';
+        sizeOpts.innerHTML = sizeRows.map(function (r) {
+          const on = (editing.size === r.label);
+          return '<label class="wa-edit-opt' + (on ? ' on' : '') + '">' +
+            '<input type="radio" name="waEditSize" value="' + escapeHtml(r.label) + '" ' +
+            'data-price="' + r.price + '"' + (on ? ' checked' : '') + '>' +
+            '<b>' + escapeHtml(r.label) + '</b>' +
+            '<span>' + r.price + ' ج.م</span></label>';
+        }).join('');
+        sizeOpts.querySelectorAll('input[name=waEditSize]').forEach(function (inp) {
+          inp.addEventListener('change', function () {
+            editing.size = inp.value;
+            editing.sizePrice = +inp.dataset.price;
+            sizeOpts.querySelectorAll('.wa-edit-opt').forEach(function (l) {
+              const cb = l.querySelector('input');
+              l.classList.toggle('on', !!(cb && cb.checked));
+            });
+            renderEditTotal();
+          });
+        });
+      } else {
+        sizeBlock.style.display = 'none';
+        sizeOpts.innerHTML = '';
+      }
+    }
+
+    /* الإضافات */
+    const exRows = editExtraRows(item.cat);
+    const exBlock = box.querySelector('#waEditExtras');
+    const exOpts = box.querySelector('#waEditExtrasOpts');
+    if (exBlock && exOpts) {
+      if (exRows.length) {
+        exBlock.style.display = '';
+        exOpts.innerHTML = exRows.map(function (r) {
+          const on = editing.picked.indexOf(r.name) !== -1;
+          return '<label class="wa-edit-opt ex' + (on ? ' on' : '') + '">' +
+            '<input type="checkbox" value="' + escapeHtml(r.name) + '" data-price="' + r.price + '"' +
+            (on ? ' checked' : '') + '>' +
+            '<b>' + escapeHtml(r.name) + '</b>' +
+            '<span>+ ' + r.price + ' ج.م</span></label>';
+        }).join('');
+        exOpts.querySelectorAll('input[type=checkbox]').forEach(function (inp) {
+          inp.addEventListener('change', function () {
+            /* دوس تاني = يشيل */
+            editing.picked = [];
+            editing.extrasPrice = 0;
+            exOpts.querySelectorAll('input:checked').forEach(function (c) {
+              editing.picked.push(c.value);
+              editing.extrasPrice += (+c.dataset.price || 0);
+            });
+            exOpts.querySelectorAll('.wa-edit-opt').forEach(function (l) {
+              const cb = l.querySelector('input');
+              l.classList.toggle('on', !!(cb && cb.checked));
+            });
+            renderEditTotal();
+            renderEditHint();
+          });
+        });
+      } else {
+        exBlock.style.display = 'none';
+        exOpts.innerHTML = '';
+      }
+    }
+
+    /* الكمية */
+    const qtyEl = box.querySelector('#waEditQty');
+    if (qtyEl) qtyEl.textContent = editing.qty;
+
+    /* الملاحظات — بنسمع على الـinput عشان نحفظ القيمة */
+    const notesEl = box.querySelector('#waEditNotes');
+    if (notesEl) {
+      notesEl.value = editing.notes;
+      notesEl.oninput = function () {
+        if (editing) editing.notes = this.value;
+      };
+    }
+
+    renderEditTotal();
+    renderEditHint();
+
+    box.classList.add('open');
+    box.setAttribute('aria-hidden', 'false');
+  }
+
+  function renderEditHint() {
+    const box = modal && modal.querySelector('#waEdit');
+    if (!box || !editing) return;
+    const hint = box.querySelector('#waEditExtrasHint');
+    if (!hint) return;
+    const n = editing.picked.length;
+    hint.textContent = n
+      ? 'مختار: ' + n + ' — دوس عليها تاني لو عايز تشيلها.'
+      : 'مفيش إضافات مختارة.';
+    hint.classList.toggle('none', n === 0);
+  }
+
+  function renderEditTotal() {
+    const box = modal && modal.querySelector('#waEdit');
+    if (!box || !editing) return;
+    const t = box.querySelector('#waEditTotal');
+    if (!t) return;
+    const unit = editing.sizePrice + editing.extrasPrice;
+    t.textContent = (unit * editing.qty) + ' ج.م';
+  }
+
+  function closeEdit() {
+    const box = modal && modal.querySelector('#waEdit');
+    if (!box) return;
+    box.classList.remove('open');
+    box.setAttribute('aria-hidden', 'true');
+    editing = null;
+  }
+
+  /* حفظ التعديل على السطر */
+  function saveEdit() {
+    if (!editing) return;
+    const item = cart[editing.index];
+    if (!item) { closeEdit(); return; }
+
+    item.size = editing.size;
+    item.price = editing.sizePrice;
+    item.extras = editing.picked.slice();
+    item.extrasPrice = editing.extrasPrice;
+    item.qty = editing.qty;
+    item.notes = editing.notes;
+    /* المفتاح بيتحدّث لأن المقاس/الإضافات اتغيّروا */
+    item.key = item.cat + '|' + item.name + '|' + (item.size || '') + '|' + item.extras.join(',');
+
+    saveCart();
+    updateBar();
+    renderCart();
+    closeEdit();
+    toastAdded('تم تعديل الطلب ✓');
+  }
+
   function removeFromCart(key) {
     cart = cart.filter(x => x.key !== key);
     saveCart();
@@ -215,7 +481,10 @@
             <span>${it.qty}</span>
             <button type="button" data-wa-plus="${i}" aria-label="زوّد">+</button>
           </div>
-          <button class="wa-item-del" type="button" data-wa-del="${i}" aria-label="شيل">شيل</button>
+          <div class="wa-item-btns">
+            <button class="wa-item-edit" type="button" data-wa-edit="${i}" aria-label="عدّل ${escapeHtml(it.name)}">✎ تعديل</button>
+            <button class="wa-item-del" type="button" data-wa-del="${i}" aria-label="شيل">شيل</button>
+          </div>
         </div>
       </div>`).join('');
 
@@ -379,13 +648,37 @@
     const del = e.target.closest('[data-wa-del]');
     if (del) { cart.splice(+del.dataset.waDel, 1); updateBar(); renderCart(); return; }
 
+    /* ── تعديل صنف ── */
+    const editBtn = e.target.closest('[data-wa-edit]');
+    if (editBtn) { openEdit(+editBtn.dataset.waEdit); return; }
+
+    const editClose = e.target.closest('[data-wa-edit-close]');
+    if (editClose) { closeEdit(); return; }
+
+    const editQ = e.target.closest('[data-wa-edit-q]');
+    if (editQ && editing) {
+      editing.qty = Math.max(1, editing.qty + (+editQ.dataset.waEditQ));
+      const q = modal && modal.querySelector('#waEditQty');
+      if (q) q.textContent = editing.qty;
+      renderEditTotal();
+      return;
+    }
+
+    if (e.target.closest('#waEditSave')) { saveEdit(); return; }
+
     if (e.target.closest('#waSend')) { sendToWhatsApp(); return; }
 
     if (e.target.closest('#waContinue')) { closeModal(); return; }
   });
 
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeModal();
+    if (e.key === 'Escape') {
+      /* لو نافذة التعديل مفتوحة → نقفلها بس (مش السلة كلها) */
+      const box = modal && modal.querySelector('#waEdit');
+      if (box && box.classList.contains('open')) { closeEdit(); return; }
+      closeModal();
+      return;
+    }
   });
 
   /* ============================================================
