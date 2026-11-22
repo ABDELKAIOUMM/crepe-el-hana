@@ -53,6 +53,19 @@
 
         <div class="wa-items" id="waItems"></div>
 
+        <div class="wa-offer" id="waOffer">
+          <div class="wa-offer-top">
+            <span class="wa-offer-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            </span>
+            <div>
+              <b id="waOfferTitle">اقتربت من مشروب مجاني</b>
+              <small id="waOfferText">ضيف أكل أكتر واحصل على مشروب مجاني مع الطلب.</small>
+            </div>
+          </div>
+          <div class="wa-offer-track"><i id="waOfferBar"></i></div>
+        </div>
+
         <div class="wa-summary">
           <div><span>عدد الأكلات</span><b id="waCount">0</b></div>
           <div class="wa-total"><span>الإجمالي</span><b id="waTotal">0 ج.م</b></div>
@@ -491,6 +504,35 @@
     countEl.textContent = cart.reduce((a, x) => a + x.qty, 0);
     const total = cart.reduce((a, x) => a + unitPrice(x) * x.qty, 0);
     totalEl.textContent = total + ' ج.م';
+    renderOffer(total);
+  }
+
+  /* 🎁 عرض «مشروب مجاني» — بيحسب في السلة ويشجع يطلب أكتر */
+  function renderOffer(total) {
+    const box = modal && modal.querySelector('#waOffer');
+    if (!box) return;
+    const title = box.querySelector('#waOfferTitle');
+    const text = box.querySelector('#waOfferText');
+    const bar = box.querySelector('#waOfferBar');
+
+    if (total < 300) {
+      const left = 300 - total;
+      title.textContent = 'اقتربت من مشروب مجاني';
+      text.textContent = 'ضيف بـ ' + left + ' ج.م بس وتاخد مشروب مجاني مع الطلب.';
+      bar.style.width = Math.min(100, (total / 300) * 100) + '%';
+      box.classList.remove('achieved');
+    } else if (total < 500) {
+      const left = 500 - total;
+      title.textContent = 'مشروب مجاني اتفتح!';
+      text.textContent = 'ممتاز! ضيف ' + left + ' ج.م بس وتحصل على توصيل مجاني كمان.';
+      bar.style.width = ((total / 500) * 100) + '%';
+      box.classList.add('achieved');
+    } else {
+      title.textContent = 'التوصيل المجاني اتفتح!';
+      text.textContent = 'تهانينا، طلبك مؤهل للتوصيل المجاني والمشروب المجاني.';
+      bar.style.width = '100%';
+      box.classList.add('achieved');
+    }
   }
 
   /* ============================================================
@@ -698,9 +740,44 @@
   /* ============================================================
      10) التهيئة
      ============================================================ */
+  /* ============================================================
+     3ج) زر «اطلب دلوقتي» — أسرع مسار للطلب
+     ============================================================ */
+  let orderFab = null;
+
+  function buildOrderFab() {
+    if (orderFab) return orderFab;
+    if (document.getElementById('waOrderFab')) return null;
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.id = 'waOrderFab';
+    btn.className = 'wa-orderfab';
+    btn.setAttribute('aria-label', 'اطلب دلوقتي على واتساب');
+    btn.innerHTML =
+      '<span class="wa-orderfab-icon" aria-hidden="true">' +
+        '<svg viewBox="0 0 24 24" width="21" height="21"><path fill="currentColor" d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.1-.7.2s-.8 1-.9 1.2c-.2.2-.3.2-.6.1-1.7-.9-2.8-1.6-3.9-3.5-.3-.5.3-.5.8-1.5.1-.2 0-.4 0-.5s-.7-1.6-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.3-.6-.4zM12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg>' +
+      '</span>' +
+      '<span class="wa-orderfab-text"><b>اطلب دلوقتي</b><em>على واتساب</em></span>';
+
+    btn.addEventListener('click', function () {
+      /* لو السلة فيها أكل → نفتح السلة (عشان يراجع ويكمّل).
+         لو فاضية → نبعث رسالة ترحيب على واتساب على طول. */
+      if (cart.length) { openModal(); return; }
+      const name = (typeof restaurant !== 'undefined' && restaurant.name) || 'كريب الهنا';
+      const msg = `أهلاً 👋\nعايز أطلب من ${name}\n\nمن فضلك ابعتلي الأصناف المتاحة وأسعارها.`;
+      window.open('https://wa.me/' + WA + '?text=' + encodeURIComponent(msg), '_blank', 'noopener');
+    });
+
+    document.body.appendChild(btn);
+    orderFab = btn;
+    return btn;
+  }
+
   function init() {
     loadCart();                        // نسترجع السلة المحفوظة (بين الصفحات)
     buildBar();
+    buildOrderFab();
     if (!modal) modal = buildModal();   // نبنيها مبكراً حتى تكون جاهزة
     injectAddButtons();
     updateBar();
