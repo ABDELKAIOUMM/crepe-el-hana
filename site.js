@@ -240,11 +240,10 @@ function switchTab(k){
   if(act)act.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
   observe();
 }
+/* الإضافة للسلة ممنوعة من صفحة القائمة — الطريقة الوحيدة هي صفحة المنتج.
+   (الدالة دي بقت زيSafety net: بتوديه لصفحة المنتج) */
 function orderItem(cat,name,size,price){
-  if(window.WAOrder&&window.WAOrder.add){window.WAOrder.add({cat:cat,name:name,size:size||'',price:+price,qty:1},{silent:true});return;}
-  const line=size?`🍽️ ${name} — الحجم: ${size}`:`🍽️ ${name}`;
-  const msg=`أهلاً، عايز أطلب من ${restaurant.name}:\n\n${line}\n💰 السعر: ${price} ج.م\n\nالاسم:\nالعنوان:\nملاحظات:`;
-  window.open('https://wa.me/'+restaurant.whatsapp+'?text='+encodeURIComponent(msg),'_blank','noopener');
+  location.href=`product.html?cat=${encodeURIComponent(cat)}`;
 }
 
 /* ══════════ رقم إصدار التطبيق ══════════
@@ -359,15 +358,43 @@ function updateTotal(){if(!currentProduct)return;let sizeEl=document.querySelect
 function updateSmartOffer(value){if(!window.smartOffer)return;smartOffer.classList.remove('achieved');if(value<300){let left=300-value;offerTitle.textContent='اقتربت من مشروب مجاني';offerText.textContent=`ضيف أكل بـ ${left} ج.م وتاخد مشروب مجاني مع الطلب.`;offerProgress.style.width=Math.min(100,value/300*100)+'%'}else if(value<500){let left=500-value;offerTitle.textContent='🎉 حصلت على مشروب مجاني';offerText.textContent=`ممتاز! ضيف ${left} ج.م بس وتحصل على توصيل مجاني كمان.`;offerProgress.style.width=(value/500*100)+'%'}else{offerTitle.textContent='التوصيل المجاني اتفتح!';offerText.textContent='تهانينا، طلبك مؤهل للتوصيل المجاني والمشروب المجاني.';offerProgress.style.width='100%';smartOffer.classList.add('achieved')}}
 function initProductViewer(){const view=document.getElementById('interactiveView'),img=document.getElementById('productImage');if(!view||!img)return;let active=false,startX=0,rotation=0,target=0;const paint=(x,y)=>{const r=view.getBoundingClientRect();let nx=Math.max(-1,Math.min(1,(x-r.left)/r.width*2-1)),ny=Math.max(-1,Math.min(1,(y-r.top)/r.height*2-1));if(!active)target=nx*13;img.style.transform=`perspective(1000px) rotateY(${target}deg) rotateX(${-ny*4}deg) scale(1.055)`;view.style.setProperty('--shine-x',((nx+1)*50)+'%');view.style.setProperty('--shine-y',((ny+1)*50)+'%')};view.addEventListener('pointerdown',e=>{active=true;startX=e.clientX;rotation=target;view.classList.add('dragging');view.setPointerCapture(e.pointerId)});view.addEventListener('pointermove',e=>{if(active)target=rotation+(e.clientX-startX)*.28;paint(e.clientX,e.clientY)});view.addEventListener('pointerup',()=>{active=false;view.classList.remove('dragging')});view.addEventListener('pointerleave',()=>{if(!active){target=0;img.style.transform=''}})}
 function resetProductView(){const img=document.getElementById('productImage');if(img)img.style.transform='perspective(1000px) rotateY(0) rotateX(0) scale(1)'}
+/* ═══ الإضافة للسلة — من صفحة المنتج بس (الطريقة الوحيدة) ═══
+   بتجمع المقاس + الإضافات + الكمية + الملاحظات في سطر واحد. */
+function collectProductOrder(){
+  const sizeEl=document.querySelector('input[name=size]:checked');
+  const ex=[...document.querySelectorAll('#extras input:checked')].map(x=>x.value);
+  const exSum=[...document.querySelectorAll('#extras input:checked')].reduce((a,x)=>a+(+x.dataset.price),0);
+  const name=document.getElementById('productName').textContent;
+  const unit=parseFloat((document.getElementById('baseLine').textContent||'0').replace(/[^0-9.]/g,''))||0;
+  const notesEl=document.getElementById('notes');
+  const notes=(notesEl&&notesEl.value||'').trim();
+  return {cat:currentCat,name:name,size:sizeEl?sizeEl.value:'',price:unit,qty:qty,
+          extras:ex,extrasPrice:exSum,notes:notes};
+}
+
+/* ضيف للسلة — بيفتح نافذة السلة عشان تشوف اللي جمعته */
+function addToCartFromProduct(){
+  const item=collectProductOrder();
+  if(window.WAOrder&&window.WAOrder.add){
+    window.WAOrder.add(item,{silent:true});
+  }
+  if(window.WAOrder&&window.WAOrder.open) window.WAOrder.open();
+  else if(typeof toast==='function') toast('✅ اتضاف للسلة','ok');
+}
+
+/* ضيف صنف تاني — يرجع للقائمة عشان تختار صنف مختلف (عشان أصحاب متعددين) */
+function addAnotherItem(){
+  const item=collectProductOrder();
+  if(window.WAOrder&&window.WAOrder.add){
+    window.WAOrder.add(item,{silent:true});
+  }
+  location.href=`category.html?cat=${encodeURIComponent(currentCat)}`;
+}
+
 function sendOrder(){
   if(window.WAOrder&&window.WAOrder.add){
-    const sizeEl=document.querySelector('input[name=size]:checked');
-    const ex=[...document.querySelectorAll('#extras input:checked')].map(x=>x.value);
-    const exSum=[...document.querySelectorAll('#extras input:checked')].reduce((a,x)=>a+(+x.dataset.price),0);
-    const name=document.getElementById('productName').textContent;
-    // baseLine = (سعر الأكلة + الحجم) — الإضافات بتتحسب منفصلة في السلة
-    const unit=parseFloat((document.getElementById('baseLine').textContent||'0').replace(/[^0-9.]/g,''))||0;
-    window.WAOrder.add({cat:currentCat,name:name,size:sizeEl?sizeEl.value:'',price:unit,qty:qty,extras:ex,extrasPrice:exSum});
+    const item=collectProductOrder();
+    window.WAOrder.add(item);
     return;
   }
   const s=document.querySelector('input[name=size]:checked');

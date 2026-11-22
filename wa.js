@@ -13,6 +13,24 @@
   let modal = null;
   let bar = null;
 
+  /* ═══ حفظ السلة بين الصفحات ═══
+     السلة كانت في الذاكرة بس — فلما بتنتقل من صفحة لمنطقة (زي «ضيف صنف تاني»)
+     كانت بتضيع. دلوقتي بنحفظها في sessionStorage عشان تفضل موجودة
+     طول ما التبويب مفتوح (وبتتمسح لما يقفل). */
+  const CART_KEY = 'crepeElHana_cart_v1';
+
+  function saveCart() {
+    try { sessionStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (e) {}
+  }
+  function loadCart() {
+    try {
+      const raw = sessionStorage.getItem(CART_KEY);
+      if (!raw) return;
+      const arr = JSON.parse(raw);
+      if (Array.isArray(arr)) cart = arr;
+    } catch (e) {}
+  }
+
   /* ============================================================
      1) نافذة الطلب
      ============================================================ */
@@ -129,11 +147,12 @@
       }));
     }
 
+    saveCart();
     updateBar();
     renderCart();
 
-    if (opts.silent) return;           // إضافة صامتة (زر +)
-    openModal();                        // فتح النافذة (سلوك سابق)
+    if (opts.silent) return;           // إضافة صامتة
+    openModal();                        // فتح النافذة
   }
 
   /* تحديث صنف موجود بدل إضافته من جديد.
@@ -153,6 +172,7 @@
     found.qty += qty;
     found.price = item.price;
     found.extrasPrice = extrasPrice;
+    saveCart();
     updateBar();
     renderCart();
     if (!opts.silent) openModal();
@@ -161,6 +181,7 @@
 
   function removeFromCart(key) {
     cart = cart.filter(x => x.key !== key);
+    saveCart();
     updateBar();
     renderCart();
   }
@@ -184,6 +205,7 @@
           <b>${escapeHtml(it.name)}</b>
           ${it.size ? `<span>${escapeHtml(it.size)}</span>` : ''}
           ${it.extras && it.extras.length ? `<span class="wa-item-extras">+ ${it.extras.map(escapeHtml).join('، ')}</span>` : ''}
+          ${it.notes ? `<span class="wa-item-notes">&#9998; ${escapeHtml(it.notes)}</span>` : ''}
           <em>${it.price} ج.م${it.extrasPrice ? ' + ' + it.extrasPrice + ' إضافات' : ''} × ${it.qty}</em>
         </div>
         <div class="wa-item-side">
@@ -241,6 +263,7 @@
       msg += `${i + 1}. ${it.name}`;
       if (it.size) msg += ` — ${it.size}`;
       if (it.extras && it.extras.length) msg += `\n   إضافات: ${it.extras.join('، ')}`;
+      if (it.notes) msg += `\n   - ${it.notes}`;
       msg += `\n   ${unitPrice(it)} ج.م × ${it.qty} = ${unitPrice(it) * it.qty} ج.م\n`;
     });
     msg += '━━━━━━━━━━━━━━━\n';
@@ -265,6 +288,7 @@
     window.open(url, '_blank', 'noopener');
     closeModal();
     cart = [];
+    try { sessionStorage.removeItem(CART_KEY); } catch (e) {}
     updateBar();
     renderCart();
   }
@@ -305,112 +329,32 @@
      7) زر + بجانب كل سعر
      ============================================================ */
   window.injectAddButtons=function injectAddButtons() {
-    // أزرار الأسعار في البيتزا
-    document.querySelectorAll('.menu-table tbody td[data-label]:not(.pz-name)').forEach(td => {
-      if (td.querySelector('.wa-add')) return;
-      const pill = td.querySelector('.price-pill');
-      if (!pill) return;
-      const row = td.closest('tr');
-      const nameEl = row ? row.querySelector('.pz-name .mi-name, .pz-name b') : null;
-      const name = nameEl ? nameEl.textContent : '';
-      const size = td.dataset.label;
-      const price = (pill.textContent.match(/\d+/) || ['0'])[0];
-      const cat = (row && row.closest('.menu-panel')) ? row.closest('.menu-panel').id.replace('panel-', '') : '';
-      const item = { cat: cat, name: name, size: size, price: +price, qty: 1 };
+    /* ═══ قرار: الإضافة للسلة مسموحة من صفحة المنتج بس ═══
+       ممنوع أي زر `+` أو سعر يضيف للسلة من صفحة القائمة.
+       كل اللي بنعمله هنا: نظّف أي أزرار + قديمة ونخلي السعر يفتح نافذة العرض. */
 
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'wa-add';
-      btn.setAttribute('aria-label', 'ضيف ' + name + ' ' + size + ' للسلة');
-      btn.innerHTML = '+';
-      btn.addEventListener('click', e => {
-        e.stopPropagation();
-        addToCart(item, { silent: true });
-        toastAdded(name + (size ? ' (' + size + ')' : ''));
-        btn.classList.add('added');
-        setTimeout(() => btn.classList.remove('added'), 700);
-      });
-
-      // نلفّ الزرالسعر والزر + داخل صف-flex
-      let wrap = pill.parentElement.querySelector('.wa-add-wrap');
-      if (!wrap) {
-        wrap = document.createElement('span');
-        wrap.className = 'wa-add-wrap';
-        pill.parentElement.insertBefore(wrap, pill);
-        wrap.appendChild(pill);
+    // 1) إزالة أي أزرار + موجودة (من نسخة قديمة)
+    document.querySelectorAll('.wa-add, .wa-add-wrap').forEach(el => {
+      if (el.classList.contains('wa-add-wrap')) {
+        // نunwrap الصف ونرجّع السعر مكانه
+        const pill = el.querySelector('.price-pill');
+        if (pill) { el.parentElement.insertBefore(pill, el); }
+        el.remove();
+      } else {
+        el.remove();
       }
-      wrap.appendChild(btn);
+    });
+    document.querySelectorAll('.wa-added').forEach(el => el.classList.remove('wa-added'));
 
-      /* ═══ السلوك الجديد (qv.js) ═══
-         الضغط على السعر → يضيف للسلة + يفتح نافذة العرض السريع (75%).
-         فبنشيل الربط القديم بتاع زر السعر (كان بيعمل إضافة صامتة بس). */
+    // 2) روابط الكروت (السعر الواحد) → ما تضيفش، بس تفتح النافذة (qv.js بيربطها)
+    document.querySelectorAll('.menu-card:not(.menu-card-sizes) .button').forEach(b => {
+      b.removeAttribute('onclick');
+    });
+
+    // 3) سعر البيتزا: نشيل أي onclick قديم ونترك الربط لـ qv.js
+    document.querySelectorAll('.price-pill').forEach(pill => {
       pill.removeAttribute('onclick');
       pill.classList.add('wa-clickable');
-    });
-
-    // ═══ كروت بأحجام (البيتزا): ربط زر + الموجود بالسلة ═══
-    document.querySelectorAll('.menu-card-sizes').forEach(card => {
-      const panel = card.closest('.menu-panel');
-      const cat = panel ? panel.id.replace('panel-', '') : '';
-      const nameEl = card.querySelector('h3');
-      const name = nameEl ? nameEl.textContent.trim() : '';
-      card.querySelectorAll('.price-row').forEach(row => {
-        const pill = row.querySelector('.price-pill');
-        const btn = row.querySelector('.wa-add');
-        if (!pill || !btn) return;
-        const size = pill.dataset.size || '';
-        const price = (pill.querySelector('.pr-price')||pill).textContent.match(/\d+/);
-        const item = { cat: cat, name: name, size: size, price: +(price ? price[0] : 0), qty: 1 };
-
-        /* مهم: الزر ممكن يتربط أكتر من مرة (لما injectAddButtons يتنادى تاني).
-           بدون الحارس ده، الضغطة الواحدة بتضيف الأكلة مرتين. */
-        if (btn.dataset.bound === '1') return;
-        btn.dataset.bound = '1';
-
-        btn.addEventListener('click', e => {
-          e.stopPropagation();
-          addToCart(item, { silent: true });
-          toastAdded(name);
-          row.classList.add('wa-added');
-          setTimeout(() => row.classList.remove('wa-added'), 700);
-        });
-      });
-    });
-
-    // بطاقات السعر الواحد
-    document.querySelectorAll('.menu-card:not(.menu-card-sizes)').forEach(card => {
-      if (card.querySelector('.wa-add')) return;
-      const h3 = card.querySelector('h3');
-      const priceEl = card.querySelector('.card-price');
-      const panel = card.closest('.menu-panel');
-      if (!h3 || !priceEl) return;
-      const name = h3.textContent;
-      const price = (priceEl.textContent.match(/\d+/) || ['0'])[0];
-      const cat = panel ? panel.id.replace('panel-', '') : '';
-      const item = { cat: cat, name: name, size: '', price: +price, qty: 1 };
-
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'wa-add wa-add-card';
-      btn.setAttribute('aria-label', 'ضيف ' + name + ' للسلة');
-      btn.innerHTML = '+';
-      btn.addEventListener('click', e => {
-        e.stopPropagation();
-        addToCart(item, { silent: true });
-        toastAdded(name);
-        btn.classList.add('added');
-        setTimeout(() => btn.classList.remove('added'), 700);
-      });
-      card.appendChild(btn);
-
-      /* ═══ السلوك الجديد (qv.js) ═══
-         • الضغط على السعر (زر "اطلبها") → يضيف للسلة + يفتح نافذة 75%
-         • الضغط على الصورة → يفتح نافذة 75% ( وفيها زر صفحة المنتج)
-         فبنشيل ربط الكارت كله (كان بيخلي أي مكان بالكارت يضيف للسلة). */
-      const orderBtn = card.querySelector('.button');
-      if (orderBtn) {
-        orderBtn.removeAttribute('onclick');
-      }
     });
   }
 
@@ -462,6 +406,7 @@
      10) التهيئة
      ============================================================ */
   function init() {
+    loadCart();                        // نسترجع السلة المحفوظة (بين الصفحات)
     buildBar();
     if (!modal) modal = buildModal();   // نبنيها مبكراً حتى تكون جاهزة
     injectAddButtons();
