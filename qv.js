@@ -30,28 +30,38 @@
     sheet.innerHTML =
       '<button type="button" class="qv-close" aria-label="اقفل">&times;</button>' +
       '<div class="qv-grid">' +
-        '<div class="qv-media"><div class="qv-imgwrap"></div>' +
-          '<button type="button" class="qv-openpage">افتح صفحة المنتج \u2190</button></div>' +
+        /* ── العمود الأيسر: الصورة فوق بالكامل ── */
+        '<div class="qv-media">' +
+          '<div class="qv-imgwrap"></div>' +
+          '<button type="button" class="qv-openpage">افتح صفحة المنتج \u2190</button>' +
+        '</div>' +
+        /* ── العمود الأيمن: رأس ثابت + محتوى متحرك + تذييل ثابت ── */
         '<div class="qv-info">' +
-          '<span class="qv-cat"></span>' +
-          '<h3 class="qv-title"></h3>' +
-          '<p class="qv-desc"></p>' +
-          '<div class="qv-sizes"></div>' +
-          '<div class="qv-extras"></div>' +
-          '<div class="qv-notes">' +
-            '<b class="qv-lab">ملاحظات للطلب <i>اختياري</i></b>' +
-            '<textarea class="qv-notestext" placeholder="مثال: دي لصاحبي محمد، من غير بصل..."></textarea>' +
+          '<div class="qv-info-head">' +
+            '<span class="qv-cat"></span>' +
+            '<h3 class="qv-title"></h3>' +
+            '<p class="qv-desc"></p>' +
           '</div>' +
-          '<div class="qv-foot">' +
-            '<div class="qv-qty"><button type="button" data-q="-1">\u2212</button>' +
-              '<b class="qv-qtyv">1</b><button type="button" data-q="1">+</button></div>' +
-            '<div class="qv-total"><span>الإجمالي</span><b class="qv-totalv">0 ج.م</b></div>' +
+          '<div class="qv-info-scroll">' +
+            '<div class="qv-sizes"></div>' +
+            '<div class="qv-extras"></div>' +
+            '<div class="qv-notes">' +
+              '<b class="qv-lab">ملاحظات للطلب <i>اختياري</i></b>' +
+              '<textarea class="qv-notestext" placeholder="مثال: دي لصاحبي محمد، من غير بصل..."></textarea>' +
+            '</div>' +
           '</div>' +
-          '<div class="qv-actions">' +
-            '<button type="button" class="qv-add">ضيف للسلة</button>' +
-            '<button type="button" class="qv-addanother">+ ضيف صنف تاني</button>' +
+          '<div class="qv-info-foot">' +
+            '<div class="qv-foot">' +
+              '<div class="qv-qty"><button type="button" data-q="-1">\u2212</button>' +
+                '<b class="qv-qtyv">1</b><button type="button" data-q="1">+</button></div>' +
+              '<div class="qv-total"><span>الإجمالي</span><b class="qv-totalv">0 ج.م</b></div>' +
+            '</div>' +
+            '<div class="qv-actions">' +
+              '<button type="button" class="qv-add">ضيف للسلة</button>' +
+              '<button type="button" class="qv-addanother">+ ضيف صنف تاني</button>' +
+            '</div>' +
+            '<p class="qv-hint"></p>' +
           '</div>' +
-          '<p class="qv-hint"></p>' +
         '</div>' +
       '</div>';
 
@@ -168,7 +178,7 @@
     /* الصورة */
     var wrap = sheet.querySelector('.qv-imgwrap');
     if (found.item.img) {
-      wrap.innerHTML = '<img alt="" loading="lazy" decoding="async" src="' +
+      wrap.innerHTML = '<img alt="' + esc(found.item.name) + '" loading="lazy" decoding="async" src="' +
         esc(imgSrc(found.item.img)) + '">';
     } else {
       wrap.innerHTML = '<span class="qv-emoji">' + esc(found.sec.emoji || '🍽️') + '</span>';
