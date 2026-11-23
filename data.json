@@ -31,7 +31,21 @@
           "img": "assets/webp/sq-professional-overhead-pizza-isolated-dar-5.webp",
           "small": 80,
           "medium": 90,
-          "large": 135
+          "large": 135,
+          "sizes": [
+            {
+              "name": "صغير",
+              "price": 80
+            },
+            {
+              "name": "وسط",
+              "price": 90
+            },
+            {
+              "name": "كبير",
+              "price": 135
+            }
+          ]
         },
         {
           "id": "pizza-بيتزا-خضار",
@@ -40,7 +54,21 @@
           "img": "assets/webp/sq-professional-overhead-pizza-isolated-dar-1.webp",
           "small": 80,
           "medium": 90,
-          "large": 135
+          "large": 135,
+          "sizes": [
+            {
+              "name": "صغير",
+              "price": 80
+            },
+            {
+              "name": "وسط",
+              "price": 90
+            },
+            {
+              "name": "كبير",
+              "price": 135
+            }
+          ]
         },
         {
           "id": "pizza-بيتزا-سوسيس",
@@ -49,7 +77,21 @@
           "img": "assets/webp/sq-professional-overhead-pizza-isolated-dar-3.webp",
           "small": 95,
           "medium": 110,
-          "large": 170
+          "large": 170,
+          "sizes": [
+            {
+              "name": "صغير",
+              "price": 95
+            },
+            {
+              "name": "وسط",
+              "price": 110
+            },
+            {
+              "name": "كبير",
+              "price": 170
+            }
+          ]
         },
         {
           "id": "pizza-بيتزا-ميكس-جبن",
@@ -58,7 +100,21 @@
           "img": "assets/webp/sq-professional-overhead-pizza-isolated-dar-4.webp",
           "small": 90,
           "medium": 100,
-          "large": 150
+          "large": 150,
+          "sizes": [
+            {
+              "name": "صغير",
+              "price": 90
+            },
+            {
+              "name": "وسط",
+              "price": 100
+            },
+            {
+              "name": "كبير",
+              "price": 150
+            }
+          ]
         },
         {
           "id": "pizza-بيتزا-سجق",
@@ -67,7 +123,21 @@
           "img": "assets/webp/sq-professional-overhead-pizza-isolated-dar-3.webp",
           "small": 95,
           "medium": 110,
-          "large": 170
+          "large": 170,
+          "sizes": [
+            {
+              "name": "صغير",
+              "price": 95
+            },
+            {
+              "name": "وسط",
+              "price": 110
+            },
+            {
+              "name": "كبير",
+              "price": 170
+            }
+          ]
         },
         {
           "id": "pizza-بيتزا-فراخ",
@@ -76,7 +146,21 @@
           "img": "assets/webp/sq-professional-overhead-pizza-isolated-dar-2.webp",
           "small": 95,
           "medium": 110,
-          "large": 170
+          "large": 170,
+          "sizes": [
+            {
+              "name": "صغير",
+              "price": 95
+            },
+            {
+              "name": "وسط",
+              "price": 110
+            },
+            {
+              "name": "كبير",
+              "price": 170
+            }
+          ]
         },
         {
           "id": "pizza-بيتزا-مشروم",
@@ -85,7 +169,21 @@
           "img": "assets/webp/sq-professional-overhead-pizza-isolated-dar-5.webp",
           "small": 95,
           "medium": 105,
-          "large": 160
+          "large": 160,
+          "sizes": [
+            {
+              "name": "صغير",
+              "price": 95
+            },
+            {
+              "name": "وسط",
+              "price": 105
+            },
+            {
+              "name": "كبير",
+              "price": 160
+            }
+          ]
         },
         {
           "id": "pizza-بيتزا-بسطرمة",
@@ -94,7 +192,21 @@
           "img": "assets/webp/sq-professional-overhead-pizza-isolated-dar-4.webp",
           "small": 95,
           "medium": 110,
-          "large": 170
+          "large": 170,
+          "sizes": [
+            {
+              "name": "صغير",
+              "price": 95
+            },
+            {
+              "name": "وسط",
+              "price": 110
+            },
+            {
+              "name": "كبير",
+              "price": 170
+            }
+          ]
         },
         {
           "id": "pizza-بيتزا-تونة",
@@ -103,7 +215,21 @@
           "img": "assets/webp/sq-professional-overhead-pizza-isolated-dar-2.webp",
           "small": 95,
           "medium": 110,
-          "large": 170
+          "large": 170,
+          "sizes": [
+            {
+              "name": "صغير",
+              "price": 95
+            },
+            {
+              "name": "وسط",
+              "price": 110
+            },
+            {
+              "name": "كبير",
+              "price": 170
+            }
+          ]
         },
         {
           "id": "pizza-بيتزا-فراخ-كرسبى",
@@ -112,7 +238,21 @@
           "img": "assets/webp/sq-professional-overhead-pizza-isolated-dar-4.webp",
           "small": 95,
           "medium": 110,
-          "large": 170
+          "large": 170,
+          "sizes": [
+            {
+              "name": "صغير",
+              "price": 95
+            },
+            {
+              "name": "وسط",
+              "price": 110
+            },
+            {
+              "name": "كبير",
+              "price": 170
+            }
+          ]
         },
         {
           "id": "pizza-بيتزا-سلامى",
@@ -121,7 +261,21 @@
           "img": "assets/webp/sq-professional-overhead-pizza-isolated-dar-2.webp",
           "small": 95,
           "medium": 110,
-          "large": 170
+          "large": 170,
+          "sizes": [
+            {
+              "name": "صغير",
+              "price": 95
+            },
+            {
+              "name": "وسط",
+              "price": 110
+            },
+            {
+              "name": "كبير",
+              "price": 170
+            }
+          ]
         },
         {
           "id": "pizza-بيتزا-سوبر-سوبريم",
@@ -130,7 +284,21 @@
           "img": "assets/webp/sq-professional-overhead-pizza-isolated-dar-2.webp",
           "small": 100,
           "medium": 110,
-          "large": 170
+          "large": 170,
+          "sizes": [
+            {
+              "name": "صغير",
+              "price": 100
+            },
+            {
+              "name": "وسط",
+              "price": 110
+            },
+            {
+              "name": "كبير",
+              "price": 170
+            }
+          ]
         },
         {
           "id": "pizza-بيتزا-فراخ-بانيه-ناجتس",
@@ -139,7 +307,21 @@
           "img": "assets/webp/sq-professional-overhead-pizza-isolated-dar-1.webp",
           "small": 95,
           "medium": 110,
-          "large": 170
+          "large": 170,
+          "sizes": [
+            {
+              "name": "صغير",
+              "price": 95
+            },
+            {
+              "name": "وسط",
+              "price": 110
+            },
+            {
+              "name": "كبير",
+              "price": 170
+            }
+          ]
         },
         {
           "id": "pizza-بيتزا-فراخ-رانش",
@@ -148,7 +330,21 @@
           "img": "assets/webp/sq-professional-overhead-pizza-isolated-dar-4.webp",
           "small": 100,
           "medium": 115,
-          "large": 175
+          "large": 175,
+          "sizes": [
+            {
+              "name": "صغير",
+              "price": 100
+            },
+            {
+              "name": "وسط",
+              "price": 115
+            },
+            {
+              "name": "كبير",
+              "price": 175
+            }
+          ]
         },
         {
           "id": "pizza-بيتزا-فراخ-باربيكيو",
@@ -157,7 +353,21 @@
           "img": "assets/webp/sq-professional-overhead-pizza-isolated-dar-3.webp",
           "small": 100,
           "medium": 115,
-          "large": 175
+          "large": 175,
+          "sizes": [
+            {
+              "name": "صغير",
+              "price": 100
+            },
+            {
+              "name": "وسط",
+              "price": 115
+            },
+            {
+              "name": "كبير",
+              "price": 175
+            }
+          ]
         },
         {
           "id": "pizza-بيتزا-مكس-فراخ",
@@ -166,7 +376,21 @@
           "img": "assets/webp/sq-professional-overhead-pizza-isolated-dar-2.webp",
           "small": 115,
           "medium": 155,
-          "large": 205
+          "large": 205,
+          "sizes": [
+            {
+              "name": "صغير",
+              "price": 115
+            },
+            {
+              "name": "وسط",
+              "price": 155
+            },
+            {
+              "name": "كبير",
+              "price": 205
+            }
+          ]
         },
         {
           "id": "pizza-بيتزا-مكس-لحوم",
@@ -175,7 +399,21 @@
           "img": "assets/webp/sq-professional-overhead-pizza-isolated-dar-4.webp",
           "small": 130,
           "medium": 155,
-          "large": 210
+          "large": 210,
+          "sizes": [
+            {
+              "name": "صغير",
+              "price": 130
+            },
+            {
+              "name": "وسط",
+              "price": 155
+            },
+            {
+              "name": "كبير",
+              "price": 210
+            }
+          ]
         }
       ]
     },
