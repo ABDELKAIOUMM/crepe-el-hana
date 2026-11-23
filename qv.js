@@ -99,8 +99,21 @@
     return null;
   }
 
-  /* أسعار المقاسات: [label, price, delta] — نفس منطق صفحة المنتج */
+  /* أسعار المقاسات: [label, price, delta]
+     • أحجام خاصة بالصنف (item.sizes) — كل صنف لوحده
+     • وإلا وراثة من القسم (sec.sizes + sizeKeys) */
   function sizeRows(sec, item) {
+    if (typeof itemSizesOf === 'function') {
+      var ss = itemSizesOf(sec, item);
+      if (ss.length) {
+        var b = Math.min.apply(null, ss.map(function (x) { return x.price; }));
+        return ss.map(function (x) {
+          return { label: x.label, price: x.price, delta: x.price - b };
+        });
+      }
+      return [];
+    }
+    /* fallback قديم (لو site.js لسه قديم) */
     if (!sec.sizes || !sec.sizes.length) return [];
     var sk = (typeof getSizeKeys === 'function' ? getSizeKeys() : {})[sec.key] || {};
     var base = null;
