@@ -539,7 +539,73 @@
     rows.forEach(function (r) { r.style.setProperty('--it-cols', cols); });
   }
 
-  /* ═══════════ 7) الأصناف والأسعار ═══════════ */
+
+  /* ═══════════ أحجام كل صنف على حدة ═══════════
+     it.sizes = [{name:'صغير', price:80}, ...]
+     لو مش موجودة → الصنف بياخد أحجام القسم (وراثة) أو سعر واحد. */
+  function itemSizes(it) {
+    if (!it) return [];
+    if (Array.isArray(it.sizes)) return it.sizes;
+    return [];
+  }
+  function hasOwnSizes(it) {
+    return !!(it && Array.isArray(it.sizes));
+  }
+  /* النمط الحالي للصنف: 'multi' (أحجام) أو 'single' (سعر واحد) */
+  function itemSizeMode(it) {
+    return hasOwnSizes(it) ? 'multi' : 'single';
+  }
+  /* الأحجام الفعلية المعروضة (خاصة أو وراثية) */
+  function effectiveSizes(m, it) {
+    if (hasOwnSizes(it)) {
+      return itemSizes(it).map(function (sz) {
+        return { name: sz.name, price: +sz.price || 0 };
+      });
+    }
+    /* الصنف اتحوّل لسعر واحد صراحةً → ما يرثش أحجام القسم */
+    if (it && it.__noSizes) return [];
+    if (m && m.sizes && m.sizes.length) {
+      var sk = (data.sizeKeys && data.sizeKeys[m.key]) || {};
+      var out = [];
+      m.sizes.forEach(function (label) {
+        var k = sk[label] || label;
+        if (it[k] != null) out.push({ name: label, price: +it[k] });
+      });
+      return out;
+    }
+    return [];
+  }
+  /* تحويل الصنف بين «سعر واحد» و«أحجام» */
+  function setItemSizeMode(m, it, mode) {
+    if (mode === 'multi') {
+      delete it.__noSizes;
+      if (hasOwnSizes(it) && it.sizes.length) return;
+      // ننشئ أحجام من القسم لو فيه، وإلا نبدأ بحجمين
+      var src = effectiveSizes(m, it);
+      if (src.length) {
+        it.sizes = src.map(function (sz) { return { name: sz.name, price: sz.price }; });
+      } else {
+        var base = +it.price || 0;
+        it.sizes = [
+          { name: 'صغير', price: base },
+          { name: 'كبير', price: Math.round(base * 1.3) }
+        ];
+      }
+      delete it.price;
+    } else {
+      // سعر واحد: نخلي smallest size هو السعر
+      var ss = itemSizes(it);
+      if (ss.length) {
+        var mn = Math.min.apply(null, ss.map(function (sz) { return +sz.price || 0; }));
+        it.price = mn;
+      }
+      delete it.sizes;
+      it.__noSizes = 1;
+    }
+    markDirty();
+  }
+
+  /* ═══════════ 7) الأصناف والأسعار — كروت منظّمة ═══════════ */
   function renderMenu() {
     var tabs = $('#menuTabs');
     tabs.innerHTML = data.menu.map(function (m, i) {
@@ -555,44 +621,99 @@
     $('#menuDesc').value = m.desc || '';
     $('#menuEmoji').value = m.emoji || '';
 
-    var hasSizes = !!m.sizes;
-    var cols = hasSizes ? m.sizes : ['price'];
-    // خريطة: اسم العرض (عربي) → المفتاح في البيانات (إنجليزي)
+    var hasSizes = !!(m.sizes && m.sizes.length);
     var sk = (data.sizeKeys && data.sizeKeys[m.key]) || {};
-    var colKey = function (c) { return (hasSizes && sk[c]) ? sk[c] : c; };
+
+    /* ── شرح مختصر فوق الكروت ── */
     $('#sizeRow').innerHTML = hasSizes
-      ? '<div class="size-note">ℹ️ القسم ده بيستخدم أحجام: <b>' + m.sizes.join(' / ') + '</b> — الأسعار دي للأصناف اللي في القسم ده.</div>'
-      : '';
+      ? '<div class="size-note">ℹ️ أحجام القسم: <b>' + esc(m.sizes.join(' / ')) + '</b> — ' +
+        'تقدر تغيّرها <b>لكل صنف</b> من الكارت نفسه.</div>'
+      : '<div class="size-note">ℹ️ القسم ده بسعر واحد — تقدر تضيف <b>أحجام لصنف واحد</b> من الكارت.</div>';
 
-    var head = '<div class="it-row head"><div>اسم الصنف</div>' +
-      cols.map(function (c) { return '<div>' + esc(c) + '</div>'; }).join('') +
-      '<div>الصورة</div><div></div></div>';
+    /* ── كارت واحد لكل صنف ── */
+    var cards = m.items.map(function (it, i) {
+      var own = hasOwnSizes(it);
+      var ss = effectiveSizes(m, it);
+      var mode = own ? 'multi' : (ss.length ? 'multi' : 'single');
 
-    var rows = m.items.map(function (it, i) {
-      var inputs = cols.map(function (c) {
-        var k = colKey(c);
-        var v = it[k];
-        return '<div><input class="inp num" data-c="' + esc(c) + '" data-k="' + esc(k) + '" data-i="' + i + '" type="number" min="0" step="1" value="' +
-          (v == null ? '' : v) + '"></div>';
-      }).join('');
-
-      // عمود الصورة: معاينة + اختيار + رفع
+      /* الصورة */
       var thumb = it.img
         ? '<img class="it-thumb" src="' + esc(it.img) + '" alt="">'
         : '<span class="it-thumb it-thumb-empty">📷</span>';
-      var imgCell = '<div class="it-img-cell">' + thumb +
-        imgField(it.img || '', 'data-img-i="' + i + '"') +
-        imgUploadBtn('data-imgup-i="' + i + '"') +
+
+      /* الاسم */
+      var nameField =
+        '<input class="inp it-name" data-c="name" data-i="' + i + '" value="' + esc(it.name) + '" placeholder="اسم الصنف">';
+
+      /* الأسعار */
+      var priceBlock;
+      if (mode === 'multi') {
+        var rows = ss.map(function (sz, si) {
+          return '<div class="it-sz-row">' +
+            '<input class="inp it-sz-name" data-szname="' + i + '" data-si="' + si + '" value="' + esc(sz.name) + '" placeholder="الحجم">' +
+            '<input class="inp num it-sz-price" type="number" min="0" step="1" data-szprice="' + i + '" data-si="' + si + '" value="' + (sz.price || 0) + '">' +
+            '<span class="it-sz-unit">ج.م</span>' +
+            '<button type="button" class="it-sz-del" data-szdel="' + i + '" data-si="' + si + '" title="احذف الحجم">✕</button>' +
+            '</div>';
+        }).join('');
+        priceBlock =
+          '<div class="it-sizes-box" data-sizes-box="' + i + '">' +
+            '<div class="it-box-head"><span>🧾 الأحجام</span>' +
+              '<button type="button" class="it-sz-add" data-szadd="' + i + '">+ حجم</button>' +
+            '</div>' +
+            rows +
+            (ss.length ? '' : '<div class="it-empty-sm">مفيش أحجام — اضغط «+ حجم»</div>') +
+          '</div>';
+      } else {
+        priceBlock =
+          '<div class="it-single-box">' +
+            '<label class="it-price-lbl">السعر</label>' +
+            '<input class="inp num it-price" type="number" min="0" step="1" data-price="' + i + '" value="' + (it.price != null ? it.price : 0) + '">' +
+            '<span class="it-sz-unit">ج.م</span>' +
+          '</div>';
+      }
+
+      /* الوصف */
+      var descField =
+        '<textarea class="inp it-desc" data-c="desc" data-i="' + i + '" rows="2" placeholder="وصف الصنف">' + esc(it.desc || '') + '</textarea>';
+
+      /* الصورة */
+      var imgBlock =
+        '<div class="it-img-box">' +
+          '<div class="it-img-top">' + thumb +
+            '<div class="it-img-acts">' +
+              imgUploadBtn('data-imgup-i="' + i + '"') +
+              '<button type="button" class="it-img-clear" data-imgclear="' + i + '" title="شيل الصورة">🗑️</button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="it-img-pick">' + imgField(it.img || '', 'data-img-i="' + i + '"') + '</div>' +
         '</div>';
-      return '<div class="it-row">' +
-        '<div class="nm"><input class="inp" data-c="name" data-i="' + i + '" value="' + esc(it.name) + '"></div>' +
-        inputs +
-        imgCell +
-        '<div><button class="it-del" data-del="' + i + '" title="حذف">✕</button></div>' +
-      '</div>';
+
+      /* التبديل بين سعر واحد / أحجام */
+      var toggle =
+        '<div class="it-mode" data-mode="' + i + '">' +
+          '<button type="button" class="it-mode-btn' + (mode === 'multi' ? ' on' : '') + '" data-mode-btn="' + i + '" data-to="multi">أحجام</button>' +
+          '<button type="button" class="it-mode-btn' + (mode === 'single' ? ' on' : '') + '" data-mode-btn="' + i + '" data-to="single">سعر واحد</button>' +
+        '</div>';
+
+      return '<article class="it-card" data-card="' + i + '">' +
+        '<header class="it-card-head">' +
+          '<span class="it-card-num">' + (i + 1) + '</span>' +
+          nameField +
+          '<button type="button" class="it-del" data-del="' + i + '" title="حذف الصنف">🗑️</button>' +
+        '</header>' +
+        '<div class="it-card-body">' +
+          imgBlock +
+          '<div class="it-card-info">' +
+            toggle +
+            priceBlock +
+            descField +
+          '</div>' +
+        '</div>' +
+      '</article>';
     }).join('');
 
-    /* شرح المقاس المناسب — حسب نوع القسم */
+    /* ── شرح المقاس المناسب ── */
     var isPizza = (m.key === 'pizza');
     var sizeHint = isPizza
       ? '<div class="size-hint"><b>🖼️ المقاس المناسب للبيتزا:</b> صورة <b>مربعة</b> (الأبعاد متساوية) — ' +
@@ -603,37 +724,156 @@
         'علامة 🟩 — أو أي مقاس بيشتغل، الموقع بيظبطها تلقائي. ' +
         '<span class="sh-dim">الأفضل 800×800 للصفحة الرئيسية و 400×400 للهاتف.</span></div>';
 
-    $('#itemsTable').innerHTML = sizeHint + head + (rows || '<div class="it-empty">مفيش أصنف — اضغط «+ صنف جديد»</div>');
+    /* الشرح بره شبكة الكروت (ياخد عرض كامل) — وبنشيل أي نسخة قديمة */
+    var gridHtml = cards || '<div class="it-empty">مفيش أصناف — اضغط «+ صنف جديد»</div>';
+    $('#itemsTable').innerHTML = gridHtml;
+    var oldHint = $('#itemsTable').parentNode.querySelector('.size-hint');
+    if (oldHint) oldHint.remove();
+    var hintBox = document.createElement('div');
+    hintBox.className = 'size-hint';
+    hintBox.innerHTML = sizeHint.replace(/^<div class="size-hint">|<\/div>$/g, '');
+    $('#itemsTable').parentNode.insertBefore(hintBox, $('#itemsTable'));
 
-    /* نحدّد أعمدة الجدول حسب عدد الأسعار (عشان مفيش تداخل) */
-    applyRowColumns(
-      Array.prototype.slice.call($('#itemsTable').querySelectorAll('.it-row')),
-      hasSizes ? m.sizes.length : 1
-    );
+    var T = $('#itemsTable');
 
-    $('#itemsTable').querySelectorAll('[data-c]').forEach(function (inp) {
+    /* ── الحقول النصية والأسعار ── */
+    T.querySelectorAll('[data-c]').forEach(function (inp) {
       inp.oninput = function () {
         var i = +inp.dataset.i;
-        var c = (inp.dataset.k || inp.dataset.c);
-        var v = (c === 'name') ? inp.value : (inp.value === '' ? 0 : +inp.value);
-        m.items[i][c] = v;
+        m.items[i][inp.dataset.c] = inp.value;
         markDirty();
       };
     });
-    /* منتقي صورة الصنف (menu)
-       ملاحظة: بنستمع على حدث imgpick المخصص بدل change،
-       عشان ما نعيدش بناء الجدول أثناء الاختيار (كان بيبوظ الـselect). */
-    $('#itemsTable').querySelectorAll('[data-img-i]').forEach(function (pk) {
+    T.querySelectorAll('[data-price]').forEach(function (inp) {
+      inp.oninput = function () {
+        var i = +inp.dataset.price;
+        m.items[i].price = inp.value === '' ? 0 : +inp.value;
+        markDirty();
+      };
+    });
+    /* أسماء وأسعار الأحجام — لو الصنف وراثي، أول تعديل بيحوّله لأحجام خاصة */
+    function ensureOwnSizes(i) {
+      if (!hasOwnSizes(m.items[i])) {
+        var src = effectiveSizes(m, m.items[i]);
+        m.items[i].sizes = src.length
+          ? src.map(function (sz) { return { name: sz.name, price: sz.price }; })
+          : [{ name: 'صغير', price: +m.items[i].price || 0 }];
+        delete m.items[i].price;
+      }
+      return m.items[i].sizes;
+    }
+    T.querySelectorAll('[data-szname]').forEach(function (inp) {
+      inp.oninput = function () {
+        var i = +inp.dataset.szname, si = +inp.dataset.si;
+        var arr = ensureOwnSizes(i);
+        if (!arr[si]) arr[si] = { name: '', price: 0 };
+        arr[si].name = inp.value;
+        markDirty();
+      };
+    });
+    T.querySelectorAll('[data-szprice]').forEach(function (inp) {
+      inp.oninput = function () {
+        var i = +inp.dataset.szprice, si = +inp.dataset.si;
+        var arr = ensureOwnSizes(i);
+        if (!arr[si]) arr[si] = { name: '', price: 0 };
+        arr[si].price = inp.value === '' ? 0 : +inp.value;
+        markDirty();
+      };
+    });
+
+    /* ── إضافة / حذف حجم لصنف واحد ── */
+    T.querySelectorAll('[data-szadd]').forEach(function (b) {
+      b.onclick = function () {
+        var i = +b.dataset.szadd;
+        /* لو الصنف لسه بيورث أحجام القسم → نعمله نسخة كاملة (عشان ما نضيّعش أي حجم) */
+        if (!hasOwnSizes(m.items[i])) {
+          var src = effectiveSizes(m, m.items[i]);
+          if (src.length) {
+            m.items[i].sizes = src.map(function (sz) { return { name: sz.name, price: sz.price }; });
+          } else {
+            m.items[i].sizes = [];
+          }
+          delete m.items[i].price;
+        }
+        var last = m.items[i].sizes[m.items[i].sizes.length - 1];
+        var base = last ? (+last.price || 0) : (+m.items[i].price || 0);
+        m.items[i].sizes.push({ name: 'حجم ' + (m.items[i].sizes.length + 1), price: base });
+        markDirty();
+        renderMenu();
+        toast('✅ اتضاف حجم جديد', 'ok');
+      };
+    });
+    T.querySelectorAll('[data-szdel]').forEach(function (b) {
+      b.onclick = function () {
+        var i = +b.dataset.szdel, si = +b.dataset.si;
+        /* نتحقق من وجود الحجم في القائمة الفعلية (خاصة أو وراثية) */
+        var cur = effectiveSizes(m, m.items[i]);
+        if (!cur[si]) return;
+        var nm = cur[si].name || ('حجم ' + (si + 1));
+        confirmBox('حذف حجم', 'متأكد إنك عايز تحذف «' + nm + '» من «' + m.items[i].name + '»؟')(
+          function () {
+            /* نطبّق الحذف على الحجم المحدد فعلاً */
+            var sk = (data.sizeKeys && data.sizeKeys[m.key]) || {};
+            var arr = hasOwnSizes(m.items[i])
+              ? m.items[i].sizes
+              : (m.items[i].sizes = cur.map(function (sz) { return { name: sz.name, price: sz.price }; }));
+            arr.splice(si, 1);
+            if (!arr.length) {
+              /* آخر حجم اتمسح → نرجّع الصنف سعر واحد */
+              m.items[i].price = 0;
+              delete m.items[i].sizes;
+            }
+            markDirty();
+            renderMenu();
+            toast('✅ اتحذف الحجم «' + nm + '»', 'ok');
+          });
+      };
+    });
+
+    /* ── التبديل: سعر واحد ⇄ أحجام ── */
+    T.querySelectorAll('[data-mode-btn]').forEach(function (b) {
+      b.onclick = function () {
+        var i = +b.dataset.modeBtn;
+        var to = b.dataset.to;
+        if (to === 'multi') {
+          delete m.items[i].__noSizes;   /* رجع يقدر ياخد أحجام */
+          if (!hasOwnSizes(m.items[i])) {
+            var src = effectiveSizes(m, m.items[i]);
+            if (src.length) {
+              m.items[i].sizes = src.map(function (sz) { return { name: sz.name, price: sz.price }; });
+            } else {
+              var base = +m.items[i].price || 0;
+              m.items[i].sizes = [{ name: 'صغير', price: base }, { name: 'كبير', price: Math.round(base * 1.3) }];
+            }
+            delete m.items[i].price;
+          }
+        } else {
+          /* سعر واحد: بناخد أقل سعر من الأحجام الفعلية (خاصة أو وراثية)
+             وبنكتبه صراحةً + بنمنع الوراثة (حاجزة __noSizes) */
+          var ss = effectiveSizes(m, m.items[i]);
+          var pr = ss.length
+            ? Math.min.apply(null, ss.map(function (sz) { return +sz.price || 0; }))
+            : (+m.items[i].price || 0);
+          m.items[i].price = pr;
+          delete m.items[i].sizes;
+          m.items[i].__noSizes = 1;      /* يمنع الوراثة من القسم */
+        }
+        markDirty();
+        renderMenu();
+        toast(to === 'multi' ? '✅ اتحوّل لأحجام — عدّل الأسعار' : '✅ بقى سعر واحد', 'ok');
+      };
+    });
+
+    /* ── منتقي صورة الصنف ── */
+    T.querySelectorAll('[data-img-i]').forEach(function (pk) {
       var i = +pk.dataset.imgI;
       bindPicker(pk);
       pk.addEventListener('imgpick', function (ev) {
         var v = ev.detail.value;
-        // القيمة الفارغة = بدون صورة (بنتخزنها صراحة عشان ما ترجعش الأصلية)
         m.items[i].img = v || '';
         markDirty();
         toast(v ? '✅ اتغيّرت الصورة' : '✅ اتشالت الصورة', 'ok');
-        // بنحدّث الـthumbnail بس — من غير إعادة بناء الجدول
-        var thumb = pk.closest('.it-img-cell') ? pk.closest('.it-img-cell').querySelector('.it-thumb') : null;
+        var thumb = pk.closest('.it-img-box') ? pk.closest('.it-img-box').querySelector('.it-thumb') : null;
         if (thumb) {
           if (v) {
             var im = null;
@@ -645,23 +885,33 @@
         }
       });
     });
-    // رفع صورة للصنف (menu) — النظام الجديد: بنخزن dataUrl فيتشتغل فوراً
-    $('#itemsTable').querySelectorAll('[data-imgup-i]').forEach(function (b) {
+    /* رفع صورة */
+    T.querySelectorAll('[data-imgup-i]').forEach(function (b) {
       b.onclick = function () {
         var i = +b.dataset.imgupI;
         pickImageFile(function (rec) {
           images.push(rec);
-          data._images = images.slice();     // لازم نحفظ الـmanifest (فيه الـdataUrl)
+          data._images = images.slice();
           m.items[i].img = rec.path;
           markDirty();
           toast('✅ اتحدّثت صورة المنتج', 'ok');
-          renderMenu();   // هنا بنعيد البناء عشان الشبكة تع是新 الصورة
+          renderMenu();
         });
       };
     });
+    /* شيل الصورة */
+    T.querySelectorAll('[data-imgclear]').forEach(function (b) {
+      b.onclick = function () {
+        var i = +b.dataset.imgclear;
+        m.items[i].img = '';
+        markDirty();
+        toast('✅ اتشالت الصورة', 'ok');
+        renderMenu();
+      };
+    });
 
-    // الحذف
-    $('#itemsTable').querySelectorAll('[data-del]').forEach(function (b) {
+    /* ── الحذف ── */
+    T.querySelectorAll('[data-del]').forEach(function (b) {
       b.onclick = function () {
         var i = +b.dataset.del;
         confirmBox('حذف الصنف', 'متأكد إنك عايز تحذف «' + m.items[i].name + '»؟')(

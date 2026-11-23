@@ -185,41 +185,77 @@ function cardSrcset(path){
   return out.join(', ');
 }
 
+
+/* ══════════════════════════════════════════════════════════
+   أحجام الصنف — لكل صنف قائمة أحجام خاصة بيه (اختياري)
+   • لو it.sizes موجودة  → أحجام خاصة بالصنف (name + price)
+   • وإلا لو m.sizes موجودة → وراثة من القسم (المفاتيح small/medium/large)
+   • وإلا                   → سعر واحد
+   ══════════════════════════════════════════════════════════ */
+function itemSizesOf(m,it){
+  if(!m||!it) return [];
+  // 1) أحجام خاصة بالصنف
+  if(Array.isArray(it.sizes)&&it.sizes.length){
+    return it.sizes.filter(function(s){return s&&s.name;}).map(function(s){
+      return {label:String(s.name), price:(s.price==null?0:+s.price), key:('sz_'+s.name)};
+    });
+  }
+  // 2) وراثة من القسم — إلا لو الصنف اتحوّل صراحةً لسعر واحد
+  if(it.__noSizes) return [];
+  if(Array.isArray(m.sizes)&&m.sizes.length){
+    const sk=sizeKeysOf(m.key);
+    const out=[];
+    m.sizes.forEach(function(label){
+      const k=sk[label]||label;
+      if(it[k]!=null) out.push({label:label, price:+it[k], key:k});
+    });
+    return out;
+  }
+  return [];
+}
+/* هل الصنف متعدد الأحجام؟ (للعرض في الكارت) */
+function hasItemSizes(m,it){
+  return itemSizesOf(m,it).length>0;
+}
+/* السعر الأساسي للصنف (أصغر سعر لو متعدد) */
+function itemBasePrice(m,it){
+  const ss=itemSizesOf(m,it);
+  if(ss.length) return Math.min.apply(null, ss.map(function(s){return s.price;}));
+  return it.price!=null?+it.price:0;
+}
+
 function panelHTML(m){
   const head=`<div class="menu-head"><span class="menu-head-emoji">${m.emoji}</span><div><h2>${m.title}</h2><p>${m.desc}</p></div></div>`;
-  if(m.sizes){
-    // ═══ كارت بصورة + أسعار جنب بعض (البيتزا) ═══
-    const sk=sizeKeysOf(m.key);
-    const sizeList=m.sizes.map(x=>sk[x]||x);
-    const cards=m.items.map((it,i)=>{
-      const rows=sizeList.map((k,si)=>{
-        const price=it[k];
-        if(price==null) return '';
-        const label=m.sizes[si];
+  // ═══ كارت بصورة + أسعار (بيتزا وأي صنف ليه أحجام خاصة) ═══
+  const cards=m.items.map((it,i)=>{
+    const ss=itemSizesOf(m,it);
+    if(ss.length){
+      const rows=ss.map(function(s){
         return `<div class="price-row">
-          <button type="button" class="price-pill wa-clickable" data-size="${label}" data-qv-price="${label}" aria-label="ضيف ${it.name} ${label} للسلة">
-            <span class="pr-size">${label}</span>
-            <span class="pr-price">${price}<i>ج.م</i></span>
+          <button type="button" class="price-pill wa-clickable" data-size="${esc(s.label)}" data-qv-price="${esc(s.label)}" aria-label="ضيف ${esc(it.name)} ${esc(s.label)} للسلة">
+            <span class="pr-size">${esc(s.label)}</span>
+            <span class="pr-price">${s.price}<i>ج.م</i></span>
           </button>
-          <button type="button" class="wa-add" aria-label="زيد ${it.name} ${label}">+</button>
+          <button type="button" class="wa-add" aria-label="زيد ${esc(it.name)} ${esc(s.label)}">+</button>
         </div>`;
       }).join('');
       return `<article class="menu-card menu-card-sizes reveal" style="transition-delay:${i*0.03}s" data-qv-item="${esc(it.id||'')}">
-        <button type="button" class="card-link card-link-img" data-qv-img aria-label="${it.name}">
-          ${it.img?`<span class="card-img" data-emoji="${m.emoji}"><img src="${imageSrc(it.img)}" alt="${it.name}" loading="lazy" decoding="async"${cardSrcset(it.img)?` srcset="${cardSrcset(it.img)}" sizes="(max-width:640px) 44vw, 300px"`:''} onerror="imgFallback(this)"></span>`:`<span class="card-emoji">${m.emoji}</span>`}
+        <button type="button" class="card-link card-link-img" data-qv-img aria-label="${esc(it.name)}">
+          ${it.img?`<span class="card-img" data-emoji="${m.emoji}"><img src="${imageSrc(it.img)}" alt="${esc(it.name)}" loading="lazy" decoding="async"${cardSrcset(it.img)?` srcset="${cardSrcset(it.img)}" sizes="(max-width:640px) 44vw, 300px"`:''} onerror="imgFallback(this)"></span>`:`<span class="card-emoji">${m.emoji}</span>`}
         </button>
         <div class="card-body">
           <div class="card-sizes">${rows}</div>
           <a class="card-name" href="product.html?cat=${m.key}&id=${encodeURIComponent(it.id)}">
-            <h3>${it.name}</h3>
-            ${it.desc?`<p class="card-desc">${it.desc}</p>`:''}
+            <h3>${esc(it.name)}</h3>
+            ${it.desc?`<p class="card-desc">${esc(it.desc)}</p>`:''}
           </a>
         </div>
       </article>`;
-    }).join('');
-    return head+`<div class="menu-cards menu-cards-sizes">${cards}</div>`;
-  }
-  const cards=m.items.map((it,i)=>`<article class="menu-card reveal" style="transition-delay:${i*0.03}s" data-qv-item="${esc(it.id||'')}"><button type="button" class="card-link" data-qv-img aria-label="${it.name}">${it.img?`<span class="card-img" data-emoji="${m.emoji}"><img src="${imageSrc(it.img)}" alt="${it.name}" loading="lazy" decoding="async"${cardSrcset(it.img)?` srcset="${cardSrcset(it.img)}" sizes="(max-width:640px) 46vw, 180px"`:''} onerror="imgFallback(this)"></span>`:`<span class="card-emoji">${m.emoji}</span>`}<h3>${it.name}</h3></button><div class="card-bottom"><span class="card-price">${it.price} <i>ج.م</i></span><button type="button" class="button primary" data-qv-price="" data-qv-price-one="1">اطلبها ←</button></div></article>`).join('');
+    }
+    return `<article class="menu-card reveal" style="transition-delay:${i*0.03}s" data-qv-item="${esc(it.id||'')}"><button type="button" class="card-link" data-qv-img aria-label="${esc(it.name)}">${it.img?`<span class="card-img" data-emoji="${m.emoji}"><img src="${imageSrc(it.img)}" alt="${esc(it.name)}" loading="lazy" decoding="async"${cardSrcset(it.img)?` srcset="${cardSrcset(it.img)}" sizes="(max-width:640px) 46vw, 180px"`:''} onerror="imgFallback(this)"></span>`:`<span class="card-emoji">${m.emoji}</span>`}<h3>${esc(it.name)}</h3></button><div class="card-bottom"><span class="card-price">${it.price} <i>ج.م</i></span><button type="button" class="button primary" data-qv-price="" data-qv-price-one="1">اطلبها ←</button></div></article>`;
+  }).join('');
+  const hasSz=m.items.some(function(it){return itemSizesOf(m,it).length;});
+  return head+`<div class="menu-cards${hasSz?' menu-cards-sizes':''}">${cards}</div>`;
   return head+`<div class="menu-cards">${cards}</div>`;
 }
 function renderMenu(){
@@ -309,29 +345,20 @@ function renderProduct(){
   catLink.textContent=m.title;
   catLink.href=backLink.href=backNav.href=`category.html?cat=${currentCat}`;
 
-  // ── الأحجام: من sizeKeys + الأسعار الحقيقية ──
-  const sk=getSizeKeys()[currentCat]||{};
+  // ── الأحجام: خاصة بالصنف (it.sizes) أو وراثية من القسم ──
+  const ss=itemSizesOf(m,item);
+  let basePrice=0;
   let sizeData=[];
-  if(m.sizes&&m.sizes.length){
-    // نحط أقل سعر أساس
-    let base=null;
-    m.sizes.forEach(s=>{const k=sk[s]||s; if(item[k]!=null&&(base===null||item[k]<base))base=item[k];});
-    base=base||0;
-    sizeData=m.sizes.map(s=>{const k=sk[s]||s; return [s,(item[k]||base)-base];});
+  if(ss.length){
+    basePrice=Math.min.apply(null, ss.map(function(x){return x.price;}));
+    sizeData=ss.map(function(x){return [x.label, x.price-basePrice];});
+  }else{
+    basePrice = item.price!=null ? +item.price : 0;
   }
-  // الأقسام غير البيتزا: مفيش أحجام خالص (البيتزا وحدها لها أحجام)
-  sizes.innerHTML=sizeData.length?sizeData.map((s,i)=>`<label class="option ${i===0?'selected':''}"><input type="radio" name="size" value="${s[0]}" data-price="${s[1]}" ${i===0?'checked':''} onchange="updateTotal()"><b>${s[0]}</b><span>${s[1]?'+ '+s[1]+' ج.م':'السعر الأساسي'}</span></label>`).join(''):'';
+  sizes.innerHTML=sizeData.length?sizeData.map((s,i)=>`<label class="option ${i===0?'selected':''}"><input type="radio" name="size" value="${esc(s[0])}" data-price="${s[1]}" ${i===0?'checked':''} onchange="updateTotal()"><b>${esc(s[0])}</b><span>${s[1]?'+ '+s[1]+' ج.م':'السعر الأساسي'}</span></label>`).join(''):'';
   // نخفي كتل الأحجام كلها لو فاضية
   const sizesBlock=sizes.closest('.block')||sizes.parentElement;
   if(sizesBlock) sizesBlock.style.display=sizeData.length?'':'none';
-
-  // السعر الأساسي = أصغر سعر متاح
-  let basePrice = item.price!=null ? item.price : (item.small||item.medium||item.large||0);
-  if(m.sizes&&m.sizes.length){
-    let mn=null;
-    m.sizes.forEach(s=>{const k=sk[s]||s; if(item[k]!=null&&(mn===null||item[k]<mn))mn=item[k];});
-    basePrice=mn||0;
-  }
 
   // ── الإضافات: من data.extras لو موجودة، وإلا الافتراضي ──
   let ex=[];
@@ -454,13 +481,14 @@ observe();
         for (var j=0;j<(sec.items||[]).length;j++){
           var it = sec.items[j];
           if (it.id !== id) continue;
-          var from = it.price != null ? it.price
-                   : (it.small != null ? it.small : (it.medium != null ? it.medium : it.large));
+          var ss=itemSizesOf(sec,it);
+          var from = ss.length ? Math.min.apply(null, ss.map(function(x){return x.price;}))
+                   : (it.price != null ? it.price : null);
           var img = it.img ? ('<span class="pop-img"><img alt="'+esc2(it.name)+'" loading="lazy" decoding="async" src="'+esc2(imageSrc(it.img))+'"></span>')
                            : '<span class="pop-img pop-emoji">'+(sec.emoji||'🍽️')+'</span>';
           var priceTxt = '';
-          if (it.small != null && it.medium != null){
-            priceTxt = '<span class="pop-from">من '+it.small+' ج.م</span>';
+          if (ss.length>1){
+            priceTxt = '<span class="pop-from">من '+from+' ج.م</span>';
           } else if (from != null){
             priceTxt = '<span class="pop-from">'+from+' ج.م</span>';
           }
