@@ -218,7 +218,7 @@ textarea.inp{min-height:78px;resize:vertical;line-height:1.6}
 /* ── الجسم: صورة + معلومات ── */
 .it-card-body{
   display:grid;
-  grid-template-columns:220px minmax(0,1fr);
+  grid-template-columns:260px minmax(0,1fr);
   grid-template-areas:"img info";
   gap:14px;align-items:start;
 }
@@ -235,45 +235,66 @@ textarea.inp{min-height:78px;resize:vertical;line-height:1.6}
 .it-img-box{display:flex;flex-direction:column;gap:9px;min-width:0}
 .it-img-box .img-picker{display:block;min-width:0;width:100%}
 .it-img-top{display:flex;align-items:center;gap:9px}
-.it-img-acts{display:flex;flex-direction:column;gap:5px;flex:1;min-width:0}
+/* أزرار الصورة: 📤 رفع + 🗑️ شيل — جنب بعض */
+.it-img-acts{display:flex;flex-direction:row;gap:6px;flex:1;min-width:0}
 .it-img-acts .img-up{
-  width:100%;padding:7px 8px;font-size:11.5px;
+  flex:1;padding:9px 10px;font-size:12px;
   display:inline-flex;align-items:center;justify-content:center;gap:5px;
   white-space:nowrap;
 }
 .it-img-clear{
-  width:100%;padding:6px 8px;font-size:11.5px;
+  padding:9px 11px;font-size:12px;
   background:#ffffff06;border:1px solid var(--line);
   color:var(--muted);border-radius:9px;cursor:pointer;transition:.2s;
   white-space:nowrap;
 }
 .it-img-clear:hover{background:#e9473618;color:#ff9c8f;border-color:#e9473640}
-/* المعاينة: صورة + اسم الملف + الأبعاد */
+/* ═══ المعاينة: صورة كبيرة + اسم الملف والأبعاد تحتها ═══ */
 .it-img-box .ip-current{
-  display:flex;align-items:flex-start;gap:9px;
-  padding:8px 9px;border-radius:10px;
+  display:flex;flex-direction:column;align-items:stretch;gap:8px;
+  padding:8px;border-radius:12px;
   background:#ffffff05;border:1px solid var(--line);
   width:100%;
 }
+/* الصورة الحالية: تملأ عرض العمود */
 .it-img-box .ip-current .ip-th{
-  width:34px;height:34px;flex-shrink:0;border-radius:8px;overflow:hidden;
-  background:#0d0c0b;
+  width:100%!important;height:auto!important;aspect-ratio:1/1;
+  flex-shrink:0;border-radius:10px;overflow:hidden;
+  background:#0d0c0b;position:relative;
+  display:grid;place-items:center;
 }
 .it-img-box .ip-current .ip-th.none{
-  display:grid;place-items:center;font-size:15px;color:var(--muted);
+  font-size:26px;color:var(--muted);
 }
-.it-img-box .ip-current .ip-th img{width:100%;height:100%;object-fit:cover;display:block}
-/* اسم الملف: LTR + سطرين */
+.it-img-box .ip-current .ip-th img{
+  width:100%!important;height:100%!important;object-fit:contain!important;display:block;
+}
+/* لو الصورة مش موجودة: علامة تحذير بدل المربع المكسور */
+.it-img-box .ip-current .ip-th.broken{
+  background:#e9473614;border:1px dashed #e9473655;
+}
+.it-img-box .ip-current .ip-th.broken::after{
+  content:'⚠️ الصورة مش موجودة';font-size:11px;color:#ff9c8f;
+  font-family:Tajawal,'Noto Color Emoji',Arial,sans-serif;
+  text-align:center;padding:6px;line-height:1.5;
+}
+/* اسم الملف: LTR + الأبعاد */
 .it-img-box .ip-name-wrap{flex:1;min-width:0;direction:ltr;text-align:left}
 .it-img-box .ip-name{
   display:block;white-space:normal;word-break:break-all;
   font-size:10.5px;line-height:1.45;color:var(--muted);
-  max-height:2.9em;overflow:hidden;direction:ltr;text-align:left;
+  direction:ltr;text-align:left;overflow:visible;
 }
 .it-img-box .ip-name small{
   display:block;margin-top:3px;font-size:10px;font-weight:600;
   color:var(--orange);direction:ltr;text-align:left;
 }
+/* الأبعاد المحسوبة تلقائياً */
+.it-img-box .ip-dims-auto{
+  display:block;margin-top:3px;font-size:10px;font-weight:700;
+  color:var(--orange);direction:ltr;text-align:left;
+}
+.it-img-box .ip-dims-auto[hidden]{display:none}
 .it-img-box .ip-open{
   width:100%;justify-content:center;font-size:12px;padding:8px;
   font-family:Tajawal,'Noto Color Emoji',Arial,sans-serif;
@@ -284,15 +305,18 @@ textarea.inp{min-height:78px;resize:vertical;line-height:1.6}
   border-radius:12px;border:1px solid var(--line);background:#0d0c0b;
 }
 .it-thumb-empty{display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--muted)}
-.it-img-acts{display:flex;flex-direction:column;gap:5px;flex:1;min-width:0}
+/* أزرار الصورة: 📤 رفع + 🗑️ شيل — جنب بعض */
+.it-img-acts{display:flex;flex-direction:row;gap:6px;flex:1;min-width:0}
 .it-img-acts .img-up{
-  width:100%;padding:7px 8px;font-size:11.5px;
+  flex:1;padding:9px 10px;font-size:12px;
   display:inline-flex;align-items:center;justify-content:center;gap:5px;
+  white-space:nowrap;
 }
 .it-img-clear{
-  width:100%;padding:6px 8px;font-size:11.5px;
+  padding:9px 11px;font-size:12px;
   background:#ffffff06;border:1px solid var(--line);
   color:var(--muted);border-radius:9px;cursor:pointer;transition:.2s;
+  white-space:nowrap;
 }
 .it-img-clear:hover{background:#e9473618;color:#ff9c8f;border-color:#e9473640}
 .it-img-pick .img-picker{min-width:0;width:100%}
@@ -387,7 +411,10 @@ textarea.inp{min-height:78px;resize:vertical;line-height:1.6}
     border-radius:12px;padding:10px;
   }
   .it-img-top{flex-shrink:0}
-  .it-img-acts{flex-direction:row;gap:6px}
+  /* المعاينة على الموبايل: صورة مربعة صغيرة مش بعرض كامل */
+  .it-img-box .ip-current{flex-direction:row;align-items:center;gap:9px;padding:6px}
+  .it-img-box .ip-current .ip-th{width:76px!important;height:76px!important;aspect-ratio:auto;flex-shrink:0}
+  .it-img-acts{flex-direction:row;gap:6px;flex-wrap:wrap}
   .it-img-acts .img-up,.it-img-clear{white-space:nowrap;padding:7px 11px}
   .it-img-pick{flex:1;min-width:0}
   .it-sz-row{grid-template-columns:minmax(0,1fr) 76px auto 26px;gap:6px}
@@ -623,11 +650,12 @@ select option:checked{
   background:#ffffff06;border:1px solid var(--line2);border-radius:11px;
   padding:6px 9px;min-height:56px;
 }
-.ip-current .ip-th{
+/* المعاينة العامة (أدوات تانية) */
+.ip-current:not(.it-img-box .ip-current) .ip-th{
   width:42px;height:42px;border-radius:9px;overflow:hidden;flex-shrink:0;
   background:#171412;border:1px solid var(--line2);display:grid;place-items:center;
 }
-.ip-current .ip-th img{width:100%;height:100%;object-fit:cover;display:block}
+.ip-current:not(.it-img-box .ip-current) .ip-th img{width:100%;height:100%;object-fit:cover;display:block}
 .ip-current .ip-th.none{font-size:19px}
 .ip-current .ip-name{
   font-size:12.5px;font-weight:700;color:var(--cream);

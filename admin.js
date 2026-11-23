@@ -65,12 +65,20 @@
   }
 
   function scanImages() {
-    // نقرأ قائمة الصور من الـ manifest الموجود في data.json
-    if (data && data._images) {
-      images = data._images.slice();
-      return;
-    }
-    images = [];
+    /* قائمة الصور: نبدأ من data._images (المدمج) ونتأكد إن كل الصور
+       المرفوعة (اللي في IMGS_KEY) موجودة — دي الحاملة للـdataUrl. */
+    var list = (data && data._images) ? data._images.slice() : [];
+    try {
+      var savedImgs = JSON.parse(localStorage.getItem(IMGS_KEY) || 'null') || [];
+      savedImgs.forEach(function (si) {
+        var found = false;
+        for (var i = 0; i < list.length; i++) {
+          if (list[i].path === si.path) { list[i] = si; found = true; break; }
+        }
+        if (!found) list.push(si);
+      });
+    } catch (e) { /* تجاهل */ }
+    images = list;
   }
 
   /* ═══════════ 3) الدخول ═══════════ */
@@ -162,7 +170,22 @@
     // الحقول الجديدة: لو المحفوظ قديم وفاضي → من base
     if (!saved.extras || !Object.keys(saved.extras).length) out.extras = base.extras;
     if (!saved.sizeKeys || !Object.keys(saved.sizeKeys).length) out.sizeKeys = base.sizeKeys;
-    if (!saved._images || !saved._images.length) out._images = base._images;
+    /* الصور: المحفوظ فيه المستخدم (يعني الصور المرفوعة بـ dataUrl) ⇒ ليه الأولوية.
+       غير كده ⇒ من base. */
+    if (saved._images && saved._images.length) {
+      /* ندمج: صور base الناقصة + صور المستخدم (المستخدم ليه الأولوية لنفس المسار) */
+      var mergedImgs = (base._images || []).slice();
+      saved._images.forEach(function (si) {
+        var found = false;
+        for (var mi = 0; mi < mergedImgs.length; mi++) {
+          if (mergedImgs[mi].path === si.path) { mergedImgs[mi] = si; found = true; break; }
+        }
+        if (!found) mergedImgs.push(si);
+      });
+      out._images = mergedImgs;
+    } else {
+      out._images = base._images;
+    }
 
     // لو المحفوظ فيه extras ناقصة (قسم مش موجود) → نكمّل من base
     if (out.extras && base.extras) {
@@ -355,6 +378,20 @@
     });
     grid.innerHTML = html;
 
+    /* الأبعاد للمصادر اللي مش معروفة ⇒ نحسبها من الصورة نفسها */
+    grid.querySelectorAll('.ip-cell .ip-th img').forEach(function (img) {
+      var cell = img.closest('.ip-cell');
+      var meta = cell.querySelector('.ip-meta');
+      if (!meta) return;
+      var upd = function () {
+        if (!img.naturalWidth) return;
+        var t = meta.textContent.replace(/\s*[⬜🟨🟩].*$/, '');
+        if (t === '—' || !t) meta.textContent = img.naturalWidth + '×' + img.naturalHeight + ' ' + meta.textContent.replace(/^\S+\s*/, '');
+      };
+      if (img.complete && img.naturalWidth) upd();
+      else img.addEventListener('load', upd, { once: true });
+    });
+
     grid.querySelectorAll('[data-pick]').forEach(function (b) {
       b.onclick = function () {
         var v = b.dataset.pick;
@@ -368,16 +405,56 @@
     });
   }
 
+  /* ═══ مصدر عرض الصورة ═══
+     الصور المرفوعة بتتخزن كـ dataUrl في مصفوفة images،
+     ومسارها (assets/upload/...) مش موجود على السيرفر ⇒ صورة مكسورة.
+     فبنرجع dataUrl لو متاح، وإلا المسار العادي. */
+  function imgSrc(path) {
+    if (!path) return '';
+    var im = null;
+    for (var i = 0; i < images.length; i++) { if (images[i].path === path) { im = images[i]; break; } }
+    return im ? (im.dataUrl || im.path) : path;
+  }
+
   /* معاينة الصورة الحالية */
   function currentPreview(cur) {
     if (!cur) return '<span class="ip-th none"><b class="ip-none-mark">Ø</b></span><span class="ip-name">بدون صورة</span>';
     var im = null;
     for (var i = 0; i < images.length; i++) { if (images[i].path === cur) { im = images[i]; break; } }
-    var src = im ? (im.dataUrl || im.path) : cur;
+    var src = imgSrc(cur);
     var nm = im ? (im.name || im.path) : cur;
     var dims = im && im.dim ? im.dim : '';
-    return '<span class="ip-th"><img src="' + esc(src) + '" alt=""></span>' +
-      '<span class="ip-name">' + esc(nm) + (dims ? ' <small>' + esc(dims) + '</small>' : '') + '</span>';
+    var html = '<span class="ip-th"><img src="' + esc(src) + '" alt="" onerror="this.closest(\'.ip-th\').classList.add(\'broken\');this.remove()"></span>' +
+      '<span class="ip-name">' + esc(nm) + (dims ? ' <small>' + esc(dims) + '</small>' : '') +
+      (!dims ? '<span class="ip-dims-auto" hidden></span>' : '') + '</span>';
+    return html;
+  }
+
+  /* يحسب أبعاد الصورة ويملاها تحت الاسم (بعد ما الصورة تتحمّل) */
+  function fillDims(scope) {
+    (scope || document).querySelectorAll('.it-img-box .ip-current').forEach(function (cur) {
+      var img = cur.querySelector('.ip-th img');
+      var nm = cur.querySelector('.ip-name');
+      if (!img || !nm) return;
+      var slot = cur.querySelector('.ip-dims-auto');
+      if (!slot) {
+        /* لو الأبعاد متكتبة بالفعل في small ⇒ متكررش */
+        var sm = nm.querySelector('small');
+        if (sm && sm.textContent.trim()) return;
+        slot = document.createElement('span');
+        slot.className = 'ip-dims-auto';
+        slot.hidden = true;
+        nm.appendChild(slot);
+      }
+      var done = function () {
+        if (img.naturalWidth) {
+          slot.hidden = false;
+          slot.textContent = img.naturalWidth + '×' + img.naturalHeight;
+        }
+      };
+      if (img.complete && img.naturalWidth) done();
+      else img.addEventListener('load', done, { once: true });
+    });
   }
 
   /* كام صنف بيستخدم الصورة دي */
@@ -636,10 +713,7 @@
       var ss = effectiveSizes(m, it);
       var mode = own ? 'multi' : (ss.length ? 'multi' : 'single');
 
-      /* الصورة */
-      var thumb = it.img
-        ? '<img class="it-thumb" src="' + esc(it.img) + '" alt="">'
-        : '<span class="it-thumb it-thumb-empty">📷</span>';
+      /* الصورة: المعاينة الكبيرة هي الصورة الحالية (مفيش ثامبنيل مكرر) */
 
       /* الاسم */
       var nameField =
@@ -680,10 +754,10 @@
       /* الصورة */
       var imgBlock =
         '<div class="it-img-box">' +
-          '<div class="it-img-top">' + thumb +
+          '<div class="it-img-top">' +
             '<div class="it-img-acts">' +
               imgUploadBtn('data-imgup-i="' + i + '"') +
-              '<button type="button" class="it-img-clear" data-imgclear="' + i + '" title="شيل الصورة">🗑️</button>' +
+              '<button type="button" class="it-img-clear" data-imgclear="' + i + '" title="شيل الصورة">🗑️ شيل الصورة</button>' +
             '</div>' +
           '</div>' +
           '<div class="it-img-pick">' + imgField(it.img || '', 'data-img-i="' + i + '"') + '</div>' +
@@ -873,16 +947,8 @@
         m.items[i].img = v || '';
         markDirty();
         toast(v ? '✅ اتغيّرت الصورة' : '✅ اتشالت الصورة', 'ok');
-        var thumb = pk.closest('.it-img-box') ? pk.closest('.it-img-box').querySelector('.it-thumb') : null;
-        if (thumb) {
-          if (v) {
-            var im = null;
-            for (var q = 0; q < images.length; q++) { if (images[q].path === v) { im = images[q]; break; } }
-            thumb.outerHTML = '<img class="it-thumb" src="' + esc(im ? (im.dataUrl || im.path) : v) + '" alt="">';
-          } else {
-            thumb.outerHTML = '<span class="it-thumb it-thumb-empty">📷</span>';
-          }
-        }
+        /* المعاينة الكبيرة بتتحدّث تلقائياً (currentPreview) */
+        fillDims(pk.closest('.it-img-box'));
       });
     });
     /* رفع صورة */
@@ -921,6 +987,9 @@
 
     $('#addSize').hidden = !hasSizes;
     $('#delSize').hidden = !hasSizes;
+
+    /* حساب أبعاد صور المعاينة بعد ما تتحمّل */
+    fillDims($('#itemsTable'));
   }
 
   $('#menuDesc').oninput = function () { data.menu[curMenu].desc = this.value; markDirty(); };
