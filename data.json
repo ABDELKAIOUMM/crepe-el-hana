@@ -1,2860 +1,2564 @@
 {
-  "version": 1,
-  "restaurant": {
-    "name": "كريب الهنا",
-    "english": "Crepe El Hana",
-    "phones": [
-      "01004388613",
-      "01147157120",
-      "0223656975"
-    ],
-    "address": "16 ش عبد الهادي متفرع من ش عبد العزيز آل سعود - المنيل",
-    "facebook": "crepeelhana",
-    "whatsapp": "201004388613"
-  },
-  "menu": [
-    {
-      "key": "pizza",
-      "title": "البيتزا",
-      "emoji": "🍕",
-      "desc": "بيتزا طازة بثلاث أحجام",
-      "sizes": [
-        "صغير",
-        "وسط",
-        "كبير"
-      ],
-      "items": [
-        {
-          "id": "pizza-بيتزا-مارجريتا",
-          "name": "بيتزا مارجريتا",
-          "desc": "صلصة طماطم، موزاريلا طازجة وريحان.",
-          "img": "assets/webp/real-بيتزا-مارجريتا.webp",
-          "small": 80,
-          "medium": 90,
-          "large": 135,
-          "sizes": [
-            {
-              "name": "صغير",
-              "price": 80
-            },
-            {
-              "name": "وسط",
-              "price": 90
-            },
-            {
-              "name": "كبير",
-              "price": 135
-            }
-          ]
-        },
-        {
-          "id": "pizza-بيتزا-خضار",
-          "name": "بيتزا خضار",
-          "desc": "فلفل ملون، بصل، ذرة وفطر فوق الموزاريلا.",
-          "img": "assets/webp/real-بيتزا-خضار.webp",
-          "small": 80,
-          "medium": 90,
-          "large": 135,
-          "sizes": [
-            {
-              "name": "صغير",
-              "price": 80
-            },
-            {
-              "name": "وسط",
-              "price": 90
-            },
-            {
-              "name": "كبير",
-              "price": 135
-            }
-          ]
-        },
-        {
-          "id": "pizza-بيتزا-سوسيس",
-          "name": "بيتزا سوسيس",
-          "desc": "شرائح سجق مشوي مع صلصة الطماطم.",
-          "img": "assets/webp/real-بيتزا-سوسيس.webp",
-          "small": 95,
-          "medium": 110,
-          "large": 170,
-          "sizes": [
-            {
-              "name": "صغير",
-              "price": 95
-            },
-            {
-              "name": "وسط",
-              "price": 110
-            },
-            {
-              "name": "كبير",
-              "price": 170
-            }
-          ]
-        },
-        {
-          "id": "pizza-بيتزا-ميكس-جبن",
-          "name": "بيتزا ميكس جبن",
-          "desc": "أربع جبنات ذايب مع ريحان.",
-          "img": "assets/webp/real-بيتزا-ميكس-جبن.webp",
-          "small": 90,
-          "medium": 100,
-          "large": 150,
-          "sizes": [
-            {
-              "name": "صغير",
-              "price": 90
-            },
-            {
-              "name": "وسط",
-              "price": 100
-            },
-            {
-              "name": "كبير",
-              "price": 150
-            }
-          ]
-        },
-        {
-          "id": "pizza-بيتزا-سجق",
-          "name": "بيتزا سجق",
-          "desc": "سجق بلدي مقطّع شرائح.",
-          "img": "assets/webp/real-بيتزا-سجق.webp",
-          "small": 95,
-          "medium": 110,
-          "large": 170,
-          "sizes": [
-            {
-              "name": "صغير",
-              "price": 95
-            },
-            {
-              "name": "وسط",
-              "price": 110
-            },
-            {
-              "name": "كبير",
-              "price": 170
-            }
-          ]
-        },
-        {
-          "id": "pizza-بيتزا-فراخ",
-          "name": "بيتزا فراخ",
-          "desc": "فراخ مشوية وصوص باربكيو خفيف.",
-          "img": "assets/webp/real-بيتزا-فراخ.webp",
-          "small": 95,
-          "medium": 110,
-          "large": 170,
-          "sizes": [
-            {
-              "name": "صغير",
-              "price": 95
-            },
-            {
-              "name": "وسط",
-              "price": 110
-            },
-            {
-              "name": "كبير",
-              "price": 170
-            }
-          ]
-        },
-        {
-          "id": "pizza-بيتزا-مشروم",
-          "name": "بيتزا مشروم",
-          "desc": "فطر طازج مع موزاريلا وزعتر.",
-          "img": "assets/webp/real-بيتزا-مشروم.webp",
-          "small": 95,
-          "medium": 105,
-          "large": 160,
-          "sizes": [
-            {
-              "name": "صغير",
-              "price": 95
-            },
-            {
-              "name": "وسط",
-              "price": 105
-            },
-            {
-              "name": "كبير",
-              "price": 160
-            }
-          ]
-        },
-        {
-          "id": "pizza-بيتزا-بسطرمة",
-          "name": "بيتزا بسطرمة",
-          "desc": "شرائح بسطرمة لحم مدخّن.",
-          "img": "assets/webp/real-بيتزا-بسطرمة.webp",
-          "small": 95,
-          "medium": 110,
-          "large": 170,
-          "sizes": [
-            {
-              "name": "صغير",
-              "price": 95
-            },
-            {
-              "name": "وسط",
-              "price": 110
-            },
-            {
-              "name": "كبير",
-              "price": 170
-            }
-          ]
-        },
-        {
-          "id": "pizza-بيتزا-تونة",
-          "name": "بيتزا تونة",
-          "desc": "تونة مع ذرة وزيتون.",
-          "img": "assets/webp/real-بيتزا-تونة.webp",
-          "small": 95,
-          "medium": 110,
-          "large": 170,
-          "sizes": [
-            {
-              "name": "صغير",
-              "price": 95
-            },
-            {
-              "name": "وسط",
-              "price": 110
-            },
-            {
-              "name": "كبير",
-              "price": 170
-            }
-          ]
-        },
-        {
-          "id": "pizza-بيتزا-فراخ-كرسبى",
-          "name": "بيتزا فراخ كرسبى",
-          "desc": "شرائح فراخ مقرمشة مع صوص الم 특별한.",
-          "img": "assets/webp/real-بيتزا-فراخ-كرسبى.webp",
-          "small": 95,
-          "medium": 110,
-          "large": 170,
-          "sizes": [
-            {
-              "name": "صغير",
-              "price": 95
-            },
-            {
-              "name": "وسط",
-              "price": 110
-            },
-            {
-              "name": "كبير",
-              "price": 170
-            }
-          ]
-        },
-        {
-          "id": "pizza-بيتزا-سلامى",
-          "name": "بيتزا سلامى",
-          "desc": "سلامي مدخّن مقطّع على الموزاريلا.",
-          "img": "assets/webp/real-بيتزا-سلامى.webp",
-          "small": 95,
-          "medium": 110,
-          "large": 170,
-          "sizes": [
-            {
-              "name": "صغير",
-              "price": 95
-            },
-            {
-              "name": "وسط",
-              "price": 110
-            },
-            {
-              "name": "كبير",
-              "price": 170
-            }
-          ]
-        },
-        {
-          "id": "pizza-بيتزا-سوبر-سوبريم",
-          "name": "بيتزا سوبر سوبريم",
-          "desc": "خضار ولحم ومشروم على عيشة سميكة.",
-          "img": "assets/webp/real-بيتزا-سوبر-سوبريم.webp",
-          "small": 100,
-          "medium": 110,
-          "large": 170,
-          "sizes": [
-            {
-              "name": "صغير",
-              "price": 100
-            },
-            {
-              "name": "وسط",
-              "price": 110
-            },
-            {
-              "name": "كبير",
-              "price": 170
-            }
-          ]
-        },
-        {
-          "id": "pizza-بيتزا-فراخ-بانيه-ناجتس",
-          "name": "بيتزا فراخ بانيه ناجتس",
-          "desc": "ناجتس فراخ مقرمشة مع صلصة مانجو.",
-          "img": "assets/webp/real-بيتزا-فراخ-بانيه-ناجتس.webp",
-          "small": 95,
-          "medium": 110,
-          "large": 170,
-          "sizes": [
-            {
-              "name": "صغير",
-              "price": 95
-            },
-            {
-              "name": "وسط",
-              "price": 110
-            },
-            {
-              "name": "كبير",
-              "price": 170
-            }
-          ]
-        },
-        {
-          "id": "pizza-بيتزا-فراخ-رانش",
-          "name": "بيتزا فراخ رانش",
-          "desc": "فراخ مع صوص الرانش والجبنة.",
-          "img": "assets/webp/real-بيتزا-فراخ-رانش.webp",
-          "small": 100,
-          "medium": 115,
-          "large": 175,
-          "sizes": [
-            {
-              "name": "صغير",
-              "price": 100
-            },
-            {
-              "name": "وسط",
-              "price": 115
-            },
-            {
-              "name": "كبير",
-              "price": 175
-            }
-          ]
-        },
-        {
-          "id": "pizza-بيتزا-فراخ-باربيكيو",
-          "name": "بيتزا فراخ باربيكيو",
-          "desc": "فراخ مع صوص الباربكيو والبصل.",
-          "img": "assets/webp/real-بيتزا-فراخ-باربيكيو.webp",
-          "small": 100,
-          "medium": 115,
-          "large": 175,
-          "sizes": [
-            {
-              "name": "صغير",
-              "price": 100
-            },
-            {
-              "name": "وسط",
-              "price": 115
-            },
-            {
-              "name": "كبير",
-              "price": 175
-            }
-          ]
-        },
-        {
-          "id": "pizza-بيتزا-مكس-فراخ",
-          "name": "بيتزا مكس فراخ",
-          "desc": "فراخ مع سجق وخضار مشكّلة.",
-          "img": "assets/webp/real-بيتزا-مكس-فراخ.webp",
-          "small": 115,
-          "medium": 155,
-          "large": 205,
-          "sizes": [
-            {
-              "name": "صغير",
-              "price": 115
-            },
-            {
-              "name": "وسط",
-              "price": 155
-            },
-            {
-              "name": "كبير",
-              "price": 205
-            }
-          ]
-        },
-        {
-          "id": "pizza-بيتزا-مكس-لحوم",
-          "name": "بيتزا مكس لحوم",
-          "desc": "لحم مفروم وسجق وبسطرمة مع خضار.",
-          "img": "assets/webp/real-بيتزا-مكس-لحوم.webp",
-          "small": 130,
-          "medium": 155,
-          "large": 210,
-          "sizes": [
-            {
-              "name": "صغير",
-              "price": 130
-            },
-            {
-              "name": "وسط",
-              "price": 155
-            },
-            {
-              "name": "كبير",
-              "price": 210
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "key": "syrian",
-      "title": "سوري",
-      "emoji": "🥙",
-      "desc": "ساندوتشات سوري بخلطات مميزة",
-      "items": [
-        {
-          "id": "syrian-سوري-بطاطس-فارم",
-          "name": "سوري بطاطس فارم",
-          "desc": "بطاطس مقرمشة متبّلة مع صوص البيت.",
-          "img": "assets/webp/real-سوري-بطاطس-فارم.webp",
-          "price": 30
-        },
-        {
-          "id": "syrian-سوري-برجر-سادة",
-          "name": "سوري برجر سادة",
-          "desc": "لحم بقري مشوي مع خبز طازج.",
-          "img": "assets/webp/real-سوري-برجر-سادة.webp",
-          "price": 65
-        },
-        {
-          "id": "syrian-سوري-برجر-بيض",
-          "name": "سوري برجر بيض",
-          "desc": "برجر مع بيض مقلي وبيكون.",
-          "img": "assets/webp/real-سوري-برجر-بيض.webp",
-          "price": 80
-        },
-        {
-          "id": "syrian-سوري-برجر-جبنة",
-          "name": "سوري برجر جبنة",
-          "desc": "برجر مع شريحة جبنة ذايب.",
-          "img": "assets/webp/real-سوري-برجر-جبنة.webp",
-          "price": 80
-        },
-        {
-          "id": "syrian-سوري-برجر-ميكس",
-          "name": "سوري برجر ميكس",
-          "desc": "برجر مزدوج مع بيكون وجبنة.",
-          "img": "assets/webp/real-سوري-برجر-ميكس.webp",
-          "price": 90
-        },
-        {
-          "id": "syrian-سوري-سوسيس-ميكسكانو",
-          "name": "سوري سوسيس ميكسكانو",
-          "desc": "سجق مشوي في خبز مع بطاطس.",
-          "img": "assets/webp/real-سوري-سوسيس-ميكسكانو.webp",
-          "price": 80
-        },
-        {
-          "id": "syrian-سوري-هوت-دوج",
-          "name": "سوري هوت دوج",
-          "desc": "هوت دوج ساخن مع كاتشب وخردل.",
-          "img": "assets/webp/real-سوري-هوت-دوج.webp",
-          "price": 80
-        },
-        {
-          "id": "syrian-سوري-كفتة-جريل",
-          "name": "سوري كفتة جريل",
-          "desc": "كفتة لحم مشوية على الفحم.",
-          "img": "assets/webp/real-سوري-كفتة-جريل.webp",
-          "price": 80
-        },
-        {
-          "id": "syrian-سوري-تونة",
-          "name": "سوري تونة",
-          "desc": "تونة مع خضار في خبز.",
-          "img": "assets/webp/real-سوري-تونة.webp",
-          "price": 80
-        },
-        {
-          "id": "syrian-سوري-فراخ-بانيه",
-          "name": "سوري فراخ بانيه",
-          "desc": "فراخ وجبنة في خبز مضغوط.",
-          "img": "assets/webp/real-سوري-فراخ-بانيه.webp",
-          "price": 80
-        },
-        {
-          "id": "syrian-سوري-فراخ-الأجريك",
-          "name": "سوري فراخ الأجريك",
-          "desc": "فراخ مقرمشة مع خضار وطماطم.",
-          "img": "assets/webp/real-سوري-فراخ-الأجريك.webp",
-          "price": 90
-        },
-        {
-          "id": "syrian-سوري-فراخ-شيش-طاووق",
-          "name": "سوري فراخ شيش طاووق",
-          "desc": "فراخ مشوية على سيخ مع صوص ثوم.",
-          "img": "assets/webp/real-سوري-فراخ-شيش-طاووق.webp",
-          "price": 90
-        },
-        {
-          "id": "syrian-سوري-سوبر-كرانشي",
-          "name": "سوري سوبر كرانشي",
-          "desc": "كرانشي مقرمش مع صوص البيت الخاص.",
-          "img": "assets/webp/real-سوري-سوبر-كرانشي.webp",
-          "price": 90
-        },
-        {
-          "id": "syrian-سوري-كرسبى",
-          "name": "سوري كرسبى",
-          "desc": "كرسبي فراخ مقرمشة مع خضار.",
-          "img": "assets/webp/real-سوري-كرسبى.webp",
-          "price": 90
-        },
-        {
-          "id": "syrian-سوري-زنجر",
-          "name": "سوري زنجر",
-          "desc": "زنجر فراخ حار مع خضار.",
-          "img": "assets/webp/real-سوري-زنجر.webp",
-          "price": 90
-        },
-        {
-          "id": "syrian-سوري-تشيكن-إسبشال-موتزاريلا",
-          "name": "سوري تشيكن إسبشال موتزاريلا",
-          "desc": "فراخ مع موزاريلا ذايب في خبز.",
-          "img": "assets/webp/real-سوري-تشيكن-إسبشال-موتزاريلا.webp",
-          "price": 100
-        },
-        {
-          "id": "syrian-سوري-كوردن-بلو",
-          "name": "سوري كوردن بلو",
-          "desc": "شيبس كوردن أزرق مع ديبو.",
-          "img": "assets/webp/real-سوري-كوردن-بلو.webp",
-          "price": 100
-        },
-        {
-          "id": "syrian-سوري-فاهيتا-فراخ",
-          "name": "سوري فاهيتا فراخ",
-          "desc": "فراخ مع فلفل ألوان وصلصة فاهيتا.",
-          "img": "assets/webp/real-سوري-فاهيتا-فراخ.webp",
-          "price": 95
-        },
-        {
-          "id": "syrian-سوري-شاورما-فراخ",
-          "name": "سوري شاورما فراخ",
-          "desc": "فراخ مشوية مع ثوم وخضار في خبز.",
-          "img": "assets/webp/real-سوري-شاورما-فراخ.webp",
-          "price": 90
-        }
-      ]
-    },
-    {
-      "key": "pasta",
-      "title": "الباستا",
-      "emoji": "🍝",
-      "desc": "باستا طازة بالصوصات المختلفة",
-      "items": [
-        {
-          "id": "pasta-باستا-نجرسكو-فراخ",
-          "name": "باستا نجرسكو فراخ",
-          "desc": "فراخ مشوية مع ليمون وزيت زيتون.",
-          "img": "assets/webp/real-باستا-نجرسكو-فراخ.webp",
-          "price": 75
-        },
-        {
-          "id": "pasta-باستا-الفريدو-فراخ",
-          "name": "باستا الفريدو فراخ",
-          "desc": "فيتوتشيني بصوص الكريمة البيضاء.",
-          "img": "assets/webp/real-باستا-الفريدو-فراخ.webp",
-          "price": 75
-        },
-        {
-          "id": "pasta-باستا-بلونيز-مفروم",
-          "name": "باستا بلونيز مفروم",
-          "desc": "باستا بالفطر في صوص كريمي.",
-          "img": "assets/webp/real-باستا-بلونيز-مفروم.webp",
-          "price": 75
-        },
-        {
-          "id": "pasta-باستا-سجق",
-          "name": "باستا سجق",
-          "desc": "باستا بالبيكون مع صوص كريمي.",
-          "img": "assets/webp/real-باستا-سجق.webp",
-          "price": 75
-        },
-        {
-          "id": "pasta-باستا-سوسيس",
-          "name": "باستا سوسيس",
-          "desc": "سباجتي بصوص الطماطم والسجق.",
-          "img": "assets/webp/real-باستا-سوسيس.webp",
-          "price": 75
-        },
-        {
-          "id": "pasta-باستا-زنجر",
-          "name": "باستا زنجر",
-          "desc": "باستا بصوص الطماطم مع كرانشي فراخ.",
-          "img": "assets/webp/real-باستا-زنجر.webp",
-          "price": 75
-        },
-        {
-          "id": "pasta-باستا-إستربس",
-          "name": "باستا إستربس",
-          "desc": "ستيك مشوي مع بطاطس.",
-          "img": "assets/webp/real-باستا-إستربس.webp",
-          "price": 75
-        },
-        {
-          "id": "pasta-باستا-بانيه",
-          "name": "باستا بانيه",
-          "desc": "باستا مخبوزة بالجبنة.",
-          "img": "assets/webp/real-باستا-بانيه.webp",
-          "price": 75
-        },
-        {
-          "id": "pasta-باستا-كرسبى",
-          "name": "باستا كرسبى",
-          "desc": "باستا مع فراخ مقرمشة.",
-          "img": "assets/webp/real-باستا-كرسبى.webp",
-          "price": 75
-        }
-      ]
-    },
-    {
-      "key": "sweet_crepe",
-      "title": "الكريب الحلو",
-      "emoji": "🥞",
-      "desc": "كريب حلو بالشوكولا والكريمة",
-      "items": [
-        {
-          "id": "sweet_crepe-كريب-شيكولاتة-نوتيلا",
-          "name": "كريب شيكولاتة نوتيلا",
-          "desc": "كريب بالشوكولاتة والموز.",
-          "img": "assets/webp/real-كريب-شيكولاتة-نوتيلا.webp",
-          "price": 45
-        },
-        {
-          "id": "sweet_crepe-كريب-شيكولاتة-نيو-كريمة",
-          "name": "كريب شيكولاتة نيو كريمة",
-          "desc": "كريب بالشوكولاتة والكريمة.",
-          "img": "assets/webp/real-كريب-شيكولاتة-نيو-كريمة.webp",
-          "price": 45
-        },
-        {
-          "id": "sweet_crepe-كريب-ميكس-تيلا",
-          "name": "كريب ميكس تيلا",
-          "desc": "كريب بالشوكولاتة والموز والصوص.",
-          "img": "assets/webp/real-كريب-ميكس-تيلا.webp",
-          "price": 65
-        },
-        {
-          "id": "sweet_crepe-كريب-شيكولاتة-بيضاء",
-          "name": "كريب شيكولاتة بيضاء",
-          "desc": "كريب بالشوكولاتة البيضاء.",
-          "img": "assets/webp/real-كريب-شيكولاتة-بيضاء.webp",
-          "price": 50
-        },
-        {
-          "id": "sweet_crepe-كريب-كراميل",
-          "name": "كريب كراميل",
-          "desc": "كريب بصوص الكراميل.",
-          "img": "assets/webp/real-كريب-كراميل.webp",
-          "price": 45
-        },
-        {
-          "id": "sweet_crepe-كريب-لوتس",
-          "name": "كريب لوتس",
-          "desc": "كريب بزبدة اللوتس.",
-          "img": "assets/webp/real-كريب-لوتس.webp",
-          "price": 50
-        }
-      ]
-    },
-    {
-      "key": "waffle",
-      "title": "الوافل",
-      "emoji": "🧇",
-      "desc": "وافل طازة بالشوكولا والفاكهة",
-      "items": [
-        {
-          "id": "waffle-وافل-شيكولاتة",
-          "name": "وافل شيكولاتة",
-          "desc": "وافل ساخن بصوص الشوكولاتة.",
-          "img": "assets/webp/real-وافل-شيكولاتة.webp",
-          "price": 50
-        },
-        {
-          "id": "waffle-وافل-كراميل",
-          "name": "وافل كراميل",
-          "desc": "وافل بصوص الكراميل.",
-          "img": "assets/webp/real-وافل-كراميل.webp",
-          "price": 70
-        },
-        {
-          "id": "waffle-وافل-شيكولاتة-نيو-كريمة",
-          "name": "وافل شيكولاتة نيو كريمة",
-          "desc": "وافل بالشوكولاتة والكريمة.",
-          "img": "assets/webp/real-وافل-شيكولاتة-نيو-كريمة.webp",
-          "price": 70
-        },
-        {
-          "id": "waffle-وافل-شيكولاتة-بيضاء",
-          "name": "وافل شيكولاتة بيضاء",
-          "desc": "وافل بالشوكولاتة البيضاء.",
-          "img": "assets/webp/real-وافل-شيكولاتة-بيضاء.webp",
-          "price": 50
-        },
-        {
-          "id": "waffle-وافل-شيكولاتة-موز",
-          "name": "وافل شيكولاتة موز",
-          "desc": "وافل بالموز والشوكولاتة.",
-          "img": "assets/webp/real-وافل-شيكولاتة-موز.webp",
-          "price": 85
-        },
-        {
-          "id": "waffle-وافل-لوتس",
-          "name": "وافل لوتس",
-          "desc": "وافل بزبدة اللوتس.",
-          "img": "assets/webp/real-وافل-لوتس.webp",
-          "price": 75
-        },
-        {
-          "id": "waffle-وافل-شيكولاتة-نوعين-فاكهة",
-          "name": "وافل شيكولاتة نوعين فاكهة",
-          "desc": "وافل بفاكهتين وشوكولاتة.",
-          "img": "assets/webp/real-وافل-شيكولاتة-نوعين-فاكهة.webp",
-          "price": 85
-        },
-        {
-          "id": "waffle-وافل-شيكولاتة-مارس",
-          "name": "وافل شيكولاتة مارس",
-          "desc": "وافل بقطع مارس.",
-          "img": "assets/webp/real-وافل-شيكولاتة-مارس.webp",
-          "price": 85
-        },
-        {
-          "id": "waffle-وافل-مالتيزرز",
-          "name": "وافل مالتيزرز",
-          "desc": "وافل مالتيزرز بالشوكولاتة.",
-          "img": "assets/webp/real-وافل-مالتيزرز.webp",
-          "price": 85
-        },
-        {
-          "id": "waffle-وافل-اسنيكرز",
-          "name": "وافل اسنيكرز",
-          "desc": "وافل بقطع اسنيكرز.",
-          "img": "assets/webp/real-وافل-اسنيكرز.webp",
-          "price": 85
-        },
-        {
-          "id": "waffle-وافل-شيكولاتة-مورو",
-          "name": "وافل شيكولاتة مورو",
-          "desc": "وافل بصوص مورو.",
-          "img": "assets/webp/real-وافل-شيكولاتة-مورو.webp",
-          "price": 80
-        },
-        {
-          "id": "waffle-وافل-شيكولاتة-ميكس-صوصات",
-          "name": "وافل شيكولاتة ميكس صوصات",
-          "desc": "وافل بخلطة صوصات وفواكه.",
-          "img": "assets/webp/real-وافل-شيكولاتة-ميكس-صوصات.webp",
-          "price": 85
-        }
-      ]
-    }
+ "version": 1,
+ "restaurant": {
+  "name": "كريب الهنا",
+  "english": "Crepe El Hana",
+  "phones": [
+   "01004388613",
+   "01147157120",
+   "0223656975"
   ],
-  "catalog": {
-    "pizza": {
-      "title": "البيتزا",
-      "crumb": "البيتزا",
-      "eyebrow": "",
-      "intro": "بيتزا طازة بثلاث أحجام",
-      "items": [
-        {
-          "id": "pizza-بيتزا-مارجريتا",
-          "name": "بيتزا مارجريتا",
-          "price": 90,
-          "img": "assets/webp/professional-overhead-pizza-isolated-dar-2.webp",
-          "tag": "مميز",
-          "desc": "مكونات طازجة، موزاريلا وصوص طماطم غني.",
-          "menuKey": "pizza"
-        },
-        {
-          "id": "pizza-بيتزا-خضار",
-          "name": "بيتزا خضار",
-          "price": 90,
-          "img": "assets/webp/professional-overhead-pizza-isolated-dar-4.webp",
-          "tag": "مميز",
-          "desc": "مكونات طازجة، موزاريلا وصوص طماطم غني.",
-          "menuKey": "pizza"
-        },
-        {
-          "id": "pizza-بيتزا-سوسيس",
-          "name": "بيتزا سوسيس",
-          "price": 110,
-          "img": "assets/webp/professional-overhead-pizza-isolated-dar-3.webp",
-          "tag": "مميز",
-          "desc": "مكونات طازجة، موزاريلا وصوص طماطم غني.",
-          "menuKey": "pizza"
-        },
-        {
-          "id": "pizza-بيتزا-ميكس-جبن",
-          "name": "بيتزا ميكس جبن",
-          "price": 100,
-          "img": "assets/webp/professional-overhead-pizza-isolated-dar-5.webp",
-          "tag": "مميز",
-          "desc": "مكونات طازجة، موزاريلا وصوص طماطم غني.",
-          "menuKey": "pizza"
-        },
-        {
-          "id": "pizza-بيتزا-سجق",
-          "name": "بيتزا سجق",
-          "price": 110,
-          "img": "assets/webp/hero-pizza.webp",
-          "tag": "مميز",
-          "desc": "مكونات طازجة، موزاريلا وصوص طماطم غني.",
-          "menuKey": "pizza"
-        },
-        {
-          "id": "pizza-بيتزا-فراخ",
-          "name": "بيتزا فراخ",
-          "price": 110,
-          "img": "assets/webp/professional-overhead-pizza-isolated-dar-1.webp",
-          "tag": "مميز",
-          "desc": "مكونات طازجة، موزاريلا وصوص طماطم غني.",
-          "menuKey": "pizza"
-        },
-        {
-          "id": "pizza-بيتزا-مشروم",
-          "name": "بيتزا مشروم",
-          "price": 105,
-          "img": "assets/webp/professional-overhead-pizza-isolated-dar-1.webp",
-          "tag": "مميز",
-          "desc": "مكونات طازجة، موزاريلا وصوص طماطم غني.",
-          "menuKey": "pizza"
-        },
-        {
-          "id": "pizza-بيتزا-بسطرمة",
-          "name": "بيتزا بسطرمة",
-          "price": 110,
-          "img": "assets/webp/professional-overhead-pizza-isolated-dar-4.webp",
-          "tag": "مميز",
-          "desc": "مكونات طازجة، موزاريلا وصوص طماطم غني.",
-          "menuKey": "pizza"
-        },
-        {
-          "id": "pizza-بيتزا-تونة",
-          "name": "بيتزا تونة",
-          "price": 110,
-          "img": "assets/webp/professional-overhead-pizza-isolated-dar-2.webp",
-          "tag": "مميز",
-          "desc": "مكونات طازجة، موزاريلا وصوص طماطم غني.",
-          "menuKey": "pizza"
-        },
-        {
-          "id": "pizza-بيتزا-فراخ-كرسبى",
-          "name": "بيتزا فراخ كرسبى",
-          "price": 110,
-          "img": "assets/webp/professional-overhead-pizza-isolated-dar-3.webp",
-          "tag": "مميز",
-          "desc": "مكونات طازجة، موزاريلا وصوص طماطم غني.",
-          "menuKey": "pizza"
-        },
-        {
-          "id": "pizza-بيتزا-سلامى",
-          "name": "بيتزا سلامى",
-          "price": 110,
-          "img": "assets/webp/professional-overhead-pizza-isolated-dar-5.webp",
-          "tag": "مميز",
-          "desc": "مكونات طازجة، موزاريلا وصوص طماطم غني.",
-          "menuKey": "pizza"
-        },
-        {
-          "id": "pizza-بيتزا-سوبر-سوبريم",
-          "name": "بيتزا سوبر سوبريم",
-          "price": 110,
-          "img": "assets/webp/hero-pizza.webp",
-          "tag": "مميز",
-          "desc": "مكونات طازجة، موزاريلا وصوص طماطم غني.",
-          "menuKey": "pizza"
-        },
-        {
-          "id": "pizza-بيتزا-فراخ-بانيه-ناجتس",
-          "name": "بيتزا فراخ بانيه ناجتس",
-          "price": 110,
-          "img": "assets/webp/professional-overhead-pizza-isolated-dar-1.webp",
-          "tag": "مميز",
-          "desc": "مكونات طازجة، موزاريلا وصوص طماطم غني.",
-          "menuKey": "pizza"
-        },
-        {
-          "id": "pizza-بيتزا-فراخ-رانش",
-          "name": "بيتزا فراخ رانش",
-          "price": 115,
-          "img": "assets/webp/professional-overhead-pizza-isolated-dar-4.webp",
-          "tag": "مميز",
-          "desc": "مكونات طازجة، موزاريلا وصوص طماطم غني.",
-          "menuKey": "pizza"
-        },
-        {
-          "id": "pizza-بيتزا-فراخ-باربيكيو",
-          "name": "بيتزا فراخ باربيكيو",
-          "price": 115,
-          "img": "assets/webp/professional-overhead-pizza-isolated-dar-2.webp",
-          "tag": "مميز",
-          "desc": "مكونات طازجة، موزاريلا وصوص طماطم غني.",
-          "menuKey": "pizza"
-        },
-        {
-          "id": "pizza-بيتزا-مكس-فراخ",
-          "name": "بيتزا مكس فراخ",
-          "price": 155,
-          "img": "assets/webp/professional-overhead-pizza-isolated-dar-3.webp",
-          "tag": "مميز",
-          "desc": "مكونات طازجة، موزاريلا وصوص طماطم غني.",
-          "menuKey": "pizza"
-        },
-        {
-          "id": "pizza-بيتزا-مكس-لحوم",
-          "name": "بيتزا مكس لحوم",
-          "price": 155,
-          "img": "assets/webp/professional-overhead-pizza-isolated-dar-5.webp",
-          "tag": "مميز",
-          "desc": "مكونات طازجة، موزاريلا وصوص طماطم غني.",
-          "menuKey": "pizza"
-        }
-      ]
+  "address": "16 ش عبد الهادي متفرع من ش عبد العزيز آل سعود - المنيل",
+  "facebook": "crepeelhana",
+  "whatsapp": "201004388613"
+ },
+ "menu": [
+  {
+   "key": "pizza",
+   "title": "البيتزا",
+   "emoji": "🍕",
+   "desc": "بيتزا طازة بثلاث أحجام",
+   "sizes": [
+    "صغير",
+    "وسط",
+    "كبير"
+   ],
+   "items": [
+    {
+     "id": "pizza-بيتزا-مارجريتا",
+     "name": "بيتزا مارجريتا",
+     "desc": "صلصة طماطم، موزاريلا طازجة وريحان.",
+     "img": "assets/webp/real-بيتزا-مارجريتا.webp",
+     "small": 80,
+     "medium": 90,
+     "large": 135,
+     "sizes": [
+      {
+       "name": "صغير",
+       "price": 80
+      },
+      {
+       "name": "وسط",
+       "price": 90
+      },
+      {
+       "name": "كبير",
+       "price": 135
+      }
+     ]
     },
-    "syrian": {
-      "title": "السوري",
-      "crumb": "السوري",
-      "eyebrow": "",
-      "intro": "ساندوتشات سوري بخلطات مميزة",
-      "items": [
-        {
-          "id": "syrian-سوري-بطاطس-فارم",
-          "name": "سوري بطاطس فارم",
-          "price": 30,
-          "img": "assets/webp/burger.webp",
-          "tag": "مميز",
-          "desc": "خبز طازج، fillings مميزة وصلصة البيت.",
-          "menuKey": "syrian"
-        },
-        {
-          "id": "syrian-سوري-برجر-سادة",
-          "name": "سوري برجر سادة",
-          "price": 65,
-          "img": "assets/webp/burger.webp",
-          "tag": "مميز",
-          "desc": "خبز طازج، fillings مميزة وصلصة البيت.",
-          "menuKey": "syrian"
-        },
-        {
-          "id": "syrian-سوري-برجر-بيض",
-          "name": "سوري برجر بيض",
-          "price": 80,
-          "img": "assets/webp/burger.webp",
-          "tag": "مميز",
-          "desc": "خبز طازج، fillings مميزة وصلصة البيت.",
-          "menuKey": "syrian"
-        },
-        {
-          "id": "syrian-سوري-برجر-جبنة",
-          "name": "سوري برجر جبنة",
-          "price": 80,
-          "img": "assets/webp/burger.webp",
-          "tag": "مميز",
-          "desc": "خبز طازج، fillings مميزة وصلصة البيت.",
-          "menuKey": "syrian"
-        },
-        {
-          "id": "syrian-سوري-برجر-ميكس",
-          "name": "سوري برجر ميكس",
-          "price": 90,
-          "img": "assets/webp/burger.webp",
-          "tag": "مميز",
-          "desc": "خبز طازج، fillings مميزة وصلصة البيت.",
-          "menuKey": "syrian"
-        },
-        {
-          "id": "syrian-سوري-سوسيس-ميكسكانو",
-          "name": "سوري سوسيس ميكسكانو",
-          "price": 80,
-          "img": "assets/webp/burger.webp",
-          "tag": "مميز",
-          "desc": "خبز طازج، fillings مميزة وصلصة البيت.",
-          "menuKey": "syrian"
-        },
-        {
-          "id": "syrian-سوري-هوت-دوج",
-          "name": "سوري هوت دوج",
-          "price": 80,
-          "img": "assets/webp/burger.webp",
-          "tag": "مميز",
-          "desc": "خبز طازج، fillings مميزة وصلصة البيت.",
-          "menuKey": "syrian"
-        },
-        {
-          "id": "syrian-سوري-كفتة-جريل",
-          "name": "سوري كفتة جريل",
-          "price": 80,
-          "img": "assets/webp/burger.webp",
-          "tag": "مميز",
-          "desc": "خبز طازج، fillings مميزة وصلصة البيت.",
-          "menuKey": "syrian"
-        },
-        {
-          "id": "syrian-سوري-تونة",
-          "name": "سوري تونة",
-          "price": 80,
-          "img": "assets/webp/burger.webp",
-          "tag": "مميز",
-          "desc": "خبز طازج، fillings مميزة وصلصة البيت.",
-          "menuKey": "syrian"
-        },
-        {
-          "id": "syrian-سوري-فراخ-بانيه",
-          "name": "سوري فراخ بانيه",
-          "price": 80,
-          "img": "assets/webp/burger.webp",
-          "tag": "مميز",
-          "desc": "خبز طازج، fillings مميزة وصلصة البيت.",
-          "menuKey": "syrian"
-        },
-        {
-          "id": "syrian-سوري-فراخ-الأجريك",
-          "name": "سوري فراخ الأجريك",
-          "price": 90,
-          "img": "assets/webp/burger.webp",
-          "tag": "مميز",
-          "desc": "خبز طازج، fillings مميزة وصلصة البيت.",
-          "menuKey": "syrian"
-        },
-        {
-          "id": "syrian-سوري-فراخ-شيش-طاووق",
-          "name": "سوري فراخ شيش طاووق",
-          "price": 90,
-          "img": "assets/webp/burger.webp",
-          "tag": "مميز",
-          "desc": "خبز طازج، fillings مميزة وصلصة البيت.",
-          "menuKey": "syrian"
-        },
-        {
-          "id": "syrian-سوري-سوبر-كرانشي",
-          "name": "سوري سوبر كرانشي",
-          "price": 90,
-          "img": "assets/webp/burger.webp",
-          "tag": "مميز",
-          "desc": "خبز طازج، fillings مميزة وصلصة البيت.",
-          "menuKey": "syrian"
-        },
-        {
-          "id": "syrian-سوري-كرسبى",
-          "name": "سوري كرسبى",
-          "price": 90,
-          "img": "assets/webp/burger.webp",
-          "tag": "مميز",
-          "desc": "خبز طازج، fillings مميزة وصلصة البيت.",
-          "menuKey": "syrian"
-        },
-        {
-          "id": "syrian-سوري-زنجر",
-          "name": "سوري زنجر",
-          "price": 90,
-          "img": "assets/webp/burger.webp",
-          "tag": "مميز",
-          "desc": "خبز طازج، fillings مميزة وصلصة البيت.",
-          "menuKey": "syrian"
-        },
-        {
-          "id": "syrian-سوري-تشيكن-إسبشال-موتزاريلا",
-          "name": "سوري تشيكن إسبشال موتزاريلا",
-          "price": 100,
-          "img": "assets/webp/burger.webp",
-          "tag": "مميز",
-          "desc": "خبز طازج، fillings مميزة وصلصة البيت.",
-          "menuKey": "syrian"
-        },
-        {
-          "id": "syrian-سوري-كوردن-بلو",
-          "name": "سوري كوردن بلو",
-          "price": 100,
-          "img": "assets/webp/burger.webp",
-          "tag": "مميز",
-          "desc": "خبز طازج، fillings مميزة وصلصة البيت.",
-          "menuKey": "syrian"
-        },
-        {
-          "id": "syrian-سوري-فاهيتا-فراخ",
-          "name": "سوري فاهيتا فراخ",
-          "price": 95,
-          "img": "assets/webp/burger.webp",
-          "tag": "مميز",
-          "desc": "خبز طازج، fillings مميزة وصلصة البيت.",
-          "menuKey": "syrian"
-        },
-        {
-          "id": "syrian-سوري-شاورما-فراخ",
-          "name": "سوري شاورما فراخ",
-          "price": 90,
-          "img": "assets/webp/burger.webp",
-          "tag": "مميز",
-          "desc": "خبز طازج، fillings مميزة وصلصة البيت.",
-          "menuKey": "syrian"
-        }
-      ]
+    {
+     "id": "pizza-بيتزا-خضار",
+     "name": "بيتزا خضار",
+     "desc": "فلفل ملون، بصل، ذرة وفطر فوق الموزاريلا.",
+     "img": "assets/webp/real-بيتزا-خضار.webp",
+     "small": 80,
+     "medium": 90,
+     "large": 135,
+     "sizes": [
+      {
+       "name": "صغير",
+       "price": 80
+      },
+      {
+       "name": "وسط",
+       "price": 90
+      },
+      {
+       "name": "كبير",
+       "price": 135
+      }
+     ]
     },
-    "pasta": {
-      "title": "الباستا",
-      "crumb": "الباستا",
-      "eyebrow": "",
-      "intro": "باستا طازة بالصوصات المختلفة",
-      "items": [
-        {
-          "id": "pasta-باستا-نجرسكو-فراخ",
-          "name": "باستا نجرسكو فراخ",
-          "price": 75,
-          "img": "assets/webp/crepe.webp",
-          "tag": "مميز",
-          "desc": "باستا إيطاليّة مع صوص كريمي طازج.",
-          "menuKey": "pasta"
-        },
-        {
-          "id": "pasta-باستا-الفريدو-فراخ",
-          "name": "باستا الفريدو فراخ",
-          "price": 75,
-          "img": "assets/webp/crepe.webp",
-          "tag": "مميز",
-          "desc": "باستا إيطاليّة مع صوص كريمي طازج.",
-          "menuKey": "pasta"
-        },
-        {
-          "id": "pasta-باستا-بلونيز-مفروم",
-          "name": "باستا بلونيز مفروم",
-          "price": 75,
-          "img": "assets/webp/crepe.webp",
-          "tag": "مميز",
-          "desc": "باستا إيطاليّة مع صوص كريمي طازج.",
-          "menuKey": "pasta"
-        },
-        {
-          "id": "pasta-باستا-سجق",
-          "name": "باستا سجق",
-          "price": 75,
-          "img": "assets/webp/crepe.webp",
-          "tag": "مميز",
-          "desc": "باستا إيطاليّة مع صوص كريمي طازج.",
-          "menuKey": "pasta"
-        },
-        {
-          "id": "pasta-باستا-سوسيس",
-          "name": "باستا سوسيس",
-          "price": 75,
-          "img": "assets/webp/crepe.webp",
-          "tag": "مميز",
-          "desc": "باستا إيطاليّة مع صوص كريمي طازج.",
-          "menuKey": "pasta"
-        },
-        {
-          "id": "pasta-باستا-زنجر",
-          "name": "باستا زنجر",
-          "price": 75,
-          "img": "assets/webp/crepe.webp",
-          "tag": "مميز",
-          "desc": "باستا إيطاليّة مع صوص كريمي طازج.",
-          "menuKey": "pasta"
-        },
-        {
-          "id": "pasta-باستا-إستربس",
-          "name": "باستا إستربس",
-          "price": 75,
-          "img": "assets/webp/crepe.webp",
-          "tag": "مميز",
-          "desc": "باستا إيطاليّة مع صوص كريمي طازج.",
-          "menuKey": "pasta"
-        },
-        {
-          "id": "pasta-باستا-بانيه",
-          "name": "باستا بانيه",
-          "price": 75,
-          "img": "assets/webp/crepe.webp",
-          "tag": "مميز",
-          "desc": "باستا إيطاليّة مع صوص كريمي طازج.",
-          "menuKey": "pasta"
-        },
-        {
-          "id": "pasta-باستا-كرسبى",
-          "name": "باستا كرسبى",
-          "price": 75,
-          "img": "assets/webp/crepe.webp",
-          "tag": "مميز",
-          "desc": "باستا إيطاليّة مع صوص كريمي طازج.",
-          "menuKey": "pasta"
-        }
-      ]
+    {
+     "id": "pizza-بيتزا-سوسيس",
+     "name": "بيتزا سوسيس",
+     "desc": "شرائح سجق مشوي مع صلصة الطماطم.",
+     "img": "assets/webp/real-بيتزا-سوسيس.webp",
+     "small": 95,
+     "medium": 110,
+     "large": 170,
+     "sizes": [
+      {
+       "name": "صغير",
+       "price": 95
+      },
+      {
+       "name": "وسط",
+       "price": 110
+      },
+      {
+       "name": "كبير",
+       "price": 170
+      }
+     ]
     },
-    "sweet_crepe": {
-      "title": "الكريب الحلو",
-      "crumb": "الكريب الحلو",
-      "eyebrow": "",
-      "intro": "كريب حلو بالشوكولا والكريمة",
-      "items": [
-        {
-          "id": "sweet_crepe-كريب-شيكولاتة-نوتيلا",
-          "name": "كريب شيكولاتة نوتيلا",
-          "price": 45,
-          "img": "assets/webp/sweet-crepe.webp",
-          "tag": "مميز",
-          "desc": "كريب حلو بالشوكولاتة والفواكه.",
-          "menuKey": "sweet_crepe"
-        },
-        {
-          "id": "sweet_crepe-كريب-شيكولاتة-نيو-كريمة",
-          "name": "كريب شيكولاتة نيو كريمة",
-          "price": 45,
-          "img": "assets/webp/sweet-crepe.webp",
-          "tag": "مميز",
-          "desc": "كريب حلو بالشوكولاتة والفواكه.",
-          "menuKey": "sweet_crepe"
-        },
-        {
-          "id": "sweet_crepe-كريب-ميكس-تيلا",
-          "name": "كريب ميكس تيلا",
-          "price": 65,
-          "img": "assets/webp/sweet-crepe.webp",
-          "tag": "مميز",
-          "desc": "كريب حلو بالشوكولاتة والفواكه.",
-          "menuKey": "sweet_crepe"
-        },
-        {
-          "id": "sweet_crepe-كريب-شيكولاتة-بيضاء",
-          "name": "كريب شيكولاتة بيضاء",
-          "price": 50,
-          "img": "assets/webp/sweet-crepe.webp",
-          "tag": "مميز",
-          "desc": "كريب حلو بالشوكولاتة والفواكه.",
-          "menuKey": "sweet_crepe"
-        },
-        {
-          "id": "sweet_crepe-كريب-كراميل",
-          "name": "كريب كراميل",
-          "price": 45,
-          "img": "assets/webp/sweet-crepe.webp",
-          "tag": "مميز",
-          "desc": "كريب حلو بالشوكولاتة والفواكه.",
-          "menuKey": "sweet_crepe"
-        },
-        {
-          "id": "sweet_crepe-كريب-لوتس",
-          "name": "كريب لوتس",
-          "price": 50,
-          "img": "assets/webp/sweet-crepe.webp",
-          "tag": "مميز",
-          "desc": "كريب حلو بالشوكولاتة والفواكه.",
-          "menuKey": "sweet_crepe"
-        }
-      ]
+    {
+     "id": "pizza-بيتزا-ميكس-جبن",
+     "name": "بيتزا ميكس جبن",
+     "desc": "أربع جبنات ذايب مع ريحان.",
+     "img": "assets/webp/real-بيتزا-ميكس-جبن.webp",
+     "small": 90,
+     "medium": 100,
+     "large": 150,
+     "sizes": [
+      {
+       "name": "صغير",
+       "price": 90
+      },
+      {
+       "name": "وسط",
+       "price": 100
+      },
+      {
+       "name": "كبير",
+       "price": 150
+      }
+     ]
     },
-    "waffle": {
-      "title": "الوافل",
-      "crumb": "الوافل",
-      "eyebrow": "",
-      "intro": "وافل طازة بالشوكولا والفاكهة",
-      "items": [
-        {
-          "id": "waffle-وافل-شيكولاتة",
-          "name": "وافل شيكولاتة",
-          "price": 50,
-          "img": "assets/webp/sweet-crepe.webp",
-          "tag": "مميز",
-          "desc": "وافل ساخن مقرمش بالحلى.",
-          "menuKey": "waffle"
-        },
-        {
-          "id": "waffle-وافل-كراميل",
-          "name": "وافل كراميل",
-          "price": 70,
-          "img": "assets/webp/sweet-crepe.webp",
-          "tag": "مميز",
-          "desc": "وافل ساخن مقرمش بالحلى.",
-          "menuKey": "waffle"
-        },
-        {
-          "id": "waffle-وافل-شيكولاتة-نيو-كريمة",
-          "name": "وافل شيكولاتة نيو كريمة",
-          "price": 70,
-          "img": "assets/webp/sweet-crepe.webp",
-          "tag": "مميز",
-          "desc": "وافل ساخن مقرمش بالحلى.",
-          "menuKey": "waffle"
-        },
-        {
-          "id": "waffle-وافل-شيكولاتة-بيضاء",
-          "name": "وافل شيكولاتة بيضاء",
-          "price": 50,
-          "img": "assets/webp/sweet-crepe.webp",
-          "tag": "مميز",
-          "desc": "وافل ساخن مقرمش بالحلى.",
-          "menuKey": "waffle"
-        },
-        {
-          "id": "waffle-وافل-شيكولاتة-موز",
-          "name": "وافل شيكولاتة موز",
-          "price": 85,
-          "img": "assets/webp/sweet-crepe.webp",
-          "tag": "مميز",
-          "desc": "وافل ساخن مقرمش بالحلى.",
-          "menuKey": "waffle"
-        },
-        {
-          "id": "waffle-وافل-لوتس",
-          "name": "وافل لوتس",
-          "price": 75,
-          "img": "assets/webp/sweet-crepe.webp",
-          "tag": "مميز",
-          "desc": "وافل ساخن مقرمش بالحلى.",
-          "menuKey": "waffle"
-        },
-        {
-          "id": "waffle-وافل-شيكولاتة-نوعين-فاكهة",
-          "name": "وافل شيكولاتة نوعين فاكهة",
-          "price": 85,
-          "img": "assets/webp/sweet-crepe.webp",
-          "tag": "مميز",
-          "desc": "وافل ساخن مقرمش بالحلى.",
-          "menuKey": "waffle"
-        },
-        {
-          "id": "waffle-وافل-شيكولاتة-مارس",
-          "name": "وافل شيكولاتة مارس",
-          "price": 85,
-          "img": "assets/webp/sweet-crepe.webp",
-          "tag": "مميز",
-          "desc": "وافل ساخن مقرمش بالحلى.",
-          "menuKey": "waffle"
-        },
-        {
-          "id": "waffle-وافل-مالتيزرز",
-          "name": "وافل مالتيزرز",
-          "price": 85,
-          "img": "assets/webp/sweet-crepe.webp",
-          "tag": "مميز",
-          "desc": "وافل ساخن مقرمش بالحلى.",
-          "menuKey": "waffle"
-        },
-        {
-          "id": "waffle-وافل-اسنيكرز",
-          "name": "وافل اسنيكرز",
-          "price": 85,
-          "img": "assets/webp/sweet-crepe.webp",
-          "tag": "مميز",
-          "desc": "وافل ساخن مقرمش بالحلى.",
-          "menuKey": "waffle"
-        },
-        {
-          "id": "waffle-وافل-شيكولاتة-مورو",
-          "name": "وافل شيكولاتة مورو",
-          "price": 80,
-          "img": "assets/webp/sweet-crepe.webp",
-          "tag": "مميز",
-          "desc": "وافل ساخن مقرمش بالحلى.",
-          "menuKey": "waffle"
-        },
-        {
-          "id": "waffle-وافل-شيكولاتة-ميكس-صوصات",
-          "name": "وافل شيكولاتة ميكس صوصات",
-          "price": 85,
-          "img": "assets/webp/sweet-crepe.webp",
-          "tag": "مميز",
-          "desc": "وافل ساخن مقرمش بالحلى.",
-          "menuKey": "waffle"
-        }
-      ]
+    {
+     "id": "pizza-بيتزا-سجق",
+     "name": "بيتزا سجق",
+     "desc": "سجق بلدي مقطّع شرائح.",
+     "img": "assets/webp/real-بيتزا-سجق.webp",
+     "small": 95,
+     "medium": 110,
+     "large": 170,
+     "sizes": [
+      {
+       "name": "صغير",
+       "price": 95
+      },
+      {
+       "name": "وسط",
+       "price": 110
+      },
+      {
+       "name": "كبير",
+       "price": 170
+      }
+     ]
+    },
+    {
+     "id": "pizza-بيتزا-فراخ",
+     "name": "بيتزا فراخ",
+     "desc": "فراخ مشوية وصوص باربكيو خفيف.",
+     "img": "assets/webp/real-بيتزا-فراخ.webp",
+     "small": 95,
+     "medium": 110,
+     "large": 170,
+     "sizes": [
+      {
+       "name": "صغير",
+       "price": 95
+      },
+      {
+       "name": "وسط",
+       "price": 110
+      },
+      {
+       "name": "كبير",
+       "price": 170
+      }
+     ]
+    },
+    {
+     "id": "pizza-بيتزا-مشروم",
+     "name": "بيتزا مشروم",
+     "desc": "فطر طازج مع موزاريلا وزعتر.",
+     "img": "assets/webp/real-بيتزا-مشروم.webp",
+     "small": 95,
+     "medium": 105,
+     "large": 160,
+     "sizes": [
+      {
+       "name": "صغير",
+       "price": 95
+      },
+      {
+       "name": "وسط",
+       "price": 105
+      },
+      {
+       "name": "كبير",
+       "price": 160
+      }
+     ]
+    },
+    {
+     "id": "pizza-بيتزا-بسطرمة",
+     "name": "بيتزا بسطرمة",
+     "desc": "شرائح بسطرمة لحم مدخّن.",
+     "img": "assets/webp/real-بيتزا-بسطرمة.webp",
+     "small": 95,
+     "medium": 110,
+     "large": 170,
+     "sizes": [
+      {
+       "name": "صغير",
+       "price": 95
+      },
+      {
+       "name": "وسط",
+       "price": 110
+      },
+      {
+       "name": "كبير",
+       "price": 170
+      }
+     ]
+    },
+    {
+     "id": "pizza-بيتزا-تونة",
+     "name": "بيتزا تونة",
+     "desc": "تونة مع ذرة وزيتون.",
+     "img": "assets/webp/real-بيتزا-تونة.webp",
+     "small": 95,
+     "medium": 110,
+     "large": 170,
+     "sizes": [
+      {
+       "name": "صغير",
+       "price": 95
+      },
+      {
+       "name": "وسط",
+       "price": 110
+      },
+      {
+       "name": "كبير",
+       "price": 170
+      }
+     ]
+    },
+    {
+     "id": "pizza-بيتزا-فراخ-كرسبى",
+     "name": "بيتزا فراخ كرسبى",
+     "desc": "شرائح فراخ مقرمشة مع صوص الم 특별한.",
+     "img": "assets/webp/real-بيتزا-فراخ-كرسبى.webp",
+     "small": 95,
+     "medium": 110,
+     "large": 170,
+     "sizes": [
+      {
+       "name": "صغير",
+       "price": 95
+      },
+      {
+       "name": "وسط",
+       "price": 110
+      },
+      {
+       "name": "كبير",
+       "price": 170
+      }
+     ]
+    },
+    {
+     "id": "pizza-بيتزا-سلامى",
+     "name": "بيتزا سلامى",
+     "desc": "سلامي مدخّن مقطّع على الموزاريلا.",
+     "img": "assets/webp/real-بيتزا-سلامى.webp",
+     "small": 95,
+     "medium": 110,
+     "large": 170,
+     "sizes": [
+      {
+       "name": "صغير",
+       "price": 95
+      },
+      {
+       "name": "وسط",
+       "price": 110
+      },
+      {
+       "name": "كبير",
+       "price": 170
+      }
+     ]
+    },
+    {
+     "id": "pizza-بيتزا-سوبر-سوبريم",
+     "name": "بيتزا سوبر سوبريم",
+     "desc": "خضار ولحم ومشروم على عيشة سميكة.",
+     "img": "assets/webp/real-بيتزا-سوبر-سوبريم.webp",
+     "small": 100,
+     "medium": 110,
+     "large": 170,
+     "sizes": [
+      {
+       "name": "صغير",
+       "price": 100
+      },
+      {
+       "name": "وسط",
+       "price": 110
+      },
+      {
+       "name": "كبير",
+       "price": 170
+      }
+     ]
+    },
+    {
+     "id": "pizza-بيتزا-فراخ-بانيه-ناجتس",
+     "name": "بيتزا فراخ بانيه ناجتس",
+     "desc": "ناجتس فراخ مقرمشة مع صلصة مانجو.",
+     "img": "assets/webp/real-بيتزا-فراخ-بانيه-ناجتس.webp",
+     "small": 95,
+     "medium": 110,
+     "large": 170,
+     "sizes": [
+      {
+       "name": "صغير",
+       "price": 95
+      },
+      {
+       "name": "وسط",
+       "price": 110
+      },
+      {
+       "name": "كبير",
+       "price": 170
+      }
+     ]
+    },
+    {
+     "id": "pizza-بيتزا-فراخ-رانش",
+     "name": "بيتزا فراخ رانش",
+     "desc": "فراخ مع صوص الرانش والجبنة.",
+     "img": "assets/webp/real-بيتزا-فراخ-رانش.webp",
+     "small": 100,
+     "medium": 115,
+     "large": 175,
+     "sizes": [
+      {
+       "name": "صغير",
+       "price": 100
+      },
+      {
+       "name": "وسط",
+       "price": 115
+      },
+      {
+       "name": "كبير",
+       "price": 175
+      }
+     ]
+    },
+    {
+     "id": "pizza-بيتزا-فراخ-باربيكيو",
+     "name": "بيتزا فراخ باربيكيو",
+     "desc": "فراخ مع صوص الباربكيو والبصل.",
+     "img": "assets/webp/real-بيتزا-فراخ-باربيكيو.webp",
+     "small": 100,
+     "medium": 115,
+     "large": 175,
+     "sizes": [
+      {
+       "name": "صغير",
+       "price": 100
+      },
+      {
+       "name": "وسط",
+       "price": 115
+      },
+      {
+       "name": "كبير",
+       "price": 175
+      }
+     ]
+    },
+    {
+     "id": "pizza-بيتزا-مكس-فراخ",
+     "name": "بيتزا مكس فراخ",
+     "desc": "فراخ مع سجق وخضار مشكّلة.",
+     "img": "assets/webp/real-بيتزا-مكس-فراخ.webp",
+     "small": 115,
+     "medium": 155,
+     "large": 205,
+     "sizes": [
+      {
+       "name": "صغير",
+       "price": 115
+      },
+      {
+       "name": "وسط",
+       "price": 155
+      },
+      {
+       "name": "كبير",
+       "price": 205
+      }
+     ]
+    },
+    {
+     "id": "pizza-بيتزا-مكس-لحوم",
+     "name": "بيتزا مكس لحوم",
+     "desc": "لحم مفروم وسجق وبسطرمة مع خضار.",
+     "img": "assets/webp/real-بيتزا-مكس-لحوم.webp",
+     "small": 130,
+     "medium": 155,
+     "large": 210,
+     "sizes": [
+      {
+       "name": "صغير",
+       "price": 130
+      },
+      {
+       "name": "وسط",
+       "price": 155
+      },
+      {
+       "name": "كبير",
+       "price": 210
+      }
+     ]
     }
+   ]
   },
-  "content": {
-    "brand": {
-      "name": "كريب الهنا",
-      "name2": "الهنا",
-      "english": "Crepe El Hana",
-      "logoEmoji": "🍕",
-      "tagline": "كريب الهنا — Crepe El Hana"
+  {
+   "key": "syrian",
+   "title": "سوري",
+   "emoji": "🥙",
+   "desc": "ساندوتشات سوري بخلطات مميزة",
+   "items": [
+    {
+     "id": "syrian-سوري-بطاطس-فارم",
+     "name": "سوري بطاطس فارم",
+     "desc": "بطاطس مقرمشة متبّلة مع صوص البيت.",
+     "img": "assets/webp/real-سوري-بطاطس-فارم.webp",
+     "price": 30
     },
-    "hero": {
-      "eyebrow": "كريب الهنا — Crepe El Hana",
-      "title1": "عايز تاكل إيه؟",
-      "title2": "النهارده؟",
-      "desc": "بيتزا طازجة، ساندوتشات سوري، باستا، كريب حلو ووافل. اختار القسم، وحدد الحجم، وابعت طلبك على واتساب بضغطة واحدة.",
-      "cta": "شوف القائمة ↓",
-      "cta2": "قائمة الأكل ←"
+    {
+     "id": "syrian-سوري-برجر-سادة",
+     "name": "سوري برجر سادة",
+     "desc": "لحم بقري مشوي مع خبز طازج.",
+     "img": "assets/webp/real-سوري-برجر-سادة.webp",
+     "price": 65
     },
-    "home": {
-      "sectionsTitle": "اختار القسم اللي يعجبك",
-      "sectionsSub": "كل قسم يورّيك قائمته لوحده بكل الأنواع اللي فيه",
-      "steps": [
-        "اختار القسم",
-        "اختار الأكلة",
-        "ظبّط طلبك",
-        "ابعت على واتساب"
-      ]
+    {
+     "id": "syrian-سوري-برجر-بيض",
+     "name": "سوري برجر بيض",
+     "desc": "برجر مع بيض مقلي وبيكون.",
+     "img": "assets/webp/real-سوري-برجر-بيض.webp",
+     "price": 80
     },
-    "menu": {
-      "eyebrow": "قائمة الأكل",
-      "title": "قائمة",
-      "titleHl": "كريب الهنا",
-      "desc": "اختار القسم من التابات اللي تحت، وحدد حجم البيتزا أو اطلب الأكلة على طول عن طريق واتساب.",
-      "crumb": "قائمة الأكل"
+    {
+     "id": "syrian-سوري-برجر-جبنة",
+     "name": "سوري برجر جبنة",
+     "desc": "برجر مع شريحة جبنة ذايب.",
+     "img": "assets/webp/real-سوري-برجر-جبنة.webp",
+     "price": 80
     },
-    "product": {
-      "pageTitle": "كريب الهنا — ظبّط طلبك",
-      "builderTitle": "ظبّط طلبك",
-      "hint": "اختار اللي يعجبك والسعر هيتحدّث لوحده",
-      "sizeLabel": "اختار الحجم",
-      "sizeRequired": "مطلوب",
-      "extrasLabel": "الإضافات",
-      "extrasRequired": "اختياري",
-      "notesLabel": "ملاحظات للطلب",
-      "notesPlaceholder": "مثال: من غير بصل، الصوص لوحده...",
-      "qtyLabel": "الكمية",
-      "sumItem": "سعر الأكلة",
-      "sumExtras": "الإضافات",
-      "sumTotal": "الإجمالي",
-      "footer": "هنبعت اسم الأكلة والحجم والإضافات والكمية على واتساب"
+    {
+     "id": "syrian-سوري-برجر-ميكس",
+     "name": "سوري برجر ميكس",
+     "desc": "برجر مزدوج مع بيكون وجبنة.",
+     "img": "assets/webp/real-سوري-برجر-ميكس.webp",
+     "price": 90
     },
-    "sections": [
-      {
-        "key": "pizza",
-        "num": "01",
-        "title": "البيتزا",
-        "desc": "17 نوع بيتزا بثلاثة أحجام",
-        "img": "assets/webp/hero-pizza.webp"
-      },
-      {
-        "key": "syrian",
-        "num": "02",
-        "title": "سوري",
-        "desc": "19 ساندوتش سوري متنوع",
-        "img": "assets/webp/burger.webp"
-      },
-      {
-        "key": "pasta",
-        "num": "03",
-        "title": "الباستا",
-        "desc": "9 أصناف باستا طازجة",
-        "img": "assets/webp/crepe.webp"
-      },
-      {
-        "key": "sweet_crepe",
-        "num": "04",
-        "title": "الكريب الحلو",
-        "desc": "6 أنواع كريب حلو",
-        "img": "assets/webp/sweet-crepe.webp"
-      },
-      {
-        "key": "waffle",
-        "num": "05",
-        "title": "الوافل",
-        "desc": "12 نوع وافل طازج",
-        "img": "assets/webp/sweet-crepe.webp"
-      }
-    ]
-  },
-  "sizeKeys": {
-    "pizza": {
-      "صغير": "small",
-      "وسط": "medium",
-      "كبير": "large"
+    {
+     "id": "syrian-سوري-سوسيس-ميكسكانو",
+     "name": "سوري سوسيس ميكسكانو",
+     "desc": "سجق مشوي في خبز مع بطاطس.",
+     "img": "assets/webp/real-سوري-سوسيس-ميكسكانو.webp",
+     "price": 80
+    },
+    {
+     "id": "syrian-سوري-هوت-دوج",
+     "name": "سوري هوت دوج",
+     "desc": "هوت دوج ساخن مع كاتشب وخردل.",
+     "img": "assets/webp/real-سوري-هوت-دوج.webp",
+     "price": 80
+    },
+    {
+     "id": "syrian-سوري-كفتة-جريل",
+     "name": "سوري كفتة جريل",
+     "desc": "كفتة لحم مشوية على الفحم.",
+     "img": "assets/webp/real-سوري-كفتة-جريل.webp",
+     "price": 80
+    },
+    {
+     "id": "syrian-سوري-تونة",
+     "name": "سوري تونة",
+     "desc": "تونة مع خضار في خبز.",
+     "img": "assets/webp/real-سوري-تونة.webp",
+     "price": 80
+    },
+    {
+     "id": "syrian-سوري-فراخ-بانيه",
+     "name": "سوري فراخ بانيه",
+     "desc": "فراخ وجبنة في خبز مضغوط.",
+     "img": "assets/webp/real-سوري-فراخ-بانيه.webp",
+     "price": 80
+    },
+    {
+     "id": "syrian-سوري-فراخ-الأجريك",
+     "name": "سوري فراخ الأجريك",
+     "desc": "فراخ مقرمشة مع خضار وطماطم.",
+     "img": "assets/webp/real-سوري-فراخ-الأجريك.webp",
+     "price": 90
+    },
+    {
+     "id": "syrian-سوري-فراخ-شيش-طاووق",
+     "name": "سوري فراخ شيش طاووق",
+     "desc": "فراخ مشوية على سيخ مع صوص ثوم.",
+     "img": "assets/webp/real-سوري-فراخ-شيش-طاووق.webp",
+     "price": 90
+    },
+    {
+     "id": "syrian-سوري-سوبر-كرانشي",
+     "name": "سوري سوبر كرانشي",
+     "desc": "كرانشي مقرمش مع صوص البيت الخاص.",
+     "img": "assets/webp/real-سوري-سوبر-كرانشي.webp",
+     "price": 90
+    },
+    {
+     "id": "syrian-سوري-كرسبى",
+     "name": "سوري كرسبى",
+     "desc": "كرسبي فراخ مقرمشة مع خضار.",
+     "img": "assets/webp/real-سوري-كرسبى.webp",
+     "price": 90
+    },
+    {
+     "id": "syrian-سوري-زنجر",
+     "name": "سوري زنجر",
+     "desc": "زنجر فراخ حار مع خضار.",
+     "img": "assets/webp/real-سوري-زنجر.webp",
+     "price": 90
+    },
+    {
+     "id": "syrian-سوري-تشيكن-إسبشال-موتزاريلا",
+     "name": "سوري تشيكن إسبشال موتزاريلا",
+     "desc": "فراخ مع موزاريلا ذايب في خبز.",
+     "img": "assets/webp/real-سوري-تشيكن-إسبشال-موتزاريلا.webp",
+     "price": 100
+    },
+    {
+     "id": "syrian-سوري-كوردن-بلو",
+     "name": "سوري كوردن بلو",
+     "desc": "شيبس كوردن أزرق مع ديبو.",
+     "img": "assets/webp/real-سوري-كوردن-بلو.webp",
+     "price": 100
+    },
+    {
+     "id": "syrian-سوري-فاهيتا-فراخ",
+     "name": "سوري فاهيتا فراخ",
+     "desc": "فراخ مع فلفل ألوان وصلصة فاهيتا.",
+     "img": "assets/webp/real-سوري-فاهيتا-فراخ.webp",
+     "price": 95
+    },
+    {
+     "id": "syrian-سوري-شاورما-فراخ",
+     "name": "سوري شاورما فراخ",
+     "desc": "فراخ مشوية مع ثوم وخضار في خبز.",
+     "img": "assets/webp/real-سوري-شاورما-فراخ.webp",
+     "price": 90
     }
+   ]
   },
-  "_images": [
+  {
+   "key": "pasta",
+   "title": "الباستا",
+   "emoji": "🍝",
+   "desc": "باستا طازة بالصوصات المختلفة",
+   "items": [
     {
-      "path": "assets/webp/burger-400.webp",
-      "name": "burger-400.webp",
-      "dim": "400×400",
-      "kb": 28.4,
-      "w": 400,
-      "h": 400
+     "id": "pasta-باستا-نجرسكو-فراخ",
+     "name": "باستا نجرسكو فراخ",
+     "desc": "فراخ مشوية مع ليمون وزيت زيتون.",
+     "img": "assets/webp/real-باستا-نجرسكو-فراخ.webp",
+     "price": 75
     },
     {
-      "path": "assets/webp/burger-800.webp",
-      "name": "burger-800.webp",
-      "dim": "800×800",
-      "kb": 78.2,
-      "w": 800,
-      "h": 800
+     "id": "pasta-باستا-الفريدو-فراخ",
+     "name": "باستا الفريدو فراخ",
+     "desc": "فيتوتشيني بصوص الكريمة البيضاء.",
+     "img": "assets/webp/real-باستا-الفريدو-فراخ.webp",
+     "price": 75
     },
     {
-      "path": "assets/webp/burger.webp",
-      "name": "burger.webp",
-      "dim": "1024×1024",
-      "kb": 113.3,
-      "w": 1024,
-      "h": 1024
+     "id": "pasta-باستا-بلونيز-مفروم",
+     "name": "باستا بلونيز مفروم",
+     "desc": "باستا بالفطر في صوص كريمي.",
+     "img": "assets/webp/real-باستا-بلونيز-مفروم.webp",
+     "price": 75
     },
     {
-      "path": "assets/webp/crepe-400.webp",
-      "name": "crepe-400.webp",
-      "dim": "400×400",
-      "kb": 28.6,
-      "w": 400,
-      "h": 400
+     "id": "pasta-باستا-سجق",
+     "name": "باستا سجق",
+     "desc": "باستا بالبيكون مع صوص كريمي.",
+     "img": "assets/webp/real-باستا-سجق.webp",
+     "price": 75
     },
     {
-      "path": "assets/webp/crepe-800.webp",
-      "name": "crepe-800.webp",
-      "dim": "800×800",
-      "kb": 76.5,
-      "w": 800,
-      "h": 800
+     "id": "pasta-باستا-سوسيس",
+     "name": "باستا سوسيس",
+     "desc": "سباجتي بصوص الطماطم والسجق.",
+     "img": "assets/webp/real-باستا-سوسيس.webp",
+     "price": 75
     },
     {
-      "path": "assets/webp/crepe.webp",
-      "name": "crepe.webp",
-      "dim": "1024×1024",
-      "kb": 107.8,
-      "w": 1024,
-      "h": 1024
+     "id": "pasta-باستا-زنجر",
+     "name": "باستا زنجر",
+     "desc": "باستا بصوص الطماطم مع كرانشي فراخ.",
+     "img": "assets/webp/real-باستا-زنجر.webp",
+     "price": 75
     },
     {
-      "path": "assets/webp/hero-pizza-1200.webp",
-      "name": "hero-pizza-1200.webp",
-      "dim": "1200×670",
-      "kb": 79.5,
-      "w": 1200,
-      "h": 670
+     "id": "pasta-باستا-إستربس",
+     "name": "باستا إستربس",
+     "desc": "ستيك مشوي مع بطاطس.",
+     "img": "assets/webp/real-باستا-إستربس.webp",
+     "price": 75
     },
     {
-      "path": "assets/webp/hero-pizza-400.webp",
-      "name": "hero-pizza-400.webp",
-      "dim": "400×223",
-      "kb": 13.6,
-      "w": 400,
-      "h": 223
+     "id": "pasta-باستا-بانيه",
+     "name": "باستا بانيه",
+     "desc": "باستا مخبوزة بالجبنة.",
+     "img": "assets/webp/real-باستا-بانيه.webp",
+     "price": 75
     },
     {
-      "path": "assets/webp/hero-pizza-800.webp",
-      "name": "hero-pizza-800.webp",
-      "dim": "800×447",
-      "kb": 43.0,
-      "w": 800,
-      "h": 447
-    },
-    {
-      "path": "assets/webp/hero-pizza.webp",
-      "name": "hero-pizza.webp",
-      "dim": "1376×768",
-      "kb": 100.3,
-      "w": 1376,
-      "h": 768
-    },
-    {
-      "path": "assets/webp/professional-overhead-pizza-isolated-dar-1-400.webp",
-      "name": "professional-overhead-pizza-isolated-dar-1-400.webp",
-      "dim": "400×180",
-      "kb": 10.3,
-      "w": 400,
-      "h": 180
-    },
-    {
-      "path": "assets/webp/professional-overhead-pizza-isolated-dar-1.webp",
-      "name": "professional-overhead-pizza-isolated-dar-1.webp",
-      "dim": "776×350",
-      "kb": 28.1,
-      "w": 776,
-      "h": 350
-    },
-    {
-      "path": "assets/webp/professional-overhead-pizza-isolated-dar-2-400.webp",
-      "name": "professional-overhead-pizza-isolated-dar-2-400.webp",
-      "dim": "400×180",
-      "kb": 10.2,
-      "w": 400,
-      "h": 180
-    },
-    {
-      "path": "assets/webp/professional-overhead-pizza-isolated-dar-2.webp",
-      "name": "professional-overhead-pizza-isolated-dar-2.webp",
-      "dim": "798×360",
-      "kb": 32.2,
-      "w": 798,
-      "h": 360
-    },
-    {
-      "path": "assets/webp/professional-overhead-pizza-isolated-dar-3-400.webp",
-      "name": "professional-overhead-pizza-isolated-dar-3-400.webp",
-      "dim": "400×232",
-      "kb": 20.8,
-      "w": 400,
-      "h": 232
-    },
-    {
-      "path": "assets/webp/professional-overhead-pizza-isolated-dar-3.webp",
-      "name": "professional-overhead-pizza-isolated-dar-3.webp",
-      "dim": "612×355",
-      "kb": 43.5,
-      "w": 612,
-      "h": 355
-    },
-    {
-      "path": "assets/webp/professional-overhead-pizza-isolated-dar-4-400.webp",
-      "name": "professional-overhead-pizza-isolated-dar-4-400.webp",
-      "dim": "400×225",
-      "kb": 13.1,
-      "w": 400,
-      "h": 225
-    },
-    {
-      "path": "assets/webp/professional-overhead-pizza-isolated-dar-4.webp",
-      "name": "professional-overhead-pizza-isolated-dar-4.webp",
-      "dim": "622×350",
-      "kb": 25.5,
-      "w": 622,
-      "h": 350
-    },
-    {
-      "path": "assets/webp/professional-overhead-pizza-isolated-dar-5-400.webp",
-      "name": "professional-overhead-pizza-isolated-dar-5-400.webp",
-      "dim": "400×175",
-      "kb": 18.2,
-      "w": 400,
-      "h": 175
-    },
-    {
-      "path": "assets/webp/professional-overhead-pizza-isolated-dar-5.webp",
-      "name": "professional-overhead-pizza-isolated-dar-5.webp",
-      "dim": "612×267",
-      "kb": 38.7,
-      "w": 612,
-      "h": 267
-    },
-    {
-      "path": "assets/webp/sq-hero-pizza-400.webp",
-      "name": "sq-hero-pizza-400.webp",
-      "dim": "400×400",
-      "kb": 35.9,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/sq-hero-pizza.webp",
-      "name": "sq-hero-pizza.webp",
-      "dim": "800×800",
-      "kb": 87.8,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/sq-professional-overhead-pizza-isolated-dar-1-400.webp",
-      "name": "sq-professional-overhead-pizza-isolated-dar-1-400.webp",
-      "dim": "400×400",
-      "kb": 23.4,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/sq-professional-overhead-pizza-isolated-dar-1.webp",
-      "name": "sq-professional-overhead-pizza-isolated-dar-1.webp",
-      "dim": "800×800",
-      "kb": 53.9,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/sq-professional-overhead-pizza-isolated-dar-2-400.webp",
-      "name": "sq-professional-overhead-pizza-isolated-dar-2-400.webp",
-      "dim": "400×400",
-      "kb": 24.1,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/sq-professional-overhead-pizza-isolated-dar-2.webp",
-      "name": "sq-professional-overhead-pizza-isolated-dar-2.webp",
-      "dim": "800×800",
-      "kb": 56.2,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/sq-professional-overhead-pizza-isolated-dar-3-400.webp",
-      "name": "sq-professional-overhead-pizza-isolated-dar-3-400.webp",
-      "dim": "400×400",
-      "kb": 25.1,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/sq-professional-overhead-pizza-isolated-dar-3.webp",
-      "name": "sq-professional-overhead-pizza-isolated-dar-3.webp",
-      "dim": "800×800",
-      "kb": 60.2,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/sq-professional-overhead-pizza-isolated-dar-4-400.webp",
-      "name": "sq-professional-overhead-pizza-isolated-dar-4-400.webp",
-      "dim": "400×400",
-      "kb": 18.9,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/sq-professional-overhead-pizza-isolated-dar-4.webp",
-      "name": "sq-professional-overhead-pizza-isolated-dar-4.webp",
-      "dim": "800×800",
-      "kb": 43.6,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/sq-professional-overhead-pizza-isolated-dar-5-400.webp",
-      "name": "sq-professional-overhead-pizza-isolated-dar-5-400.webp",
-      "dim": "400×400",
-      "kb": 33.2,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/sq-professional-overhead-pizza-isolated-dar-5.webp",
-      "name": "sq-professional-overhead-pizza-isolated-dar-5.webp",
-      "dim": "800×800",
-      "kb": 74.3,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/sweet-crepe-400.webp",
-      "name": "sweet-crepe-400.webp",
-      "dim": "400×400",
-      "kb": 25.0,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/sweet-crepe-800.webp",
-      "name": "sweet-crepe-800.webp",
-      "dim": "800×800",
-      "kb": 66.5,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/sweet-crepe.webp",
-      "name": "sweet-crepe.webp",
-      "dim": "1024×1024",
-      "kb": 95.8,
-      "w": 1024,
-      "h": 1024
-    },
-    {
-      "path": "assets/webp/real-بيتزا-مارجريتا.webp",
-      "name": "real-بيتزا-مارجريتا.webp",
-      "dim": "800×800",
-      "kb": 75.7,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-بيتزا-مارجريتا-400.webp",
-      "name": "real-بيتزا-مارجريتا-400.webp",
-      "dim": "400×400",
-      "kb": 23.8,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-بيتزا-خضار.webp",
-      "name": "real-بيتزا-خضار.webp",
-      "dim": "800×800",
-      "kb": 186.2,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-بيتزا-خضار-400.webp",
-      "name": "real-بيتزا-خضار-400.webp",
-      "dim": "400×400",
-      "kb": 44.1,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-بيتزا-فراخ.webp",
-      "name": "real-بيتزا-فراخ.webp",
-      "dim": "800×800",
-      "kb": 96.8,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-بيتزا-فراخ-400.webp",
-      "name": "real-بيتزا-فراخ-400.webp",
-      "dim": "400×400",
-      "kb": 25.3,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-بيتزا-بسطرمة.webp",
-      "name": "real-بيتزا-بسطرمة.webp",
-      "dim": "800×800",
-      "kb": 138.7,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-بيتزا-بسطرمة-400.webp",
-      "name": "real-بيتزا-بسطرمة-400.webp",
-      "dim": "400×400",
-      "kb": 36.1,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-بيتزا-تونة.webp",
-      "name": "real-بيتزا-تونة.webp",
-      "dim": "800×800",
-      "kb": 189.1,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-بيتزا-تونة-400.webp",
-      "name": "real-بيتزا-تونة-400.webp",
-      "dim": "400×400",
-      "kb": 43.5,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-بيتزا-سوسيس.webp",
-      "name": "real-بيتزا-سوسيس.webp",
-      "dim": "800×800",
-      "kb": 136.8,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-بيتزا-سوسيس-400.webp",
-      "name": "real-بيتزا-سوسيس-400.webp",
-      "dim": "400×400",
-      "kb": 37.7,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-بيتزا-ميكس-جبن.webp",
-      "name": "real-بيتزا-ميكس-جبن.webp",
-      "dim": "800×800",
-      "kb": 93.6,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-بيتزا-ميكس-جبن-400.webp",
-      "name": "real-بيتزا-ميكس-جبن-400.webp",
-      "dim": "400×400",
-      "kb": 23.3,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-بيتزا-سجق.webp",
-      "name": "real-بيتزا-سجق.webp",
-      "dim": "800×800",
-      "kb": 146.2,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-بيتزا-سجق-400.webp",
-      "name": "real-بيتزا-سجق-400.webp",
-      "dim": "400×400",
-      "kb": 36.1,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-بيتزا-مشروم.webp",
-      "name": "real-بيتزا-مشروم.webp",
-      "dim": "800×800",
-      "kb": 62.6,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-بيتزا-مشروم-400.webp",
-      "name": "real-بيتزا-مشروم-400.webp",
-      "dim": "400×400",
-      "kb": 22.8,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-بيتزا-فراخ-كرسبى.webp",
-      "name": "real-بيتزا-فراخ-كرسبى.webp",
-      "dim": "800×800",
-      "kb": 70.6,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-بيتزا-فراخ-كرسبى-400.webp",
-      "name": "real-بيتزا-فراخ-كرسبى-400.webp",
-      "dim": "400×400",
-      "kb": 22.2,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-بيتزا-سلامى.webp",
-      "name": "real-بيتزا-سلامى.webp",
-      "dim": "800×800",
-      "kb": 103.9,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-بيتزا-سلامى-400.webp",
-      "name": "real-بيتزا-سلامى-400.webp",
-      "dim": "400×400",
-      "kb": 30.5,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-بيتزا-سوبر-سوبريم.webp",
-      "name": "real-بيتزا-سوبر-سوبريم.webp",
-      "dim": "800×800",
-      "kb": 194.4,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-بيتزا-سوبر-سوبريم-400.webp",
-      "name": "real-بيتزا-سوبر-سوبريم-400.webp",
-      "dim": "400×400",
-      "kb": 42.1,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-بيتزا-فراخ-بانيه-ناجتس.webp",
-      "name": "real-بيتزا-فراخ-بانيه-ناجتس.webp",
-      "dim": "800×800",
-      "kb": 158.8,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-بيتزا-فراخ-بانيه-ناجتس-400.webp",
-      "name": "real-بيتزا-فراخ-بانيه-ناجتس-400.webp",
-      "dim": "400×400",
-      "kb": 38.7,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-بيتزا-فراخ-رانش.webp",
-      "name": "real-بيتزا-فراخ-رانش.webp",
-      "dim": "800×800",
-      "kb": 124.3,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-بيتزا-فراخ-رانش-400.webp",
-      "name": "real-بيتزا-فراخ-رانش-400.webp",
-      "dim": "400×400",
-      "kb": 34.6,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-بيتزا-فراخ-باربيكيو.webp",
-      "name": "real-بيتزا-فراخ-باربيكيو.webp",
-      "dim": "800×800",
-      "kb": 220.3,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-بيتزا-فراخ-باربيكيو-400.webp",
-      "name": "real-بيتزا-فراخ-باربيكيو-400.webp",
-      "dim": "400×400",
-      "kb": 60.8,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-بيتزا-مكس-فراخ.webp",
-      "name": "real-بيتزا-مكس-فراخ.webp",
-      "dim": "800×800",
-      "kb": 220.3,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-بيتزا-مكس-فراخ-400.webp",
-      "name": "real-بيتزا-مكس-فراخ-400.webp",
-      "dim": "400×400",
-      "kb": 60.8,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-بيتزا-مكس-لحوم.webp",
-      "name": "real-بيتزا-مكس-لحوم.webp",
-      "dim": "800×800",
-      "kb": 186.2,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-بيتزا-مكس-لحوم-400.webp",
-      "name": "real-بيتزا-مكس-لحوم-400.webp",
-      "dim": "400×400",
-      "kb": 44.1,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-سوري-بطاطس-فارم.webp",
-      "name": "real-سوري-بطاطس-فارم.webp",
-      "dim": "800×800",
-      "kb": 88.0,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-سوري-بطاطس-فارم-400.webp",
-      "name": "real-سوري-بطاطس-فارم-400.webp",
-      "dim": "400×400",
-      "kb": 23.0,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-سوري-برجر-سادة.webp",
-      "name": "real-سوري-برجر-سادة.webp",
-      "dim": "800×800",
-      "kb": 37.9,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-سوري-برجر-سادة-400.webp",
-      "name": "real-سوري-برجر-سادة-400.webp",
-      "dim": "400×400",
-      "kb": 13.1,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-سوري-برجر-بيض.webp",
-      "name": "real-سوري-برجر-بيض.webp",
-      "dim": "800×800",
-      "kb": 110.0,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-سوري-برجر-بيض-400.webp",
-      "name": "real-سوري-برجر-بيض-400.webp",
-      "dim": "400×400",
-      "kb": 28.0,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-سوري-برجر-جبنة.webp",
-      "name": "real-سوري-برجر-جبنة.webp",
-      "dim": "800×800",
-      "kb": 78.5,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-سوري-برجر-جبنة-400.webp",
-      "name": "real-سوري-برجر-جبنة-400.webp",
-      "dim": "400×400",
-      "kb": 20.5,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-سوري-برجر-ميكس.webp",
-      "name": "real-سوري-برجر-ميكس.webp",
-      "dim": "800×800",
-      "kb": 45.6,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-سوري-برجر-ميكس-400.webp",
-      "name": "real-سوري-برجر-ميكس-400.webp",
-      "dim": "400×400",
-      "kb": 15.4,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-سوري-سوسيس-ميكسكانو.webp",
-      "name": "real-سوري-سوسيس-ميكسكانو.webp",
-      "dim": "800×800",
-      "kb": 70.9,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-سوري-سوسيس-ميكسكانو-400.webp",
-      "name": "real-سوري-سوسيس-ميكسكانو-400.webp",
-      "dim": "400×400",
-      "kb": 20.0,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-سوري-هوت-دوج.webp",
-      "name": "real-سوري-هوت-دوج.webp",
-      "dim": "800×800",
-      "kb": 76.8,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-سوري-هوت-دوج-400.webp",
-      "name": "real-سوري-هوت-دوج-400.webp",
-      "dim": "400×400",
-      "kb": 18.9,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-سوري-كفتة-جريل.webp",
-      "name": "real-سوري-كفتة-جريل.webp",
-      "dim": "800×800",
-      "kb": 80.4,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-سوري-كفتة-جريل-400.webp",
-      "name": "real-سوري-كفتة-جريل-400.webp",
-      "dim": "400×400",
-      "kb": 23.8,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-سوري-تونة.webp",
-      "name": "real-سوري-تونة.webp",
-      "dim": "800×800",
-      "kb": 130.0,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-سوري-تونة-400.webp",
-      "name": "real-سوري-تونة-400.webp",
-      "dim": "400×400",
-      "kb": 34.3,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-سوري-فراخ-بانيه.webp",
-      "name": "real-سوري-فراخ-بانيه.webp",
-      "dim": "800×800",
-      "kb": 102.2,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-سوري-فراخ-بانيه-400.webp",
-      "name": "real-سوري-فراخ-بانيه-400.webp",
-      "dim": "400×400",
-      "kb": 20.8,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-سوري-فراخ-الأجريك.webp",
-      "name": "real-سوري-فراخ-الأجريك.webp",
-      "dim": "800×800",
-      "kb": 75.8,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-سوري-فراخ-الأجريك-400.webp",
-      "name": "real-سوري-فراخ-الأجريك-400.webp",
-      "dim": "400×400",
-      "kb": 22.2,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-سوري-فراخ-شيش-طاووق.webp",
-      "name": "real-سوري-فراخ-شيش-طاووق.webp",
-      "dim": "800×800",
-      "kb": 159.7,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-سوري-فراخ-شيش-طاووق-400.webp",
-      "name": "real-سوري-فراخ-شيش-طاووق-400.webp",
-      "dim": "400×400",
-      "kb": 43.6,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-سوري-سوبر-كرانشي.webp",
-      "name": "real-سوري-سوبر-كرانشي.webp",
-      "dim": "800×800",
-      "kb": 119.6,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-سوري-سوبر-كرانشي-400.webp",
-      "name": "real-سوري-سوبر-كرانشي-400.webp",
-      "dim": "400×400",
-      "kb": 32.7,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-سوري-كرسبى.webp",
-      "name": "real-سوري-كرسبى.webp",
-      "dim": "800×800",
-      "kb": 75.8,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-سوري-كرسبى-400.webp",
-      "name": "real-سوري-كرسبى-400.webp",
-      "dim": "400×400",
-      "kb": 22.2,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-سوري-زنجر.webp",
-      "name": "real-سوري-زنجر.webp",
-      "dim": "800×800",
-      "kb": 119.6,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-سوري-زنجر-400.webp",
-      "name": "real-سوري-زنجر-400.webp",
-      "dim": "400×400",
-      "kb": 32.7,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-سوري-تشيكن-إسبشال-موتزاريلا.webp",
-      "name": "real-سوري-تشيكن-إسبشال-موتزاريلا.webp",
-      "dim": "800×800",
-      "kb": 96.8,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-سوري-تشيكن-إسبشال-موتزاريلا-400.webp",
-      "name": "real-سوري-تشيكن-إسبشال-موتزاريلا-400.webp",
-      "dim": "400×400",
-      "kb": 25.3,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-سوري-كوردن-بلو.webp",
-      "name": "real-سوري-كوردن-بلو.webp",
-      "dim": "800×800",
-      "kb": 44.9,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-سوري-كوردن-بلو-400.webp",
-      "name": "real-سوري-كوردن-بلو-400.webp",
-      "dim": "400×400",
-      "kb": 13.6,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-سوري-فاهيتا-فراخ.webp",
-      "name": "real-سوري-فاهيتا-فراخ.webp",
-      "dim": "800×800",
-      "kb": 149.2,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-سوري-فاهيتا-فراخ-400.webp",
-      "name": "real-سوري-فاهيتا-فراخ-400.webp",
-      "dim": "400×400",
-      "kb": 35.5,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-سوري-شاورما-فراخ.webp",
-      "name": "real-سوري-شاورما-فراخ.webp",
-      "dim": "800×800",
-      "kb": 15.1,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-سوري-شاورما-فراخ-400.webp",
-      "name": "real-سوري-شاورما-فراخ-400.webp",
-      "dim": "400×400",
-      "kb": 6.0,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-باستا-نجرسكو-فراخ.webp",
-      "name": "real-باستا-نجرسكو-فراخ.webp",
-      "dim": "800×800",
-      "kb": 46.2,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-باستا-نجرسكو-فراخ-400.webp",
-      "name": "real-باستا-نجرسكو-فراخ-400.webp",
-      "dim": "400×400",
-      "kb": 14.5,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-باستا-الفريدو-فراخ.webp",
-      "name": "real-باستا-الفريدو-فراخ.webp",
-      "dim": "800×800",
-      "kb": 75.3,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-باستا-الفريدو-فراخ-400.webp",
-      "name": "real-باستا-الفريدو-فراخ-400.webp",
-      "dim": "400×400",
-      "kb": 17.9,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-باستا-بلونيز-مفروم.webp",
-      "name": "real-باستا-بلونيز-مفروم.webp",
-      "dim": "800×800",
-      "kb": 51.2,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-باستا-بلونيز-مفروم-400.webp",
-      "name": "real-باستا-بلونيز-مفروم-400.webp",
-      "dim": "400×400",
-      "kb": 15.8,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-باستا-سجق.webp",
-      "name": "real-باستا-سجق.webp",
-      "dim": "800×800",
-      "kb": 65.2,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-باستا-سجق-400.webp",
-      "name": "real-باستا-سجق-400.webp",
-      "dim": "400×400",
-      "kb": 20.8,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-باستا-سوسيس.webp",
-      "name": "real-باستا-سوسيس.webp",
-      "dim": "800×800",
-      "kb": 102.5,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-باستا-سوسيس-400.webp",
-      "name": "real-باستا-سوسيس-400.webp",
-      "dim": "400×400",
-      "kb": 24.1,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-باستا-زنجر.webp",
-      "name": "real-باستا-زنجر.webp",
-      "dim": "800×800",
-      "kb": 113.2,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-باستا-زنجر-400.webp",
-      "name": "real-باستا-زنجر-400.webp",
-      "dim": "400×400",
-      "kb": 29.1,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-باستا-إستربس.webp",
-      "name": "real-باستا-إستربس.webp",
-      "dim": "800×800",
-      "kb": 116.2,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-باستا-إستربس-400.webp",
-      "name": "real-باستا-إستربس-400.webp",
-      "dim": "400×400",
-      "kb": 33.1,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-باستا-بانيه.webp",
-      "name": "real-باستا-بانيه.webp",
-      "dim": "800×800",
-      "kb": 192.0,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-باستا-بانيه-400.webp",
-      "name": "real-باستا-بانيه-400.webp",
-      "dim": "400×400",
-      "kb": 53.8,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-باستا-كرسبى.webp",
-      "name": "real-باستا-كرسبى.webp",
-      "dim": "800×800",
-      "kb": 75.3,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-باستا-كرسبى-400.webp",
-      "name": "real-باستا-كرسبى-400.webp",
-      "dim": "400×400",
-      "kb": 23.9,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-كريب-شيكولاتة-نوتيلا.webp",
-      "name": "real-كريب-شيكولاتة-نوتيلا.webp",
-      "dim": "800×800",
-      "kb": 56.5,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-كريب-شيكولاتة-نوتيلا-400.webp",
-      "name": "real-كريب-شيكولاتة-نوتيلا-400.webp",
-      "dim": "400×400",
-      "kb": 16.2,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-كريب-شيكولاتة-نيو-كريمة.webp",
-      "name": "real-كريب-شيكولاتة-نيو-كريمة.webp",
-      "dim": "800×800",
-      "kb": 67.2,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-كريب-شيكولاتة-نيو-كريمة-400.webp",
-      "name": "real-كريب-شيكولاتة-نيو-كريمة-400.webp",
-      "dim": "400×400",
-      "kb": 17.9,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-كريب-ميكس-تيلا.webp",
-      "name": "real-كريب-ميكس-تيلا.webp",
-      "dim": "800×800",
-      "kb": 44.7,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-كريب-ميكس-تيلا-400.webp",
-      "name": "real-كريب-ميكس-تيلا-400.webp",
-      "dim": "400×400",
-      "kb": 12.7,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-كريب-شيكولاتة-بيضاء.webp",
-      "name": "real-كريب-شيكولاتة-بيضاء.webp",
-      "dim": "800×800",
-      "kb": 88.8,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-كريب-شيكولاتة-بيضاء-400.webp",
-      "name": "real-كريب-شيكولاتة-بيضاء-400.webp",
-      "dim": "400×400",
-      "kb": 28.9,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-كريب-كراميل.webp",
-      "name": "real-كريب-كراميل.webp",
-      "dim": "800×800",
-      "kb": 82.6,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-كريب-كراميل-400.webp",
-      "name": "real-كريب-كراميل-400.webp",
-      "dim": "400×400",
-      "kb": 23.3,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-كريب-لوتس.webp",
-      "name": "real-كريب-لوتس.webp",
-      "dim": "800×800",
-      "kb": 80.3,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-كريب-لوتس-400.webp",
-      "name": "real-كريب-لوتس-400.webp",
-      "dim": "400×400",
-      "kb": 23.4,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-وافل-شيكولاتة.webp",
-      "name": "real-وافل-شيكولاتة.webp",
-      "dim": "800×800",
-      "kb": 72.3,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-وافل-شيكولاتة-400.webp",
-      "name": "real-وافل-شيكولاتة-400.webp",
-      "dim": "400×400",
-      "kb": 23.6,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-وافل-كراميل.webp",
-      "name": "real-وافل-كراميل.webp",
-      "dim": "800×800",
-      "kb": 64.8,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-وافل-كراميل-400.webp",
-      "name": "real-وافل-كراميل-400.webp",
-      "dim": "400×400",
-      "kb": 20.4,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-وافل-شيكولاتة-نيو-كريمة.webp",
-      "name": "real-وافل-شيكولاتة-نيو-كريمة.webp",
-      "dim": "800×800",
-      "kb": 72.3,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-وافل-شيكولاتة-نيو-كريمة-400.webp",
-      "name": "real-وافل-شيكولاتة-نيو-كريمة-400.webp",
-      "dim": "400×400",
-      "kb": 23.6,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-وافل-شيكولاتة-بيضاء.webp",
-      "name": "real-وافل-شيكولاتة-بيضاء.webp",
-      "dim": "800×800",
-      "kb": 72.3,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-وافل-شيكولاتة-بيضاء-400.webp",
-      "name": "real-وافل-شيكولاتة-بيضاء-400.webp",
-      "dim": "400×400",
-      "kb": 23.6,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-وافل-شيكولاتة-موز.webp",
-      "name": "real-وافل-شيكولاتة-موز.webp",
-      "dim": "800×800",
-      "kb": 74.3,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-وافل-شيكولاتة-موز-400.webp",
-      "name": "real-وافل-شيكولاتة-موز-400.webp",
-      "dim": "400×400",
-      "kb": 24.2,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-وافل-لوتس.webp",
-      "name": "real-وافل-لوتس.webp",
-      "dim": "800×800",
-      "kb": 86.7,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-وافل-لوتس-400.webp",
-      "name": "real-وافل-لوتس-400.webp",
-      "dim": "400×400",
-      "kb": 24.3,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-وافل-شيكولاتة-نوعين-فاكهة.webp",
-      "name": "real-وافل-شيكولاتة-نوعين-فاكهة.webp",
-      "dim": "800×800",
-      "kb": 228.2,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-وافل-شيكولاتة-نوعين-فاكهة-400.webp",
-      "name": "real-وافل-شيكولاتة-نوعين-فاكهة-400.webp",
-      "dim": "400×400",
-      "kb": 50.6,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-وافل-شيكولاتة-مارس.webp",
-      "name": "real-وافل-شيكولاتة-مارس.webp",
-      "dim": "800×800",
-      "kb": 83.0,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-وافل-شيكولاتة-مارس-400.webp",
-      "name": "real-وافل-شيكولاتة-مارس-400.webp",
-      "dim": "400×400",
-      "kb": 28.3,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-وافل-مالتيزرز.webp",
-      "name": "real-وافل-مالتيزرز.webp",
-      "dim": "800×800",
-      "kb": 64.8,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-وافل-مالتيزرز-400.webp",
-      "name": "real-وافل-مالتيزرز-400.webp",
-      "dim": "400×400",
-      "kb": 20.4,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-وافل-اسنيكرز.webp",
-      "name": "real-وافل-اسنيكرز.webp",
-      "dim": "800×800",
-      "kb": 83.0,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-وافل-اسنيكرز-400.webp",
-      "name": "real-وافل-اسنيكرز-400.webp",
-      "dim": "400×400",
-      "kb": 28.3,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-وافل-شيكولاتة-مورو.webp",
-      "name": "real-وافل-شيكولاتة-مورو.webp",
-      "dim": "800×800",
-      "kb": 208.9,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-وافل-شيكولاتة-مورو-400.webp",
-      "name": "real-وافل-شيكولاتة-مورو-400.webp",
-      "dim": "400×400",
-      "kb": 28.9,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-وافل-شيكولاتة-ميكس-صوصات.webp",
-      "name": "real-وافل-شيكولاتة-ميكس-صوصات.webp",
-      "dim": "800×800",
-      "kb": 83.2,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-وافل-شيكولاتة-ميكس-صوصات-400.webp",
-      "name": "real-وافل-شيكولاتة-ميكس-صوصات-400.webp",
-      "dim": "400×400",
-      "kb": 22.4,
-      "w": 400,
-      "h": 400
-    },
-    {
-      "path": "assets/webp/real-بيتزا-ميكس-لحوم.webp",
-      "name": "real-بيتزا-ميكس-لحوم.webp",
-      "dim": "800×800",
-      "kb": 81.6,
-      "w": 800,
-      "h": 800
-    },
-    {
-      "path": "assets/webp/real-بيتزا-ميكس-لحوم-400.webp",
-      "name": "real-بيتزا-ميكس-لحوم-400.webp",
-      "dim": "400×400",
-      "kb": 24.6,
-      "w": 400,
-      "h": 400
+     "id": "pasta-باستا-كرسبى",
+     "name": "باستا كرسبى",
+     "desc": "باستا مع فراخ مقرمشة.",
+     "img": "assets/webp/real-باستا-كرسبى.webp",
+     "price": 75
     }
-  ],
-  "extras": {
-    "pizza": [
-      {
-        "name": "جبن إضافي",
-        "price": 35
-      },
-      {
-        "name": "تونة إضافية",
-        "price": 55
-      },
-      {
-        "name": "زيتون",
-        "price": 20
-      },
-      {
-        "name": "هالبينو",
-        "price": 20
-      }
-    ],
-    "syrian": [
-      {
-        "name": "جبنة شيدر",
-        "price": 25
-      },
-      {
-        "name": "لحم إضافي",
-        "price": 40
-      },
-      {
-        "name": "صوص خاص",
-        "price": 15
-      }
-    ],
-    "pasta": [
-      {
-        "name": "جبنة إضافية",
-        "price": 30
-      },
-      {
-        "name": "دجاج إضافي",
-        "price": 50
-      },
-      {
-        "name": "صوص كريمي",
-        "price": 15
-      }
-    ],
-    "sweet_crepe": [
-      {
-        "name": "شوكولاتة إضافية",
-        "price": 15
-      },
-      {
-        "name": "فواكه",
-        "price": 20
-      },
-      {
-        "name": "مكسرات",
-        "price": 25
-      }
-    ],
-    "waffle": [
-      {
-        "name": "شوكولاتة",
-        "price": 15
-      },
-      {
-        "name": "كريمة",
-        "price": 20
-      },
-      {
-        "name": "عسل",
-        "price": 10
-      }
-    ]
+   ]
+  },
+  {
+   "key": "sweet_crepe",
+   "title": "الكريب الحلو",
+   "emoji": "🥞",
+   "desc": "كريب حلو بالشوكولا والكريمة",
+   "items": [
+    {
+     "id": "sweet_crepe-كريب-شيكولاتة-نوتيلا",
+     "name": "كريب شيكولاتة نوتيلا",
+     "desc": "كريب بالشوكولاتة والموز.",
+     "img": "assets/webp/real-كريب-شيكولاتة-نوتيلا.webp",
+     "price": 45
+    },
+    {
+     "id": "sweet_crepe-كريب-شيكولاتة-نيو-كريمة",
+     "name": "كريب شيكولاتة نيو كريمة",
+     "desc": "كريب بالشوكولاتة والكريمة.",
+     "img": "assets/webp/real-كريب-شيكولاتة-نيو-كريمة.webp",
+     "price": 45
+    },
+    {
+     "id": "sweet_crepe-كريب-ميكس-تيلا",
+     "name": "كريب ميكس تيلا",
+     "desc": "كريب بالشوكولاتة والموز والصوص.",
+     "img": "assets/webp/real-كريب-ميكس-تيلا.webp",
+     "price": 65
+    },
+    {
+     "id": "sweet_crepe-كريب-شيكولاتة-بيضاء",
+     "name": "كريب شيكولاتة بيضاء",
+     "desc": "كريب بالشوكولاتة البيضاء.",
+     "img": "assets/webp/real-كريب-شيكولاتة-بيضاء.webp",
+     "price": 50
+    },
+    {
+     "id": "sweet_crepe-كريب-كراميل",
+     "name": "كريب كراميل",
+     "desc": "كريب بصوص الكراميل.",
+     "img": "assets/webp/real-كريب-كراميل.webp",
+     "price": 45
+    },
+    {
+     "id": "sweet_crepe-كريب-لوتس",
+     "name": "كريب لوتس",
+     "desc": "كريب بزبدة اللوتس.",
+     "img": "assets/webp/real-كريب-لوتس.webp",
+     "price": 50
+    }
+   ]
+  },
+  {
+   "key": "waffle",
+   "title": "الوافل",
+   "emoji": "🧇",
+   "desc": "وافل طازة بالشوكولا والفاكهة",
+   "items": [
+    {
+     "id": "waffle-وافل-شيكولاتة",
+     "name": "وافل شيكولاتة",
+     "desc": "وافل ساخن بصوص الشوكولاتة.",
+     "img": "assets/webp/real-وافل-شيكولاتة.webp",
+     "price": 50
+    },
+    {
+     "id": "waffle-وافل-كراميل",
+     "name": "وافل كراميل",
+     "desc": "وافل بصوص الكراميل.",
+     "img": "assets/webp/real-وافل-كراميل.webp",
+     "price": 70
+    },
+    {
+     "id": "waffle-وافل-شيكولاتة-نيو-كريمة",
+     "name": "وافل شيكولاتة نيو كريمة",
+     "desc": "وافل بالشوكولاتة والكريمة.",
+     "img": "assets/webp/real-وافل-شيكولاتة-نيو-كريمة.webp",
+     "price": 70
+    },
+    {
+     "id": "waffle-وافل-شيكولاتة-بيضاء",
+     "name": "وافل شيكولاتة بيضاء",
+     "desc": "وافل بالشوكولاتة البيضاء.",
+     "img": "assets/webp/real-وافل-شيكولاتة-بيضاء.webp",
+     "price": 50
+    },
+    {
+     "id": "waffle-وافل-شيكولاتة-موز",
+     "name": "وافل شيكولاتة موز",
+     "desc": "وافل بالموز والشوكولاتة.",
+     "img": "assets/webp/real-وافل-شيكولاتة-موز.webp",
+     "price": 85
+    },
+    {
+     "id": "waffle-وافل-لوتس",
+     "name": "وافل لوتس",
+     "desc": "وافل بزبدة اللوتس.",
+     "img": "assets/webp/real-وافل-لوتس.webp",
+     "price": 75
+    },
+    {
+     "id": "waffle-وافل-شيكولاتة-نوعين-فاكهة",
+     "name": "وافل شيكولاتة نوعين فاكهة",
+     "desc": "وافل بفاكهتين وشوكولاتة.",
+     "img": "assets/webp/real-وافل-شيكولاتة-نوعين-فاكهة.webp",
+     "price": 85
+    },
+    {
+     "id": "waffle-وافل-شيكولاتة-مارس",
+     "name": "وافل شيكولاتة مارس",
+     "desc": "وافل بقطع مارس.",
+     "img": "assets/webp/real-وافل-شيكولاتة-مارس.webp",
+     "price": 85
+    },
+    {
+     "id": "waffle-وافل-مالتيزرز",
+     "name": "وافل مالتيزرز",
+     "desc": "وافل مالتيزرز بالشوكولاتة.",
+     "img": "assets/webp/real-وافل-مالتيزرز.webp",
+     "price": 85
+    },
+    {
+     "id": "waffle-وافل-اسنيكرز",
+     "name": "وافل اسنيكرز",
+     "desc": "وافل بقطع اسنيكرز.",
+     "img": "assets/webp/real-وافل-اسنيكرز.webp",
+     "price": 85
+    },
+    {
+     "id": "waffle-وافل-شيكولاتة-مورو",
+     "name": "وافل شيكولاتة مورو",
+     "desc": "وافل بصوص مورو.",
+     "img": "assets/webp/real-وافل-شيكولاتة-مورو.webp",
+     "price": 80
+    },
+    {
+     "id": "waffle-وافل-شيكولاتة-ميكس-صوصات",
+     "name": "وافل شيكولاتة ميكس صوصات",
+     "desc": "وافل بخلطة صوصات وفواكه.",
+     "img": "assets/webp/real-وافل-شيكولاتة-ميكس-صوصات.webp",
+     "price": 85
+    }
+   ]
   }
+ ],
+ "catalog": {
+  "pizza": {
+   "title": "البيتزا",
+   "crumb": "البيتزا",
+   "eyebrow": "",
+   "intro": "بيتزا طازة بثلاث أحجام",
+   "items": [
+    {
+     "id": "pizza-بيتزا-مارجريتا",
+     "name": "بيتزا مارجريتا",
+     "price": 90,
+     "img": "assets/webp/real-بيتزا-مارجريتا.webp",
+     "tag": "مميز",
+     "desc": "صلصة طماطم، موزاريلا طازجة وريحان.",
+     "menuKey": "pizza"
+    },
+    {
+     "id": "pizza-بيتزا-خضار",
+     "name": "بيتزا خضار",
+     "price": 90,
+     "img": "assets/webp/real-بيتزا-خضار.webp",
+     "tag": "مميز",
+     "desc": "فلفل ملون، بصل، ذرة وفطر فوق الموزاريلا.",
+     "menuKey": "pizza"
+    },
+    {
+     "id": "pizza-بيتزا-سوسيس",
+     "name": "بيتزا سوسيس",
+     "price": 110,
+     "img": "assets/webp/real-بيتزا-سوسيس.webp",
+     "tag": "مميز",
+     "desc": "شرائح سجق مشوي مع صلصة الطماطم.",
+     "menuKey": "pizza"
+    },
+    {
+     "id": "pizza-بيتزا-ميكس-جبن",
+     "name": "بيتزا ميكس جبن",
+     "price": 100,
+     "img": "assets/webp/real-بيتزا-ميكس-جبن.webp",
+     "tag": "مميز",
+     "desc": "أربع جبنات ذايب مع ريحان.",
+     "menuKey": "pizza"
+    },
+    {
+     "id": "pizza-بيتزا-سجق",
+     "name": "بيتزا سجق",
+     "price": 110,
+     "img": "assets/webp/real-بيتزا-سجق.webp",
+     "tag": "مميز",
+     "desc": "سجق بلدي مقطّع شرائح.",
+     "menuKey": "pizza"
+    },
+    {
+     "id": "pizza-بيتزا-فراخ",
+     "name": "بيتزا فراخ",
+     "price": 110,
+     "img": "assets/webp/real-بيتزا-فراخ.webp",
+     "tag": "مميز",
+     "desc": "فراخ مشوية وصوص باربكيو خفيف.",
+     "menuKey": "pizza"
+    },
+    {
+     "id": "pizza-بيتزا-مشروم",
+     "name": "بيتزا مشروم",
+     "price": 105,
+     "img": "assets/webp/real-بيتزا-مشروم.webp",
+     "tag": "مميز",
+     "desc": "فطر طازج مع موزاريلا وزعتر.",
+     "menuKey": "pizza"
+    },
+    {
+     "id": "pizza-بيتزا-بسطرمة",
+     "name": "بيتزا بسطرمة",
+     "price": 110,
+     "img": "assets/webp/real-بيتزا-بسطرمة.webp",
+     "tag": "مميز",
+     "desc": "شرائح بسطرمة لحم مدخّن.",
+     "menuKey": "pizza"
+    },
+    {
+     "id": "pizza-بيتزا-تونة",
+     "name": "بيتزا تونة",
+     "price": 110,
+     "img": "assets/webp/real-بيتزا-تونة.webp",
+     "tag": "مميز",
+     "desc": "تونة مع ذرة وزيتون.",
+     "menuKey": "pizza"
+    },
+    {
+     "id": "pizza-بيتزا-فراخ-كرسبى",
+     "name": "بيتزا فراخ كرسبى",
+     "price": 110,
+     "img": "assets/webp/real-بيتزا-فراخ-كرسبى.webp",
+     "tag": "مميز",
+     "desc": "شرائح فراخ مقرمشة مع صوص الم 특별한.",
+     "menuKey": "pizza"
+    },
+    {
+     "id": "pizza-بيتزا-سلامى",
+     "name": "بيتزا سلامى",
+     "price": 110,
+     "img": "assets/webp/real-بيتزا-سلامى.webp",
+     "tag": "مميز",
+     "desc": "سلامي مدخّن مقطّع على الموزاريلا.",
+     "menuKey": "pizza"
+    },
+    {
+     "id": "pizza-بيتزا-سوبر-سوبريم",
+     "name": "بيتزا سوبر سوبريم",
+     "price": 110,
+     "img": "assets/webp/real-بيتزا-سوبر-سوبريم.webp",
+     "tag": "مميز",
+     "desc": "خضار ولحم ومشروم على عيشة سميكة.",
+     "menuKey": "pizza"
+    },
+    {
+     "id": "pizza-بيتزا-فراخ-بانيه-ناجتس",
+     "name": "بيتزا فراخ بانيه ناجتس",
+     "price": 110,
+     "img": "assets/webp/real-بيتزا-فراخ-بانيه-ناجتس.webp",
+     "tag": "مميز",
+     "desc": "ناجتس فراخ مقرمشة مع صلصة مانجو.",
+     "menuKey": "pizza"
+    },
+    {
+     "id": "pizza-بيتزا-فراخ-رانش",
+     "name": "بيتزا فراخ رانش",
+     "price": 115,
+     "img": "assets/webp/real-بيتزا-فراخ-رانش.webp",
+     "tag": "مميز",
+     "desc": "فراخ مع صوص الرانش والجبنة.",
+     "menuKey": "pizza"
+    },
+    {
+     "id": "pizza-بيتزا-فراخ-باربيكيو",
+     "name": "بيتزا فراخ باربيكيو",
+     "price": 115,
+     "img": "assets/webp/real-بيتزا-فراخ-باربيكيو.webp",
+     "tag": "مميز",
+     "desc": "فراخ مع صوص الباربكيو والبصل.",
+     "menuKey": "pizza"
+    },
+    {
+     "id": "pizza-بيتزا-مكس-فراخ",
+     "name": "بيتزا مكس فراخ",
+     "price": 155,
+     "img": "assets/webp/real-بيتزا-مكس-فراخ.webp",
+     "tag": "مميز",
+     "desc": "فراخ مع سجق وخضار مشكّلة.",
+     "menuKey": "pizza"
+    },
+    {
+     "id": "pizza-بيتزا-مكس-لحوم",
+     "name": "بيتزا مكس لحوم",
+     "price": 155,
+     "img": "assets/webp/real-بيتزا-مكس-لحوم.webp",
+     "tag": "مميز",
+     "desc": "لحم مفروم وسجق وبسطرمة مع خضار.",
+     "menuKey": "pizza"
+    }
+   ]
+  },
+  "syrian": {
+   "title": "السوري",
+   "crumb": "السوري",
+   "eyebrow": "",
+   "intro": "ساندوتشات سوري بخلطات مميزة",
+   "items": [
+    {
+     "id": "syrian-سوري-بطاطس-فارم",
+     "name": "سوري بطاطس فارم",
+     "price": 30,
+     "img": "assets/webp/real-سوري-بطاطس-فارم.webp",
+     "tag": "مميز",
+     "desc": "بطاطس مقرمشة متبّلة مع صوص البيت.",
+     "menuKey": "syrian"
+    },
+    {
+     "id": "syrian-سوري-برجر-سادة",
+     "name": "سوري برجر سادة",
+     "price": 65,
+     "img": "assets/webp/real-سوري-برجر-سادة.webp",
+     "tag": "مميز",
+     "desc": "لحم بقري مشوي مع خبز طازج.",
+     "menuKey": "syrian"
+    },
+    {
+     "id": "syrian-سوري-برجر-بيض",
+     "name": "سوري برجر بيض",
+     "price": 80,
+     "img": "assets/webp/real-سوري-برجر-بيض.webp",
+     "tag": "مميز",
+     "desc": "برجر مع بيض مقلي وبيكون.",
+     "menuKey": "syrian"
+    },
+    {
+     "id": "syrian-سوري-برجر-جبنة",
+     "name": "سوري برجر جبنة",
+     "price": 80,
+     "img": "assets/webp/real-سوري-برجر-جبنة.webp",
+     "tag": "مميز",
+     "desc": "برجر مع شريحة جبنة ذايب.",
+     "menuKey": "syrian"
+    },
+    {
+     "id": "syrian-سوري-برجر-ميكس",
+     "name": "سوري برجر ميكس",
+     "price": 90,
+     "img": "assets/webp/real-سوري-برجر-ميكس.webp",
+     "tag": "مميز",
+     "desc": "برجر مزدوج مع بيكون وجبنة.",
+     "menuKey": "syrian"
+    },
+    {
+     "id": "syrian-سوري-سوسيس-ميكسكانو",
+     "name": "سوري سوسيس ميكسكانو",
+     "price": 80,
+     "img": "assets/webp/real-سوري-سوسيس-ميكسكانو.webp",
+     "tag": "مميز",
+     "desc": "سجق مشوي في خبز مع بطاطس.",
+     "menuKey": "syrian"
+    },
+    {
+     "id": "syrian-سوري-هوت-دوج",
+     "name": "سوري هوت دوج",
+     "price": 80,
+     "img": "assets/webp/real-سوري-هوت-دوج.webp",
+     "tag": "مميز",
+     "desc": "هوت دوج ساخن مع كاتشب وخردل.",
+     "menuKey": "syrian"
+    },
+    {
+     "id": "syrian-سوري-كفتة-جريل",
+     "name": "سوري كفتة جريل",
+     "price": 80,
+     "img": "assets/webp/real-سوري-كفتة-جريل.webp",
+     "tag": "مميز",
+     "desc": "كفتة لحم مشوية على الفحم.",
+     "menuKey": "syrian"
+    },
+    {
+     "id": "syrian-سوري-تونة",
+     "name": "سوري تونة",
+     "price": 80,
+     "img": "assets/webp/real-سوري-تونة.webp",
+     "tag": "مميز",
+     "desc": "تونة مع خضار في خبز.",
+     "menuKey": "syrian"
+    },
+    {
+     "id": "syrian-سوري-فراخ-بانيه",
+     "name": "سوري فراخ بانيه",
+     "price": 80,
+     "img": "assets/webp/real-سوري-فراخ-بانيه.webp",
+     "tag": "مميز",
+     "desc": "فراخ وجبنة في خبز مضغوط.",
+     "menuKey": "syrian"
+    },
+    {
+     "id": "syrian-سوري-فراخ-الأجريك",
+     "name": "سوري فراخ الأجريك",
+     "price": 90,
+     "img": "assets/webp/real-سوري-فراخ-الأجريك.webp",
+     "tag": "مميز",
+     "desc": "فراخ مقرمشة مع خضار وطماطم.",
+     "menuKey": "syrian"
+    },
+    {
+     "id": "syrian-سوري-فراخ-شيش-طاووق",
+     "name": "سوري فراخ شيش طاووق",
+     "price": 90,
+     "img": "assets/webp/real-سوري-فراخ-شيش-طاووق.webp",
+     "tag": "مميز",
+     "desc": "فراخ مشوية على سيخ مع صوص ثوم.",
+     "menuKey": "syrian"
+    },
+    {
+     "id": "syrian-سوري-سوبر-كرانشي",
+     "name": "سوري سوبر كرانشي",
+     "price": 90,
+     "img": "assets/webp/real-سوري-سوبر-كرانشي.webp",
+     "tag": "مميز",
+     "desc": "كرانشي مقرمش مع صوص البيت الخاص.",
+     "menuKey": "syrian"
+    },
+    {
+     "id": "syrian-سوري-كرسبى",
+     "name": "سوري كرسبى",
+     "price": 90,
+     "img": "assets/webp/real-سوري-كرسبى.webp",
+     "tag": "مميز",
+     "desc": "كرسبي فراخ مقرمشة مع خضار.",
+     "menuKey": "syrian"
+    },
+    {
+     "id": "syrian-سوري-زنجر",
+     "name": "سوري زنجر",
+     "price": 90,
+     "img": "assets/webp/real-سوري-زنجر.webp",
+     "tag": "مميز",
+     "desc": "زنجر فراخ حار مع خضار.",
+     "menuKey": "syrian"
+    },
+    {
+     "id": "syrian-سوري-تشيكن-إسبشال-موتزاريلا",
+     "name": "سوري تشيكن إسبشال موتزاريلا",
+     "price": 100,
+     "img": "assets/webp/real-سوري-تشيكن-إسبشال-موتزاريلا.webp",
+     "tag": "مميز",
+     "desc": "فراخ مع موزاريلا ذايب في خبز.",
+     "menuKey": "syrian"
+    },
+    {
+     "id": "syrian-سوري-كوردن-بلو",
+     "name": "سوري كوردن بلو",
+     "price": 100,
+     "img": "assets/webp/real-سوري-كوردن-بلو.webp",
+     "tag": "مميز",
+     "desc": "شيبس كوردن أزرق مع ديبو.",
+     "menuKey": "syrian"
+    },
+    {
+     "id": "syrian-سوري-فاهيتا-فراخ",
+     "name": "سوري فاهيتا فراخ",
+     "price": 95,
+     "img": "assets/webp/real-سوري-فاهيتا-فراخ.webp",
+     "tag": "مميز",
+     "desc": "فراخ مع فلفل ألوان وصلصة فاهيتا.",
+     "menuKey": "syrian"
+    },
+    {
+     "id": "syrian-سوري-شاورما-فراخ",
+     "name": "سوري شاورما فراخ",
+     "price": 90,
+     "img": "assets/webp/real-سوري-شاورما-فراخ.webp",
+     "tag": "مميز",
+     "desc": "فراخ مشوية مع ثوم وخضار في خبز.",
+     "menuKey": "syrian"
+    }
+   ]
+  },
+  "pasta": {
+   "title": "الباستا",
+   "crumb": "الباستا",
+   "eyebrow": "",
+   "intro": "باستا طازة بالصوصات المختلفة",
+   "items": [
+    {
+     "id": "pasta-باستا-نجرسكو-فراخ",
+     "name": "باستا نجرسكو فراخ",
+     "price": 75,
+     "img": "assets/webp/real-باستا-نجرسكو-فراخ.webp",
+     "tag": "مميز",
+     "desc": "فراخ مشوية مع ليمون وزيت زيتون.",
+     "menuKey": "pasta"
+    },
+    {
+     "id": "pasta-باستا-الفريدو-فراخ",
+     "name": "باستا الفريدو فراخ",
+     "price": 75,
+     "img": "assets/webp/real-باستا-الفريدو-فراخ.webp",
+     "tag": "مميز",
+     "desc": "فيتوتشيني بصوص الكريمة البيضاء.",
+     "menuKey": "pasta"
+    },
+    {
+     "id": "pasta-باستا-بلونيز-مفروم",
+     "name": "باستا بلونيز مفروم",
+     "price": 75,
+     "img": "assets/webp/real-باستا-بلونيز-مفروم.webp",
+     "tag": "مميز",
+     "desc": "باستا بالفطر في صوص كريمي.",
+     "menuKey": "pasta"
+    },
+    {
+     "id": "pasta-باستا-سجق",
+     "name": "باستا سجق",
+     "price": 75,
+     "img": "assets/webp/real-باستا-سجق.webp",
+     "tag": "مميز",
+     "desc": "باستا بالبيكون مع صوص كريمي.",
+     "menuKey": "pasta"
+    },
+    {
+     "id": "pasta-باستا-سوسيس",
+     "name": "باستا سوسيس",
+     "price": 75,
+     "img": "assets/webp/real-باستا-سوسيس.webp",
+     "tag": "مميز",
+     "desc": "سباجتي بصوص الطماطم والسجق.",
+     "menuKey": "pasta"
+    },
+    {
+     "id": "pasta-باستا-زنجر",
+     "name": "باستا زنجر",
+     "price": 75,
+     "img": "assets/webp/real-باستا-زنجر.webp",
+     "tag": "مميز",
+     "desc": "باستا بصوص الطماطم مع كرانشي فراخ.",
+     "menuKey": "pasta"
+    },
+    {
+     "id": "pasta-باستا-إستربس",
+     "name": "باستا إستربس",
+     "price": 75,
+     "img": "assets/webp/real-باستا-إستربس.webp",
+     "tag": "مميز",
+     "desc": "ستيك مشوي مع بطاطس.",
+     "menuKey": "pasta"
+    },
+    {
+     "id": "pasta-باستا-بانيه",
+     "name": "باستا بانيه",
+     "price": 75,
+     "img": "assets/webp/real-باستا-بانيه.webp",
+     "tag": "مميز",
+     "desc": "باستا مخبوزة بالجبنة.",
+     "menuKey": "pasta"
+    },
+    {
+     "id": "pasta-باستا-كرسبى",
+     "name": "باستا كرسبى",
+     "price": 75,
+     "img": "assets/webp/real-باستا-كرسبى.webp",
+     "tag": "مميز",
+     "desc": "باستا مع فراخ مقرمشة.",
+     "menuKey": "pasta"
+    }
+   ]
+  },
+  "sweet_crepe": {
+   "title": "الكريب الحلو",
+   "crumb": "الكريب الحلو",
+   "eyebrow": "",
+   "intro": "كريب حلو بالشوكولا والكريمة",
+   "items": [
+    {
+     "id": "sweet_crepe-كريب-شيكولاتة-نوتيلا",
+     "name": "كريب شيكولاتة نوتيلا",
+     "price": 45,
+     "img": "assets/webp/real-كريب-شيكولاتة-نوتيلا.webp",
+     "tag": "مميز",
+     "desc": "كريب بالشوكولاتة والموز.",
+     "menuKey": "sweet_crepe"
+    },
+    {
+     "id": "sweet_crepe-كريب-شيكولاتة-نيو-كريمة",
+     "name": "كريب شيكولاتة نيو كريمة",
+     "price": 45,
+     "img": "assets/webp/real-كريب-شيكولاتة-نيو-كريمة.webp",
+     "tag": "مميز",
+     "desc": "كريب بالشوكولاتة والكريمة.",
+     "menuKey": "sweet_crepe"
+    },
+    {
+     "id": "sweet_crepe-كريب-ميكس-تيلا",
+     "name": "كريب ميكس تيلا",
+     "price": 65,
+     "img": "assets/webp/real-كريب-ميكس-تيلا.webp",
+     "tag": "مميز",
+     "desc": "كريب بالشوكولاتة والموز والصوص.",
+     "menuKey": "sweet_crepe"
+    },
+    {
+     "id": "sweet_crepe-كريب-شيكولاتة-بيضاء",
+     "name": "كريب شيكولاتة بيضاء",
+     "price": 50,
+     "img": "assets/webp/real-كريب-شيكولاتة-بيضاء.webp",
+     "tag": "مميز",
+     "desc": "كريب بالشوكولاتة البيضاء.",
+     "menuKey": "sweet_crepe"
+    },
+    {
+     "id": "sweet_crepe-كريب-كراميل",
+     "name": "كريب كراميل",
+     "price": 45,
+     "img": "assets/webp/real-كريب-كراميل.webp",
+     "tag": "مميز",
+     "desc": "كريب بصوص الكراميل.",
+     "menuKey": "sweet_crepe"
+    },
+    {
+     "id": "sweet_crepe-كريب-لوتس",
+     "name": "كريب لوتس",
+     "price": 50,
+     "img": "assets/webp/real-كريب-لوتس.webp",
+     "tag": "مميز",
+     "desc": "كريب بزبدة اللوتس.",
+     "menuKey": "sweet_crepe"
+    }
+   ]
+  },
+  "waffle": {
+   "title": "الوافل",
+   "crumb": "الوافل",
+   "eyebrow": "",
+   "intro": "وافل طازة بالشوكولا والفاكهة",
+   "items": [
+    {
+     "id": "waffle-وافل-شيكولاتة",
+     "name": "وافل شيكولاتة",
+     "price": 50,
+     "img": "assets/webp/real-وافل-شيكولاتة.webp",
+     "tag": "مميز",
+     "desc": "وافل ساخن بصوص الشوكولاتة.",
+     "menuKey": "waffle"
+    },
+    {
+     "id": "waffle-وافل-كراميل",
+     "name": "وافل كراميل",
+     "price": 70,
+     "img": "assets/webp/real-وافل-كراميل.webp",
+     "tag": "مميز",
+     "desc": "وافل بصوص الكراميل.",
+     "menuKey": "waffle"
+    },
+    {
+     "id": "waffle-وافل-شيكولاتة-نيو-كريمة",
+     "name": "وافل شيكولاتة نيو كريمة",
+     "price": 70,
+     "img": "assets/webp/real-وافل-شيكولاتة-نيو-كريمة.webp",
+     "tag": "مميز",
+     "desc": "وافل بالشوكولاتة والكريمة.",
+     "menuKey": "waffle"
+    },
+    {
+     "id": "waffle-وافل-شيكولاتة-بيضاء",
+     "name": "وافل شيكولاتة بيضاء",
+     "price": 50,
+     "img": "assets/webp/real-وافل-شيكولاتة-بيضاء.webp",
+     "tag": "مميز",
+     "desc": "وافل بالشوكولاتة البيضاء.",
+     "menuKey": "waffle"
+    },
+    {
+     "id": "waffle-وافل-شيكولاتة-موز",
+     "name": "وافل شيكولاتة موز",
+     "price": 85,
+     "img": "assets/webp/real-وافل-شيكولاتة-موز.webp",
+     "tag": "مميز",
+     "desc": "وافل بالموز والشوكولاتة.",
+     "menuKey": "waffle"
+    },
+    {
+     "id": "waffle-وافل-لوتس",
+     "name": "وافل لوتس",
+     "price": 75,
+     "img": "assets/webp/real-وافل-لوتس.webp",
+     "tag": "مميز",
+     "desc": "وافل بزبدة اللوتس.",
+     "menuKey": "waffle"
+    },
+    {
+     "id": "waffle-وافل-شيكولاتة-نوعين-فاكهة",
+     "name": "وافل شيكولاتة نوعين فاكهة",
+     "price": 85,
+     "img": "assets/webp/real-وافل-شيكولاتة-نوعين-فاكهة.webp",
+     "tag": "مميز",
+     "desc": "وافل بفاكهتين وشوكولاتة.",
+     "menuKey": "waffle"
+    },
+    {
+     "id": "waffle-وافل-شيكولاتة-مارس",
+     "name": "وافل شيكولاتة مارس",
+     "price": 85,
+     "img": "assets/webp/real-وافل-شيكولاتة-مارس.webp",
+     "tag": "مميز",
+     "desc": "وافل بقطع مارس.",
+     "menuKey": "waffle"
+    },
+    {
+     "id": "waffle-وافل-مالتيزرز",
+     "name": "وافل مالتيزرز",
+     "price": 85,
+     "img": "assets/webp/real-وافل-مالتيزرز.webp",
+     "tag": "مميز",
+     "desc": "وافل مالتيزرز بالشوكولاتة.",
+     "menuKey": "waffle"
+    },
+    {
+     "id": "waffle-وافل-اسنيكرز",
+     "name": "وافل اسنيكرز",
+     "price": 85,
+     "img": "assets/webp/real-وافل-اسنيكرز.webp",
+     "tag": "مميز",
+     "desc": "وافل بقطع اسنيكرز.",
+     "menuKey": "waffle"
+    },
+    {
+     "id": "waffle-وافل-شيكولاتة-مورو",
+     "name": "وافل شيكولاتة مورو",
+     "price": 80,
+     "img": "assets/webp/real-وافل-شيكولاتة-مورو.webp",
+     "tag": "مميز",
+     "desc": "وافل بصوص مورو.",
+     "menuKey": "waffle"
+    },
+    {
+     "id": "waffle-وافل-شيكولاتة-ميكس-صوصات",
+     "name": "وافل شيكولاتة ميكس صوصات",
+     "price": 85,
+     "img": "assets/webp/real-وافل-شيكولاتة-ميكس-صوصات.webp",
+     "tag": "مميز",
+     "desc": "وافل بخلطة صوصات وفواكه.",
+     "menuKey": "waffle"
+    }
+   ]
+  }
+ },
+ "content": {
+  "brand": {
+   "name": "كريب الهنا",
+   "name2": "الهنا",
+   "english": "Crepe El Hana",
+   "logoEmoji": "🍕",
+   "tagline": "كريب الهنا — Crepe El Hana"
+  },
+  "hero": {
+   "eyebrow": "كريب الهنا — Crepe El Hana",
+   "title1": "عايز تاكل إيه؟",
+   "title2": "النهارده؟",
+   "desc": "بيتزا طازجة، ساندوتشات سوري، باستا، كريب حلو ووافل. اختار القسم، وحدد الحجم، وابعت طلبك على واتساب بضغطة واحدة.",
+   "cta": "شوف القائمة ↓",
+   "cta2": "قائمة الأكل ←"
+  },
+  "home": {
+   "sectionsTitle": "اختار القسم اللي يعجبك",
+   "sectionsSub": "كل قسم يورّيك قائمته لوحده بكل الأنواع اللي فيه",
+   "steps": [
+    "اختار القسم",
+    "اختار الأكلة",
+    "ظبّط طلبك",
+    "ابعت على واتساب"
+   ]
+  },
+  "menu": {
+   "eyebrow": "قائمة الأكل",
+   "title": "قائمة",
+   "titleHl": "كريب الهنا",
+   "desc": "اختار القسم من التابات اللي تحت، وحدد حجم البيتزا أو اطلب الأكلة على طول عن طريق واتساب.",
+   "crumb": "قائمة الأكل"
+  },
+  "product": {
+   "pageTitle": "كريب الهنا — ظبّط طلبك",
+   "builderTitle": "ظبّط طلبك",
+   "hint": "اختار اللي يعجبك والسعر هيتحدّث لوحده",
+   "sizeLabel": "اختار الحجم",
+   "sizeRequired": "مطلوب",
+   "extrasLabel": "الإضافات",
+   "extrasRequired": "اختياري",
+   "notesLabel": "ملاحظات للطلب",
+   "notesPlaceholder": "مثال: من غير بصل، الصوص لوحده...",
+   "qtyLabel": "الكمية",
+   "sumItem": "سعر الأكلة",
+   "sumExtras": "الإضافات",
+   "sumTotal": "الإجمالي",
+   "footer": "هنبعت اسم الأكلة والحجم والإضافات والكمية على واتساب"
+  },
+  "sections": [
+   {
+    "key": "pizza",
+    "num": "01",
+    "title": "البيتزا",
+    "desc": "17 نوع بيتزا بثلاثة أحجام",
+    "img": "assets/webp/hero-pizza.webp"
+   },
+   {
+    "key": "syrian",
+    "num": "02",
+    "title": "سوري",
+    "desc": "19 ساندوتش سوري متنوع",
+    "img": "assets/webp/burger.webp"
+   },
+   {
+    "key": "pasta",
+    "num": "03",
+    "title": "الباستا",
+    "desc": "9 أصناف باستا طازجة",
+    "img": "assets/webp/crepe.webp"
+   },
+   {
+    "key": "sweet_crepe",
+    "num": "04",
+    "title": "الكريب الحلو",
+    "desc": "6 أنواع كريب حلو",
+    "img": "assets/webp/sweet-crepe.webp"
+   },
+   {
+    "key": "waffle",
+    "num": "05",
+    "title": "الوافل",
+    "desc": "12 نوع وافل طازج",
+    "img": "assets/webp/sweet-crepe.webp"
+   }
+  ]
+ },
+ "sizeKeys": {
+  "pizza": {
+   "صغير": "small",
+   "وسط": "medium",
+   "كبير": "large"
+  }
+ },
+ "_images": [
+  {
+   "path": "assets/webp/real-باستا-إستربس-400.webp",
+   "name": "real-باستا-إستربس-400.webp",
+   "dim": "400×400",
+   "kb": 21.6,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-باستا-إستربس.webp",
+   "name": "real-باستا-إستربس.webp",
+   "dim": "800×800",
+   "kb": 69.1,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-باستا-الفريدو-فراخ-400.webp",
+   "name": "real-باستا-الفريدو-فراخ-400.webp",
+   "dim": "400×400",
+   "kb": 31.6,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-باستا-الفريدو-فراخ.webp",
+   "name": "real-باستا-الفريدو-فراخ.webp",
+   "dim": "800×800",
+   "kb": 96.7,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-باستا-بانيه-400.webp",
+   "name": "real-باستا-بانيه-400.webp",
+   "dim": "400×400",
+   "kb": 31.7,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-باستا-بانيه.webp",
+   "name": "real-باستا-بانيه.webp",
+   "dim": "800×800",
+   "kb": 101.5,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-باستا-بلونيز-مفروم-400.webp",
+   "name": "real-باستا-بلونيز-مفروم-400.webp",
+   "dim": "400×400",
+   "kb": 23.5,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-باستا-بلونيز-مفروم.webp",
+   "name": "real-باستا-بلونيز-مفروم.webp",
+   "dim": "800×800",
+   "kb": 75.1,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-باستا-زنجر-400.webp",
+   "name": "real-باستا-زنجر-400.webp",
+   "dim": "400×400",
+   "kb": 32.0,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-باستا-زنجر.webp",
+   "name": "real-باستا-زنجر.webp",
+   "dim": "800×800",
+   "kb": 104.1,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-باستا-سجق-400.webp",
+   "name": "real-باستا-سجق-400.webp",
+   "dim": "400×400",
+   "kb": 25.8,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-باستا-سجق.webp",
+   "name": "real-باستا-سجق.webp",
+   "dim": "800×800",
+   "kb": 80.7,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-باستا-سوسيس-400.webp",
+   "name": "real-باستا-سوسيس-400.webp",
+   "dim": "400×400",
+   "kb": 16.2,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-باستا-سوسيس.webp",
+   "name": "real-باستا-سوسيس.webp",
+   "dim": "800×800",
+   "kb": 43.8,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-باستا-كرسبى-400.webp",
+   "name": "real-باستا-كرسبى-400.webp",
+   "dim": "400×400",
+   "kb": 32.6,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-باستا-كرسبى.webp",
+   "name": "real-باستا-كرسبى.webp",
+   "dim": "800×800",
+   "kb": 95.9,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-باستا-نجرسكو-فراخ-400.webp",
+   "name": "real-باستا-نجرسكو-فراخ-400.webp",
+   "dim": "400×400",
+   "kb": 28.3,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-باستا-نجرسكو-فراخ.webp",
+   "name": "real-باستا-نجرسكو-فراخ.webp",
+   "dim": "800×800",
+   "kb": 90.0,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-بيتزا-بسطرمة-400.webp",
+   "name": "real-بيتزا-بسطرمة-400.webp",
+   "dim": "400×400",
+   "kb": 35.8,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-بيتزا-بسطرمة.webp",
+   "name": "real-بيتزا-بسطرمة.webp",
+   "dim": "800×800",
+   "kb": 113.7,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-بيتزا-تونة-400.webp",
+   "name": "real-بيتزا-تونة-400.webp",
+   "dim": "400×400",
+   "kb": 37.9,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-بيتزا-تونة.webp",
+   "name": "real-بيتزا-تونة.webp",
+   "dim": "800×800",
+   "kb": 131.7,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-بيتزا-خضار-400.webp",
+   "name": "real-بيتزا-خضار-400.webp",
+   "dim": "400×400",
+   "kb": 31.1,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-بيتزا-خضار.webp",
+   "name": "real-بيتزا-خضار.webp",
+   "dim": "800×800",
+   "kb": 103.4,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-بيتزا-سجق-400.webp",
+   "name": "real-بيتزا-سجق-400.webp",
+   "dim": "400×400",
+   "kb": 35.3,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-بيتزا-سجق.webp",
+   "name": "real-بيتزا-سجق.webp",
+   "dim": "800×800",
+   "kb": 127.6,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-بيتزا-سلامى-400.webp",
+   "name": "real-بيتزا-سلامى-400.webp",
+   "dim": "400×400",
+   "kb": 34.3,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-بيتزا-سلامى.webp",
+   "name": "real-بيتزا-سلامى.webp",
+   "dim": "800×800",
+   "kb": 114.8,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-بيتزا-سوبر-سوبريم-400.webp",
+   "name": "real-بيتزا-سوبر-سوبريم-400.webp",
+   "dim": "400×400",
+   "kb": 40.7,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-بيتزا-سوبر-سوبريم.webp",
+   "name": "real-بيتزا-سوبر-سوبريم.webp",
+   "dim": "800×800",
+   "kb": 124.1,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-بيتزا-سوسيس-400.webp",
+   "name": "real-بيتزا-سوسيس-400.webp",
+   "dim": "400×400",
+   "kb": 26.8,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-بيتزا-سوسيس.webp",
+   "name": "real-بيتزا-سوسيس.webp",
+   "dim": "800×800",
+   "kb": 83.1,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-بيتزا-فراخ-400.webp",
+   "name": "real-بيتزا-فراخ-400.webp",
+   "dim": "400×400",
+   "kb": 34.6,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-بيتزا-فراخ-باربيكيو-400.webp",
+   "name": "real-بيتزا-فراخ-باربيكيو-400.webp",
+   "dim": "400×400",
+   "kb": 46.4,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-بيتزا-فراخ-باربيكيو.webp",
+   "name": "real-بيتزا-فراخ-باربيكيو.webp",
+   "dim": "800×800",
+   "kb": 170.2,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-بيتزا-فراخ-بانيه-ناجتس-400.webp",
+   "name": "real-بيتزا-فراخ-بانيه-ناجتس-400.webp",
+   "dim": "400×400",
+   "kb": 39.3,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-بيتزا-فراخ-بانيه-ناجتس.webp",
+   "name": "real-بيتزا-فراخ-بانيه-ناجتس.webp",
+   "dim": "800×800",
+   "kb": 155.4,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-بيتزا-فراخ-رانش-400.webp",
+   "name": "real-بيتزا-فراخ-رانش-400.webp",
+   "dim": "400×400",
+   "kb": 43.6,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-بيتزا-فراخ-رانش.webp",
+   "name": "real-بيتزا-فراخ-رانش.webp",
+   "dim": "800×800",
+   "kb": 154.9,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-بيتزا-فراخ-كرسبى-400.webp",
+   "name": "real-بيتزا-فراخ-كرسبى-400.webp",
+   "dim": "400×400",
+   "kb": 27.6,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-بيتزا-فراخ-كرسبى.webp",
+   "name": "real-بيتزا-فراخ-كرسبى.webp",
+   "dim": "800×800",
+   "kb": 92.3,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-بيتزا-فراخ.webp",
+   "name": "real-بيتزا-فراخ.webp",
+   "dim": "800×800",
+   "kb": 106.2,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-بيتزا-مارجريتا-400.webp",
+   "name": "real-بيتزا-مارجريتا-400.webp",
+   "dim": "400×400",
+   "kb": 29.4,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-بيتزا-مارجريتا.webp",
+   "name": "real-بيتزا-مارجريتا.webp",
+   "dim": "800×800",
+   "kb": 97.0,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-بيتزا-مشروم-400.webp",
+   "name": "real-بيتزا-مشروم-400.webp",
+   "dim": "400×400",
+   "kb": 45.0,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-بيتزا-مشروم.webp",
+   "name": "real-بيتزا-مشروم.webp",
+   "dim": "800×800",
+   "kb": 160.7,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-بيتزا-مكس-فراخ-400.webp",
+   "name": "real-بيتزا-مكس-فراخ-400.webp",
+   "dim": "400×400",
+   "kb": 47.9,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-بيتزا-مكس-فراخ.webp",
+   "name": "real-بيتزا-مكس-فراخ.webp",
+   "dim": "800×800",
+   "kb": 166.2,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-بيتزا-مكس-لحوم-400.webp",
+   "name": "real-بيتزا-مكس-لحوم-400.webp",
+   "dim": "400×400",
+   "kb": 41.8,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-بيتزا-مكس-لحوم.webp",
+   "name": "real-بيتزا-مكس-لحوم.webp",
+   "dim": "800×800",
+   "kb": 149.4,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-بيتزا-ميكس-جبن-400.webp",
+   "name": "real-بيتزا-ميكس-جبن-400.webp",
+   "dim": "400×400",
+   "kb": 25.6,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-بيتزا-ميكس-جبن.webp",
+   "name": "real-بيتزا-ميكس-جبن.webp",
+   "dim": "800×800",
+   "kb": 76.6,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-سوري-برجر-بيض-400.webp",
+   "name": "real-سوري-برجر-بيض-400.webp",
+   "dim": "400×400",
+   "kb": 28.2,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-سوري-برجر-بيض.webp",
+   "name": "real-سوري-برجر-بيض.webp",
+   "dim": "800×800",
+   "kb": 82.3,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-سوري-برجر-جبنة-400.webp",
+   "name": "real-سوري-برجر-جبنة-400.webp",
+   "dim": "400×400",
+   "kb": 27.6,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-سوري-برجر-جبنة.webp",
+   "name": "real-سوري-برجر-جبنة.webp",
+   "dim": "800×800",
+   "kb": 90.5,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-سوري-برجر-سادة-400.webp",
+   "name": "real-سوري-برجر-سادة-400.webp",
+   "dim": "400×400",
+   "kb": 23.2,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-سوري-برجر-سادة.webp",
+   "name": "real-سوري-برجر-سادة.webp",
+   "dim": "800×800",
+   "kb": 76.2,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-سوري-برجر-ميكس-400.webp",
+   "name": "real-سوري-برجر-ميكس-400.webp",
+   "dim": "400×400",
+   "kb": 16.7,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-سوري-برجر-ميكس.webp",
+   "name": "real-سوري-برجر-ميكس.webp",
+   "dim": "800×800",
+   "kb": 53.4,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-سوري-بطاطس-فارم-400.webp",
+   "name": "real-سوري-بطاطس-فارم-400.webp",
+   "dim": "400×400",
+   "kb": 39.4,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-سوري-بطاطس-فارم.webp",
+   "name": "real-سوري-بطاطس-فارم.webp",
+   "dim": "800×800",
+   "kb": 135.5,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-سوري-تشيكن-إسبشال-موتزاريلا-400.webp",
+   "name": "real-سوري-تشيكن-إسبشال-موتزاريلا-400.webp",
+   "dim": "400×400",
+   "kb": 19.9,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-سوري-تشيكن-إسبشال-موتزاريلا.webp",
+   "name": "real-سوري-تشيكن-إسبشال-موتزاريلا.webp",
+   "dim": "800×800",
+   "kb": 54.1,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-سوري-تونة-400.webp",
+   "name": "real-سوري-تونة-400.webp",
+   "dim": "400×400",
+   "kb": 20.7,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-سوري-تونة.webp",
+   "name": "real-سوري-تونة.webp",
+   "dim": "800×800",
+   "kb": 61.2,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-سوري-زنجر-400.webp",
+   "name": "real-سوري-زنجر-400.webp",
+   "dim": "400×400",
+   "kb": 17.7,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-سوري-زنجر.webp",
+   "name": "real-سوري-زنجر.webp",
+   "dim": "800×800",
+   "kb": 49.6,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-سوري-سوبر-كرانشي-400.webp",
+   "name": "real-سوري-سوبر-كرانشي-400.webp",
+   "dim": "400×400",
+   "kb": 18.4,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-سوري-سوبر-كرانشي.webp",
+   "name": "real-سوري-سوبر-كرانشي.webp",
+   "dim": "800×800",
+   "kb": 47.2,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-سوري-سوسيس-ميكسكانو-400.webp",
+   "name": "real-سوري-سوسيس-ميكسكانو-400.webp",
+   "dim": "400×400",
+   "kb": 22.1,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-سوري-سوسيس-ميكسكانو.webp",
+   "name": "real-سوري-سوسيس-ميكسكانو.webp",
+   "dim": "800×800",
+   "kb": 76.6,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-سوري-شاورما-فراخ-400.webp",
+   "name": "real-سوري-شاورما-فراخ-400.webp",
+   "dim": "400×400",
+   "kb": 18.8,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-سوري-شاورما-فراخ.webp",
+   "name": "real-سوري-شاورما-فراخ.webp",
+   "dim": "800×800",
+   "kb": 62.4,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-سوري-فاهيتا-فراخ-400.webp",
+   "name": "real-سوري-فاهيتا-فراخ-400.webp",
+   "dim": "400×400",
+   "kb": 35.6,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-سوري-فاهيتا-فراخ.webp",
+   "name": "real-سوري-فاهيتا-فراخ.webp",
+   "dim": "800×800",
+   "kb": 120.3,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-سوري-فراخ-الأجريك-400.webp",
+   "name": "real-سوري-فراخ-الأجريك-400.webp",
+   "dim": "400×400",
+   "kb": 17.8,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-سوري-فراخ-الأجريك.webp",
+   "name": "real-سوري-فراخ-الأجريك.webp",
+   "dim": "800×800",
+   "kb": 54.7,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-سوري-فراخ-بانيه-400.webp",
+   "name": "real-سوري-فراخ-بانيه-400.webp",
+   "dim": "400×400",
+   "kb": 20.9,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-سوري-فراخ-بانيه.webp",
+   "name": "real-سوري-فراخ-بانيه.webp",
+   "dim": "800×800",
+   "kb": 72.2,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-سوري-فراخ-شيش-طاووق-400.webp",
+   "name": "real-سوري-فراخ-شيش-طاووق-400.webp",
+   "dim": "400×400",
+   "kb": 26.8,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-سوري-فراخ-شيش-طاووق.webp",
+   "name": "real-سوري-فراخ-شيش-طاووق.webp",
+   "dim": "800×800",
+   "kb": 86.5,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-سوري-كرسبى-400.webp",
+   "name": "real-سوري-كرسبى-400.webp",
+   "dim": "400×400",
+   "kb": 21.7,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-سوري-كرسبى.webp",
+   "name": "real-سوري-كرسبى.webp",
+   "dim": "800×800",
+   "kb": 72.8,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-سوري-كفتة-جريل-400.webp",
+   "name": "real-سوري-كفتة-جريل-400.webp",
+   "dim": "400×400",
+   "kb": 41.5,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-سوري-كفتة-جريل.webp",
+   "name": "real-سوري-كفتة-جريل.webp",
+   "dim": "800×800",
+   "kb": 126.5,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-سوري-كوردن-بلو-400.webp",
+   "name": "real-سوري-كوردن-بلو-400.webp",
+   "dim": "400×400",
+   "kb": 30.2,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-سوري-كوردن-بلو.webp",
+   "name": "real-سوري-كوردن-بلو.webp",
+   "dim": "800×800",
+   "kb": 78.7,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-سوري-هوت-دوج-400.webp",
+   "name": "real-سوري-هوت-دوج-400.webp",
+   "dim": "400×400",
+   "kb": 18.0,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-سوري-هوت-دوج.webp",
+   "name": "real-سوري-هوت-دوج.webp",
+   "dim": "800×800",
+   "kb": 47.5,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-كريب-شيكولاتة-بيضاء-400.webp",
+   "name": "real-كريب-شيكولاتة-بيضاء-400.webp",
+   "dim": "400×400",
+   "kb": 27.3,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-كريب-شيكولاتة-بيضاء.webp",
+   "name": "real-كريب-شيكولاتة-بيضاء.webp",
+   "dim": "800×800",
+   "kb": 85.6,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-كريب-شيكولاتة-نوتيلا-400.webp",
+   "name": "real-كريب-شيكولاتة-نوتيلا-400.webp",
+   "dim": "400×400",
+   "kb": 26.3,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-كريب-شيكولاتة-نوتيلا.webp",
+   "name": "real-كريب-شيكولاتة-نوتيلا.webp",
+   "dim": "800×800",
+   "kb": 84.0,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-كريب-شيكولاتة-نيو-كريمة-400.webp",
+   "name": "real-كريب-شيكولاتة-نيو-كريمة-400.webp",
+   "dim": "400×400",
+   "kb": 20.5,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-كريب-شيكولاتة-نيو-كريمة.webp",
+   "name": "real-كريب-شيكولاتة-نيو-كريمة.webp",
+   "dim": "800×800",
+   "kb": 71.5,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-كريب-كراميل-400.webp",
+   "name": "real-كريب-كراميل-400.webp",
+   "dim": "400×400",
+   "kb": 42.9,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-كريب-كراميل.webp",
+   "name": "real-كريب-كراميل.webp",
+   "dim": "800×800",
+   "kb": 164.7,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-كريب-لوتس-400.webp",
+   "name": "real-كريب-لوتس-400.webp",
+   "dim": "400×400",
+   "kb": 30.1,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-كريب-لوتس.webp",
+   "name": "real-كريب-لوتس.webp",
+   "dim": "800×800",
+   "kb": 90.7,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-كريب-ميكس-تيلا-400.webp",
+   "name": "real-كريب-ميكس-تيلا-400.webp",
+   "dim": "400×400",
+   "kb": 24.4,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-كريب-ميكس-تيلا.webp",
+   "name": "real-كريب-ميكس-تيلا.webp",
+   "dim": "800×800",
+   "kb": 80.6,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-وافل-اسنيكرز-400.webp",
+   "name": "real-وافل-اسنيكرز-400.webp",
+   "dim": "400×400",
+   "kb": 26.1,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-وافل-اسنيكرز.webp",
+   "name": "real-وافل-اسنيكرز.webp",
+   "dim": "800×800",
+   "kb": 75.2,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-وافل-شيكولاتة-400.webp",
+   "name": "real-وافل-شيكولاتة-400.webp",
+   "dim": "400×400",
+   "kb": 35.6,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-وافل-شيكولاتة-بيضاء-400.webp",
+   "name": "real-وافل-شيكولاتة-بيضاء-400.webp",
+   "dim": "400×400",
+   "kb": 15.3,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-وافل-شيكولاتة-بيضاء.webp",
+   "name": "real-وافل-شيكولاتة-بيضاء.webp",
+   "dim": "800×800",
+   "kb": 44.4,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-وافل-شيكولاتة-مارس-400.webp",
+   "name": "real-وافل-شيكولاتة-مارس-400.webp",
+   "dim": "400×400",
+   "kb": 17.3,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-وافل-شيكولاتة-مارس.webp",
+   "name": "real-وافل-شيكولاتة-مارس.webp",
+   "dim": "800×800",
+   "kb": 50.6,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-وافل-شيكولاتة-مورو-400.webp",
+   "name": "real-وافل-شيكولاتة-مورو-400.webp",
+   "dim": "400×400",
+   "kb": 22.0,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-وافل-شيكولاتة-مورو.webp",
+   "name": "real-وافل-شيكولاتة-مورو.webp",
+   "dim": "800×800",
+   "kb": 65.4,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-وافل-شيكولاتة-موز-400.webp",
+   "name": "real-وافل-شيكولاتة-موز-400.webp",
+   "dim": "400×400",
+   "kb": 29.2,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-وافل-شيكولاتة-موز.webp",
+   "name": "real-وافل-شيكولاتة-موز.webp",
+   "dim": "800×800",
+   "kb": 80.7,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-وافل-شيكولاتة-ميكس-صوصات-400.webp",
+   "name": "real-وافل-شيكولاتة-ميكس-صوصات-400.webp",
+   "dim": "400×400",
+   "kb": 23.7,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-وافل-شيكولاتة-ميكس-صوصات.webp",
+   "name": "real-وافل-شيكولاتة-ميكس-صوصات.webp",
+   "dim": "800×800",
+   "kb": 65.6,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-وافل-شيكولاتة-نوعين-فاكهة-400.webp",
+   "name": "real-وافل-شيكولاتة-نوعين-فاكهة-400.webp",
+   "dim": "400×400",
+   "kb": 35.9,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-وافل-شيكولاتة-نوعين-فاكهة.webp",
+   "name": "real-وافل-شيكولاتة-نوعين-فاكهة.webp",
+   "dim": "800×800",
+   "kb": 119.1,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-وافل-شيكولاتة-نيو-كريمة-400.webp",
+   "name": "real-وافل-شيكولاتة-نيو-كريمة-400.webp",
+   "dim": "400×400",
+   "kb": 24.4,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-وافل-شيكولاتة-نيو-كريمة.webp",
+   "name": "real-وافل-شيكولاتة-نيو-كريمة.webp",
+   "dim": "800×800",
+   "kb": 66.7,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-وافل-شيكولاتة.webp",
+   "name": "real-وافل-شيكولاتة.webp",
+   "dim": "800×800",
+   "kb": 110.5,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-وافل-كراميل-400.webp",
+   "name": "real-وافل-كراميل-400.webp",
+   "dim": "400×400",
+   "kb": 24.8,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-وافل-كراميل.webp",
+   "name": "real-وافل-كراميل.webp",
+   "dim": "800×800",
+   "kb": 82.3,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-وافل-لوتس-400.webp",
+   "name": "real-وافل-لوتس-400.webp",
+   "dim": "400×400",
+   "kb": 17.6,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-وافل-لوتس.webp",
+   "name": "real-وافل-لوتس.webp",
+   "dim": "800×800",
+   "kb": 51.3,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/real-وافل-مالتيزرز-400.webp",
+   "name": "real-وافل-مالتيزرز-400.webp",
+   "dim": "400×400",
+   "kb": 20.9,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/real-وافل-مالتيزرز.webp",
+   "name": "real-وافل-مالتيزرز.webp",
+   "dim": "800×800",
+   "kb": 67.0,
+   "w": 800,
+   "h": 800
+  }
+ ],
+ "extras": {
+  "pizza": [
+   {
+    "name": "جبن إضافي",
+    "price": 35
+   },
+   {
+    "name": "تونة إضافية",
+    "price": 55
+   },
+   {
+    "name": "زيتون",
+    "price": 20
+   },
+   {
+    "name": "هالبينو",
+    "price": 20
+   }
+  ],
+  "syrian": [
+   {
+    "name": "جبنة شيدر",
+    "price": 25
+   },
+   {
+    "name": "لحم إضافي",
+    "price": 40
+   },
+   {
+    "name": "صوص خاص",
+    "price": 15
+   }
+  ],
+  "pasta": [
+   {
+    "name": "جبنة إضافية",
+    "price": 30
+   },
+   {
+    "name": "دجاج إضافي",
+    "price": 50
+   },
+   {
+    "name": "صوص كريمي",
+    "price": 15
+   }
+  ],
+  "sweet_crepe": [
+   {
+    "name": "شوكولاتة إضافية",
+    "price": 15
+   },
+   {
+    "name": "فواكه",
+    "price": 20
+   },
+   {
+    "name": "مكسرات",
+    "price": 25
+   }
+  ],
+  "waffle": [
+   {
+    "name": "شوكولاتة",
+    "price": 15
+   },
+   {
+    "name": "كريمة",
+    "price": 20
+   },
+   {
+    "name": "عسل",
+    "price": 10
+   }
+  ]
+ }
 }
