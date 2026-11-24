@@ -294,7 +294,7 @@
     data.content.sections.push({
       key: 'new' + (data.content.sections.length + 1),
       num: String(data.content.sections.length + 1).padStart(2, '0'),
-      title: 'قسم جديد', desc: 'وصف القسم', img: 'assets/webp/sq-professional-overhead-pizza-isolated-dar-2.webp'
+      title: 'قسم جديد', desc: 'وصف القسم', img: 'assets/webp/real-بيتزا-مارجريتا.webp'
     });
     markDirty(); renderSections();
   };
