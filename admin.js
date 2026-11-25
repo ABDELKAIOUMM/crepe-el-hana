@@ -79,6 +79,95 @@
       });
     } catch (e) { /* تجاهل */ }
     images = list;
+    repairDeadImagePaths();
+  }
+
+  /* ═══════════ 2ب) إصلاح مسارات الصور الميتة ═══════════
+     لو أي صورة مربوطة بمسار مش موجود على السيرفر (404)
+     — زي الصور القديمة اللي اتشالت — بنصلّحها تلقائي
+     ونختار بديل صحيح من نفس القسم. */
+  var DEAD_PATTERNS = /hero-pizza|burger\.webp|crepe\.webp|sweet-crepe\.webp|sq-professional-overhead|professional-overhead-pizza-isolated|assets\/upload\/pngwing/i;
+
+  function sectionFallbackImg(key) {
+    var map = {
+      pizza: 'assets/webp/real-بيتزا-مارجريتا.webp',
+      syrian: 'assets/webp/real-سوري-برجر-سادة.webp',
+      pasta: 'assets/webp/real-باستا-إستربس.webp',
+      sweet_crepe: 'assets/webp/real-كريب-شيكولاتة-نوتيلا.webp',
+      waffle: 'assets/webp/real-وافل-شيكولاتة.webp'
+    };
+    return map[key] || 'assets/webp/real-بيتزا-مارجريتا.webp';
+  }
+
+  function itemFallbackImg(catKey, idx) {
+    /* 1) catalog (أصح مصدر — بييجي من data.json المنشور) */
+    var c = data && data.catalog ? data.catalog[catKey] : null;
+    if (c && c.items && c.items[idx] && c.items[idx].img && !DEAD_PATTERNS.test(c.items[idx].img)) {
+      return c.items[idx].img;
+    }
+    /* 2) menu — بس لو المسار مش ميت */
+    var m = data && data.menu ? data.menu.filter(function (s) { return s.key === catKey; })[0] : null;
+    if (m && m.items && m.items[idx] && m.items[idx].img && !DEAD_PATTERNS.test(m.items[idx].img)) {
+      return m.items[idx].img;
+    }
+    /* 3) الصورة الافتراضية للقسم */
+    return sectionFallbackImg(catKey);
+  }
+
+  function repairDeadImagePaths() {
+    if (!data) return;
+    var fixed = 0;
+
+    /* 1) صور الأقسام */
+    var secs = (data.content && data.content.sections) || [];
+    secs.forEach(function (s) {
+      var bad = !s.img || DEAD_PATTERNS.test(s.img);
+      if (!bad && images.length) {
+        /* لو المسار موجود بس مش في الـmanifest ومش dataUrl → مش موجود على السيرفر */
+        var known = images.some(function (im) { return im.path === s.img; });
+        if (!known && !/^data:image\//.test(s.img)) bad = true;
+      }
+      if (bad) { s.img = sectionFallbackImg(s.key); fixed++; }
+    });
+
+    /* 2) catalog الأول — عشان الـmenu ياخد منه المسار الصح */
+    if (data.catalog) {
+      Object.keys(data.catalog).forEach(function (ck) {
+        (data.catalog[ck].items || []).forEach(function (ci, i) {
+          if (!ci.img || DEAD_PATTERNS.test(ci.img)) { ci.img = itemFallbackImg(ck, i); fixed++; }
+        });
+      });
+    }
+
+    /* 3) صور الأصناف */
+    (data.menu || []).forEach(function (sec) {
+      (sec.items || []).forEach(function (it, i) {
+        var bad = !it.img || DEAD_PATTERNS.test(it.img);
+        if (!bad && images.length) {
+          var known = images.some(function (im) { return im.path === it.img; });
+          if (!known && !/^data:image\//.test(it.img)) bad = true;
+        }
+        if (bad) { it.img = itemFallbackImg(sec.key, i); fixed++; }
+      });
+    });
+
+    /* 4) راجعين تاني: نضمن إن كل المسارات بقت سليمة فعلاً
+       (المصدر الصح = data.json المنشور) */
+    var baseItems = {};
+    (data.menu || []).forEach(function (s) {
+      (s.items || []).forEach(function (it) { baseItems[it.id] = it.img; });
+    });
+    (data.menu || []).forEach(function (sec) {
+      (sec.items || []).forEach(function (it) {
+        if (baseItems[it.id] && (!it.img || DEAD_PATTERNS.test(it.img))) it.img = baseItems[it.id];
+      });
+    });
+
+    if (fixed) {
+      console.warn('[CMS] تم إصلاح ' + fixed + ' مسار صورة قديم');
+      markDirty();
+    }
+    return fixed;
   }
 
   /* ═══════════ 3) الدخول ═══════════ */
@@ -239,12 +328,13 @@
     var grid = $('#sectionsGrid');
     var cs = data.content.sections;
     grid.innerHTML = cs.map(function (s, i) {
+      var src = imgSrc(s.img);
       return '' +
         '<div class="sec-card" data-i="' + i + '">' +
           '<div class="sec-num">' + esc(s.num) + '</div>' +
-          '<img class="sec-img" src="' + esc(s.img) + '" alt="" loading="lazy">' +
+          '<img class="sec-img" src="' + esc(src) + '" alt="" loading="lazy">' +
           '<div class="sec-thumb-row">' +
-            '<img src="' + esc(s.img) + '" alt="">' +
+            '<img src="' + esc(src) + '" alt="">' +
             '<input class="inp sm" data-f="img" value="' + esc(s.img) + '">' +
             '<button class="btn ghost sm" data-pick="' + i + '">🖼️</button>' +
           '</div>' +
@@ -266,8 +356,9 @@
         inp.oninput = function () {
           data.content.sections[i][inp.dataset.f] = inp.value;
           if (inp.dataset.f === 'img') {
-            card.querySelector('.sec-img').src = inp.value;
-            card.querySelector('.sec-thumb-row img').src = inp.value;
+            var r = imgSrc(inp.value);
+            card.querySelector('.sec-img').src = r;
+            card.querySelector('.sec-thumb-row img').src = r;
           }
           markDirty();
         };
@@ -1372,6 +1463,18 @@
   };
 
   $('#btnSave').onclick = function () { saveData(); };
+  $('#btnReset').onclick = function () {
+    confirmBox('إعادة ضبط التعديلات',
+      'هترجع كل التعديلات المحفوظة في المتصفح لحالة data.json الأصلية. كل الصور هترجع لحالتها المنشورة. متأكد؟')(
+      function () {
+        try {
+          localStorage.removeItem(LS_KEY);
+          localStorage.removeItem(SCALE_KEY);
+          localStorage.removeItem(IMGS_KEY);
+        } catch (e) { /* تجاهل */ }
+        location.reload();
+      });
+  };
   $('#btnLogout').onclick = function () {
     if (dirty) {
       confirmBox('فيه تعديلات مش متحفوظة', 'تحب تحفظها الأول؟')(
