@@ -22,7 +22,7 @@
     waffle: 'assets/webp/sweet-crepe.webp'
   };
 
-  function repairDeadPaths(menu, content, catalog, base) {
+  function repairDeadPaths(menu, content, catalog, base, userImages) {
     var fixed = 0;
 
     /* ═══ قائمة الصور الموجودة فعلاً (من data.json المنشور) ═══
@@ -33,19 +33,43 @@
       base._images.forEach(function (im) { if (im && im.path) validPaths[im.path] = 1; });
     }
 
-    /* مسار ميت؟ (1) pattern معروف، (2) أو مش موجود في قائمة الصور المنشورة */
+    /* ═══ الصور اللي المستخدم رفعها بنفسه (عنده dataUrl ليها)
+       → دي مش ماتة، ومينفعش نفرط فيها. */
+    var userPaths = {};
+    (userImages || []).forEach(function (im) {
+      if (im && im.path && im.dataUrl) userPaths[im.path] = 1;
+    });
+
+    /* مسار ميت؟ (1) pattern معروف، (2) أو مش موجود في قائمة الصور المنشورة
+       (3) ومش صورة رفعها المستخدم */
     function isDead(path) {
       if (!path) return true;
+      if (/^data:image\//.test(path)) return false;
+      if (userPaths[path]) return false;
       if (DEAD_RE.test(path)) return true;
-      if (validPaths && !/^data:image\//.test(path)) return !validPaths[path];
+      if (validPaths) return !validPaths[path];
       return false;
     }
 
     /* صور الأقسام */
     if (content && content.sections) {
+      /* ═══ لو المستخدم غيّر صورة القسم بنفسه (رفعها) → نسيبها.
+             بس لو القيمة المحفوظة قديمة ومش زي المنشور (من نسخة سابقة)
+             → نرجّعها للمنشور. */
+      var baseSec = {};
+      if (base && base.content && base.content.sections) {
+        base.content.sections.forEach(function (bs) { baseSec[bs.key] = bs.img; });
+      }
       content.sections.forEach(function (s) {
+        var isUserUpload = /^data:image\//.test(s.img || '') || userPaths[s.img || ''];
+        var published = baseSec[s.key];
+        if (published && !isUserUpload && s.img !== published && !isDead(s.img)) {
+          /* قيمة محفوظة من نسخة أقدم — نرجّعها للمنشور */
+          s.img = published; fixed++;
+          return;
+        }
         if (isDead(s.img)) {
-          s.img = SEC_FALLBACK[s.key] || SEC_FALLBACK.pizza; fixed++;
+          s.img = published || SEC_FALLBACK[s.key] || SEC_FALLBACK.pizza; fixed++;
         }
       });
     }
@@ -319,7 +343,8 @@
           window.__MENU_OVERRIDE,
           window.__CONTENT_OVERRIDE,
           window.__CATALOG_OVERRIDE,
-          base
+          base,
+          window.__IMAGES_MANIFEST
         );
         if (__fixed) {
           console.warn('[Site] تم إصلاح ' + __fixed + ' مسار صورة قديم في التعديلات المحفوظة');
@@ -358,7 +383,7 @@
         if (saved.sizeKeys) window.__SIZEKEYS_OVERRIDE = saved.sizeKeys;
         if (saved.extras) window.__EXTRAS_OVERRIDE = saved.extras;
         if (saved._images) window.__IMAGES_MANIFEST = saved._images;
-        repairDeadPaths(window.__MENU_OVERRIDE, window.__CONTENT_OVERRIDE, window.__CATALOG_OVERRIDE, null);
+        repairDeadPaths(window.__MENU_OVERRIDE, window.__CONTENT_OVERRIDE, window.__CATALOG_OVERRIDE, null, window.__IMAGES_MANIFEST);
         applyContent(window.__CONTENT_OVERRIDE);
         (function tryReapply(attempt) {
           if (typeof window.__reapplyData === 'function') {

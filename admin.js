@@ -127,14 +127,27 @@
 
     /* 1) صور الأقسام */
     var secs = (data.content && data.content.sections) || [];
+    /* الصورة المنشورة الصح لكل قسم (من data.json) */
+    var publishedSec = {};
+    if (publishedBase && publishedBase.content && publishedBase.content.sections) {
+      publishedBase.content.sections.forEach(function (bs) { publishedSec[bs.key] = bs.img; });
+    }
     secs.forEach(function (s) {
+      var isUserUpload = /^data:image\//.test(s.img || '')
+        || images.some(function (im) { return im.path === s.img && im.dataUrl; });
+      var published = publishedSec[s.key];
+      /* القيمة المحفوظة من نسخة أقدم → نرجّعها للمنشور */
+      if (published && !isUserUpload && s.img !== published) {
+        s.img = published; fixed++;
+        return;
+      }
       var bad = !s.img || DEAD_PATTERNS.test(s.img);
       if (!bad && images.length) {
         /* لو المسار موجود بس مش في الـmanifest ومش dataUrl → مش موجود على السيرفر */
         var known = images.some(function (im) { return im.path === s.img; });
         if (!known && !/^data:image\//.test(s.img)) bad = true;
       }
-      if (bad) { s.img = sectionFallbackImg(s.key); fixed++; }
+      if (bad) { s.img = published || sectionFallbackImg(s.key); fixed++; }
     });
 
     /* 2) catalog الأول — عشان الـmenu ياخد منه المسار الصح */
