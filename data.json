@@ -1436,35 +1436,35 @@
     "num": "01",
     "title": "البيتزا",
     "desc": "17 نوع بيتزا بثلاثة أحجام",
-    "img": "assets/webp/hero-pizza.webp"
+    "img": "assets/webp/real-بيتزا-مارجريتا.webp"
    },
    {
     "key": "syrian",
     "num": "02",
     "title": "سوري",
     "desc": "19 ساندوتش سوري متنوع",
-    "img": "assets/webp/burger.webp"
+    "img": "assets/webp/real-سوري-برجر-سادة.webp"
    },
    {
     "key": "pasta",
     "num": "03",
     "title": "الباستا",
     "desc": "9 أصناف باستا طازجة",
-    "img": "assets/webp/crepe.webp"
+    "img": "assets/webp/real-باستا-إستربس.webp"
    },
    {
     "key": "sweet_crepe",
     "num": "04",
     "title": "الكريب الحلو",
     "desc": "6 أنواع كريب حلو",
-    "img": "assets/webp/sweet-crepe.webp"
+    "img": "assets/webp/real-كريب-شيكولاتة-نوتيلا.webp"
    },
    {
     "key": "waffle",
     "num": "05",
     "title": "الوافل",
     "desc": "12 نوع وافل طازج",
-    "img": "assets/webp/sweet-crepe.webp"
+    "img": "assets/webp/real-وافل-شيكولاتة.webp"
    }
   ]
  },

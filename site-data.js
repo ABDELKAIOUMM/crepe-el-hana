@@ -8,6 +8,80 @@
   var LS_KEY = 'crepeElHana_data_v1';
   var SCALE_KEY = 'crepeElHana_scale_v1';
 
+  /* ═══════════ إصلاح مسارات الصور القديمة/الميتة ═══════════
+     لو المستخدم عنده تعديلات قديمة في المتصفح (localStorage) بتشير
+     لصور اتشالت من السيرفر → بنصلّحها أوتوماتيك ونعرض الصورة الصح.
+     بدون ده، أي صورة يتغيّر مسارها بتفضل مكسورة عنده. */
+  var DEAD_RE = /hero-pizza|burger\.webp|crepe\.webp|sweet-crepe\.webp|sq-professional-overhead|professional-overhead-pizza-isolated|assets\/upload\/pngwing/i;
+
+  var SEC_FALLBACK = {
+    pizza: 'assets/webp/real-بيتزا-مارجريتا.webp',
+    syrian: 'assets/webp/real-سوري-برجر-سادة.webp',
+    pasta: 'assets/webp/real-باستا-إستربس.webp',
+    sweet_crepe: 'assets/webp/real-كريب-شيكولاتة-نوتيلا.webp',
+    waffle: 'assets/webp/real-وافل-شيكولاتة.webp'
+  };
+
+  function repairDeadPaths(menu, content, catalog, base) {
+    var fixed = 0;
+    /* صور الأقسام */
+    if (content && content.sections) {
+      content.sections.forEach(function (s) {
+        if (!s.img || DEAD_RE.test(s.img)) {
+          s.img = SEC_FALLBACK[s.key] || SEC_FALLBACK.pizza; fixed++;
+        }
+      });
+    }
+    /* صور الأصناف */
+    if (menu) {
+      menu.forEach(function (sec) {
+        (sec.items || []).forEach(function (it, i) {
+          if (!it.img || DEAD_RE.test(it.img)) {
+            it.img = (catalog && catalog[sec.key] && catalog[sec.key].items && catalog[sec.key].items[i] && catalog[sec.key].items[i].img)
+              || SEC_FALLBACK[sec.key] || SEC_FALLBACK.pizza;
+            fixed++;
+          }
+        });
+      });
+    }
+    /* catalog — بنصلّحه بعد الـmenu عشان الـmenu ياخد منه المسار الصح.
+       ولو اتصلح هنا الأول، الـmenu هياخد منه المسار الميت تاني. */
+    if (catalog) {
+      Object.keys(catalog).forEach(function (ck) {
+        (catalog[ck].items || []).forEach(function (ci, i) {
+          if (!ci.img || DEAD_RE.test(ci.img)) {
+            ci.img = (menu && menu[ck] && menu[ck].items && menu[ck].items[i] && menu[ck].items[i].img)
+              || SEC_FALLBACK[ck] || SEC_FALLBACK.pizza;
+            fixed++;
+          }
+        });
+      });
+    }
+    /* ═══ راجعين تاني: نضمن إن كل المسارات بقت سليمة فعلاً ═══
+       (المصدر الصح = data.json المنشور) */
+    if (base) {
+      var baseItems = {};
+      (base.menu || []).forEach(function (s) {
+        (s.items || []).forEach(function (it) { baseItems[it.id] = it.img; });
+      });
+      if (menu) {
+        menu.forEach(function (sec) {
+          (sec.items || []).forEach(function (it) {
+            if (baseItems[it.id] && (!it.img || DEAD_RE.test(it.img))) it.img = baseItems[it.id];
+          });
+        });
+      }
+      if (catalog) {
+        Object.keys(catalog).forEach(function (ck) {
+          (catalog[ck].items || []).forEach(function (ci) {
+            if (baseItems[ci.id] && (!ci.img || DEAD_RE.test(ci.img))) ci.img = baseItems[ci.id];
+          });
+        });
+      }
+    }
+    return fixed;
+  }
+
   function applyScale(s) {
     s = s || {};
     var r = document.documentElement.style;
@@ -75,7 +149,26 @@
       if (ttl) ttl.textContent = s.title || ttl.textContent;
       if (dsc) dsc.textContent = s.desc || dsc.textContent;
       var im = card.querySelector('img');
-      if (im && s.img) im.src = s.img;
+      if (im && s.img) {
+        /* لو الصورة اترفعت من اللوحة → بتكون dataUrl في الـmanifest.
+           لازم نمرّرها من imageSrc() عشان تظهر، وإلا الـpath بيطلع 404. */
+        var src = (typeof imageSrc === 'function') ? imageSrc(s.img) : s.img;
+        if (im.getAttribute('src') !== src) im.setAttribute('src', src);
+        im.removeAttribute('srcset');
+        /* لو الصورة معروضة/مش موجودة → نخفيها بدل ما نظهر أيقونة مكسورة */
+        im.onerror = function () {
+          this.style.visibility = 'hidden';
+          var holder = this.parentElement;
+          if (holder && !holder.querySelector('.cat-fallback')) {
+            var fb = document.createElement('span');
+            fb.className = 'cat-fallback';
+            fb.setAttribute('aria-hidden', 'true');
+            fb.textContent = '🍽️';
+            holder.appendChild(fb);
+          }
+        };
+        im.style.visibility = '';
+      }
       var href = card.getAttribute('href');
       if (href && s.key) card.setAttribute('href', 'category.html?cat=' + s.key);
     }
@@ -208,6 +301,27 @@
         window.__IMAGES_MANIFEST = (saved._images && saved._images.length)
           ? saved._images : base._images;
 
+        /* ═══ إصلاح أي مسار صورة ميتة في تعديلات المستخدم المحفوظة ═══ */
+        var __fixed = repairDeadPaths(
+          window.__MENU_OVERRIDE,
+          window.__CONTENT_OVERRIDE,
+          window.__CATALOG_OVERRIDE,
+          base
+        );
+        if (__fixed) {
+          console.warn('[Site] تم إصلاح ' + __fixed + ' مسار صورة قديم في التعديلات المحفوظة');
+          /* نحفظ التصحيح عشان يتثبت */
+          try {
+            var __s = JSON.parse(localStorage.getItem(LS_KEY) || 'null');
+            if (__s) {
+              __s.menu = window.__MENU_OVERRIDE;
+              __s.content = window.__CONTENT_OVERRIDE;
+              __s.catalog = window.__CATALOG_OVERRIDE;
+              localStorage.setItem(LS_KEY, JSON.stringify(__s));
+            }
+          } catch (e) { /* تجاهل */ }
+        }
+
         applyContent(window.__CONTENT_OVERRIDE);
         /* ═══ مهم: إعادة الرسم لازم تتم بعد ما site.js يجهّز دواله ═══
            أحياناً الـfetch بيخلص قبل ما site.js يتحمّل → بنحفظ الدالة
@@ -231,6 +345,7 @@
         if (saved.sizeKeys) window.__SIZEKEYS_OVERRIDE = saved.sizeKeys;
         if (saved.extras) window.__EXTRAS_OVERRIDE = saved.extras;
         if (saved._images) window.__IMAGES_MANIFEST = saved._images;
+        repairDeadPaths(window.__MENU_OVERRIDE, window.__CONTENT_OVERRIDE, window.__CATALOG_OVERRIDE, null);
         applyContent(saved.content);
         (function tryReapply(attempt) {
           if (typeof window.__reapplyData === 'function') {
