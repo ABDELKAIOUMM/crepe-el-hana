@@ -1436,35 +1436,35 @@
     "num": "01",
     "title": "البيتزا",
     "desc": "17 نوع بيتزا بثلاثة أحجام",
-    "img": "assets/webp/real-بيتزا-مارجريتا.webp"
+    "img": "assets/webp/hero-pizza.webp"
    },
    {
     "key": "syrian",
     "num": "02",
     "title": "سوري",
     "desc": "19 ساندوتش سوري متنوع",
-    "img": "assets/webp/real-سوري-برجر-سادة.webp"
+    "img": "assets/webp/burger.webp"
    },
    {
     "key": "pasta",
     "num": "03",
     "title": "الباستا",
     "desc": "9 أصناف باستا طازجة",
-    "img": "assets/webp/real-باستا-إستربس.webp"
+    "img": "assets/webp/crepe.webp"
    },
    {
     "key": "sweet_crepe",
     "num": "04",
     "title": "الكريب الحلو",
     "desc": "6 أنواع كريب حلو",
-    "img": "assets/webp/real-كريب-شيكولاتة-نوتيلا.webp"
+    "img": "assets/webp/sweet-crepe.webp"
    },
    {
     "key": "waffle",
     "num": "05",
     "title": "الوافل",
     "desc": "12 نوع وافل طازج",
-    "img": "assets/webp/real-وافل-شيكولاتة.webp"
+    "img": "assets/webp/sweet-crepe.webp"
    }
   ]
  },
@@ -1476,6 +1476,86 @@
   }
  },
  "_images": [
+  {
+   "path": "assets/webp/burger-400.webp",
+   "name": "burger-400.webp",
+   "dim": "400×400",
+   "kb": 28.4,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/burger-800.webp",
+   "name": "burger-800.webp",
+   "dim": "800×800",
+   "kb": 78.2,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/burger.webp",
+   "name": "burger.webp",
+   "dim": "1024×1024",
+   "kb": 113.3,
+   "w": 1024,
+   "h": 1024
+  },
+  {
+   "path": "assets/webp/crepe-400.webp",
+   "name": "crepe-400.webp",
+   "dim": "400×400",
+   "kb": 28.6,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/crepe-800.webp",
+   "name": "crepe-800.webp",
+   "dim": "800×800",
+   "kb": 76.5,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/crepe.webp",
+   "name": "crepe.webp",
+   "dim": "1024×1024",
+   "kb": 107.8,
+   "w": 1024,
+   "h": 1024
+  },
+  {
+   "path": "assets/webp/hero-pizza-1200.webp",
+   "name": "hero-pizza-1200.webp",
+   "dim": "1200×670",
+   "kb": 79.5,
+   "w": 1200,
+   "h": 670
+  },
+  {
+   "path": "assets/webp/hero-pizza-400.webp",
+   "name": "hero-pizza-400.webp",
+   "dim": "400×223",
+   "kb": 13.6,
+   "w": 400,
+   "h": 223
+  },
+  {
+   "path": "assets/webp/hero-pizza-800.webp",
+   "name": "hero-pizza-800.webp",
+   "dim": "800×447",
+   "kb": 43.0,
+   "w": 800,
+   "h": 447
+  },
+  {
+   "path": "assets/webp/hero-pizza.webp",
+   "name": "hero-pizza.webp",
+   "dim": "1376×768",
+   "kb": 100.3,
+   "w": 1376,
+   "h": 768
+  },
   {
    "path": "assets/webp/real-باستا-إستربس-400.webp",
    "name": "real-باستا-إستربس-400.webp",
@@ -2008,7 +2088,7 @@
    "path": "assets/webp/real-سوري-زنجر-400.webp",
    "name": "real-سوري-زنجر-400.webp",
    "dim": "400×400",
-   "kb": 17.7,
+   "kb": 22.2,
    "w": 400,
    "h": 400
   },
@@ -2016,7 +2096,7 @@
    "path": "assets/webp/real-سوري-زنجر.webp",
    "name": "real-سوري-زنجر.webp",
    "dim": "800×800",
-   "kb": 49.6,
+   "kb": 63.1,
    "w": 800,
    "h": 800
   },
@@ -2472,7 +2552,7 @@
    "path": "assets/webp/real-وافل-مالتيزرز-400.webp",
    "name": "real-وافل-مالتيزرز-400.webp",
    "dim": "400×400",
-   "kb": 20.9,
+   "kb": 18.4,
    "w": 400,
    "h": 400
   },
@@ -2480,9 +2560,33 @@
    "path": "assets/webp/real-وافل-مالتيزرز.webp",
    "name": "real-وافل-مالتيزرز.webp",
    "dim": "800×800",
-   "kb": 67.0,
+   "kb": 72.0,
    "w": 800,
    "h": 800
+  },
+  {
+   "path": "assets/webp/sweet-crepe-400.webp",
+   "name": "sweet-crepe-400.webp",
+   "dim": "400×400",
+   "kb": 25.0,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/sweet-crepe-800.webp",
+   "name": "sweet-crepe-800.webp",
+   "dim": "800×800",
+   "kb": 66.5,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/sweet-crepe.webp",
+   "name": "sweet-crepe.webp",
+   "dim": "1024×1024",
+   "kb": 95.8,
+   "w": 1024,
+   "h": 1024
   }
  ],
  "extras": {
