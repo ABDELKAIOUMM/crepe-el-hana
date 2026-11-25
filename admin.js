@@ -54,10 +54,13 @@
   }
 
   /* ═══════════ 2) تحميل من data.json (أول مرة) ═══════════ */
+  var publishedBase = null;   /* نسخة data.json المنشورة — مصدر الحقيقة */
+
   function fetchDefaults() {
     return fetch('data.json?v=' + Date.now())
       .then(function (r) { return r.json(); })
       .then(function (d) {
+        publishedBase = d;
         data = d;
         scanImages();
         saveData(true);
@@ -100,17 +103,21 @@
   }
 
   function itemFallbackImg(catKey, idx) {
-    /* 1) catalog (أصح مصدر — بييجي من data.json المنشور) */
+    /* 1) data.json المنشور — المصدر الأصح على الإطلاق */
+    var pb = publishedBase && publishedBase.menu
+      ? publishedBase.menu.filter(function (s) { return s.key === catKey; })[0] : null;
+    if (pb && pb.items && pb.items[idx] && pb.items[idx].img) return pb.items[idx].img;
+    /* 2) catalog */
     var c = data && data.catalog ? data.catalog[catKey] : null;
     if (c && c.items && c.items[idx] && c.items[idx].img && !DEAD_PATTERNS.test(c.items[idx].img)) {
       return c.items[idx].img;
     }
-    /* 2) menu — بس لو المسار مش ميت */
+    /* 3) menu — بس لو المسار مش ميت */
     var m = data && data.menu ? data.menu.filter(function (s) { return s.key === catKey; })[0] : null;
     if (m && m.items && m.items[idx] && m.items[idx].img && !DEAD_PATTERNS.test(m.items[idx].img)) {
       return m.items[idx].img;
     }
-    /* 3) الصورة الافتراضية للقسم */
+    /* 4) الصورة الافتراضية للقسم */
     return sectionFallbackImg(catKey);
   }
 
@@ -196,6 +203,7 @@
     fetch('data.json?v=' + Date.now())
       .then(function (r) { return r.json(); })
       .then(function (d) {
+        publishedBase = d;
         data = mergeDefaults(d);
         scanImages();
         saveData(true);

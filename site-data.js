@@ -24,60 +24,63 @@
 
   function repairDeadPaths(menu, content, catalog, base) {
     var fixed = 0;
+
+    /* ═══ قائمة الصور الموجودة فعلاً (من data.json المنشور) ═══
+       أي مسار بره القائمة دي = ميت (404) → لازم يتصلح. */
+    var validPaths = null;
+    if (base && base._images && base._images.length) {
+      validPaths = {};
+      base._images.forEach(function (im) { if (im && im.path) validPaths[im.path] = 1; });
+    }
+
+    /* مسار ميت؟ (1) pattern معروف، (2) أو مش موجود في قائمة الصور المنشورة */
+    function isDead(path) {
+      if (!path) return true;
+      if (DEAD_RE.test(path)) return true;
+      if (validPaths && !/^data:image\//.test(path)) return !validPaths[path];
+      return false;
+    }
+
     /* صور الأقسام */
     if (content && content.sections) {
       content.sections.forEach(function (s) {
-        if (!s.img || DEAD_RE.test(s.img)) {
+        if (isDead(s.img)) {
           s.img = SEC_FALLBACK[s.key] || SEC_FALLBACK.pizza; fixed++;
         }
       });
     }
-    /* صور الأصناف */
-    if (menu) {
-      menu.forEach(function (sec) {
-        (sec.items || []).forEach(function (it, i) {
-          if (!it.img || DEAD_RE.test(it.img)) {
-            it.img = (catalog && catalog[sec.key] && catalog[sec.key].items && catalog[sec.key].items[i] && catalog[sec.key].items[i].img)
-              || SEC_FALLBACK[sec.key] || SEC_FALLBACK.pizza;
-            fixed++;
-          }
-        });
-      });
-    }
-    /* catalog — بنصلّحه بعد الـmenu عشان الـmenu ياخد منه المسار الصح.
-       ولو اتصلح هنا الأول، الـmenu هياخد منه المسار الميت تاني. */
+    /* catalog — بنصلّحه قبل الـmenu عشان الـmenu ياخد منه المسار الصح.
+       ولو اتصلح بعد الـmenu، الـmenu هياخد منه المسار الميت تاني. */
     if (catalog) {
       Object.keys(catalog).forEach(function (ck) {
         (catalog[ck].items || []).forEach(function (ci, i) {
-          if (!ci.img || DEAD_RE.test(ci.img)) {
-            ci.img = (menu && menu[ck] && menu[ck].items && menu[ck].items[i] && menu[ck].items[i].img)
+          if (isDead(ci.img)) {
+            ci.img = (menu && menu[ck] && menu[ck].items && menu[ck].items[i] && menu[ck].items[i].img && !isDead(menu[ck].items[i].img))
+              ? menu[ck].items[i].img
+              : (base && base.menu && base.menu.filter(function (x) { return x.key === ck; })[0]
+                 && base.menu.filter(function (x) { return x.key === ck; })[0].items[i]
+                 && base.menu.filter(function (x) { return x.key === ck; })[0].items[i].img)
               || SEC_FALLBACK[ck] || SEC_FALLBACK.pizza;
             fixed++;
           }
         });
       });
     }
-    /* ═══ راجعين تاني: نضمن إن كل المسارات بقت سليمة فعلاً ═══
-       (المصدر الصح = data.json المنشور) */
-    if (base) {
-      var baseItems = {};
-      (base.menu || []).forEach(function (s) {
-        (s.items || []).forEach(function (it) { baseItems[it.id] = it.img; });
+    /* صور الأصناف */
+    if (menu) {
+      menu.forEach(function (sec) {
+        (sec.items || []).forEach(function (it, i) {
+          if (isDead(it.img)) {
+            it.img = (catalog && catalog[sec.key] && catalog[sec.key].items && catalog[sec.key].items[i] && catalog[sec.key].items[i].img && !isDead(catalog[sec.key].items[i].img))
+              ? catalog[sec.key].items[i].img
+              : (base && base.menu && base.menu.filter(function (x) { return x.key === sec.key; })[0]
+                 && base.menu.filter(function (x) { return x.key === sec.key; })[0].items[i]
+                 && base.menu.filter(function (x) { return x.key === sec.key; })[0].items[i].img)
+              || SEC_FALLBACK[sec.key] || SEC_FALLBACK.pizza;
+            fixed++;
+          }
+        });
       });
-      if (menu) {
-        menu.forEach(function (sec) {
-          (sec.items || []).forEach(function (it) {
-            if (baseItems[it.id] && (!it.img || DEAD_RE.test(it.img))) it.img = baseItems[it.id];
-          });
-        });
-      }
-      if (catalog) {
-        Object.keys(catalog).forEach(function (ck) {
-          (catalog[ck].items || []).forEach(function (ci) {
-            if (baseItems[ci.id] && (!ci.img || DEAD_RE.test(ci.img))) ci.img = baseItems[ci.id];
-          });
-        });
-      }
     }
     return fixed;
   }
@@ -153,10 +156,20 @@
         /* لو الصورة اترفعت من اللوحة → بتكون dataUrl في الـmanifest.
            لازم نمرّرها من imageSrc() عشان تظهر، وإلا الـpath بيطلع 404. */
         var src = (typeof imageSrc === 'function') ? imageSrc(s.img) : s.img;
+        /* نحفظ الصورة الأصلية من الـHTML كشبكة أمان */
+        if (!im.getAttribute('data-fallback-src')) {
+          im.setAttribute('data-fallback-src', im.getAttribute('src') || '');
+        }
         if (im.getAttribute('src') !== src) im.setAttribute('src', src);
         im.removeAttribute('srcset');
-        /* لو الصورة معروضة/مش موجودة → نخفيها بدل ما نظهر أيقونة مكسورة */
+        /* شبكة أمان: لو الصورة الجديدة مش موجودة → نرجع لأصل الـHTML،
+           ولو هي كمان مش موجودة → نظهر إيموجي بدل مربع مكسور. */
         im.onerror = function () {
+          var fbSrc = this.getAttribute('data-fallback-src');
+          if (fbSrc && this.getAttribute('src') !== fbSrc) {
+            this.setAttribute('src', fbSrc);
+            return;
+          }
           this.style.visibility = 'hidden';
           var holder = this.parentElement;
           if (holder && !holder.querySelector('.cat-fallback')) {
@@ -346,7 +359,7 @@
         if (saved.extras) window.__EXTRAS_OVERRIDE = saved.extras;
         if (saved._images) window.__IMAGES_MANIFEST = saved._images;
         repairDeadPaths(window.__MENU_OVERRIDE, window.__CONTENT_OVERRIDE, window.__CATALOG_OVERRIDE, null);
-        applyContent(saved.content);
+        applyContent(window.__CONTENT_OVERRIDE);
         (function tryReapply(attempt) {
           if (typeof window.__reapplyData === 'function') {
             window.__reapplyData();
