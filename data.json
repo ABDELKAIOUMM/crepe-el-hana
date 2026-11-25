@@ -1443,14 +1443,14 @@
     "num": "02",
     "title": "سوري",
     "desc": "19 ساندوتش سوري متنوع",
-    "img": "assets/webp/burger.webp"
+    "img": "assets/webp/section-syrian.webp"
    },
    {
     "key": "pasta",
     "num": "03",
     "title": "الباستا",
     "desc": "9 أصناف باستا طازجة",
-    "img": "assets/webp/crepe.webp"
+    "img": "assets/webp/section-pasta.webp"
    },
    {
     "key": "sweet_crepe",
@@ -1464,7 +1464,7 @@
     "num": "05",
     "title": "الوافل",
     "desc": "12 نوع وافل طازج",
-    "img": "assets/webp/sweet-crepe.webp"
+    "img": "assets/webp/section-waffle.webp"
    }
   ]
  },
@@ -2563,6 +2563,78 @@
    "kb": 72.0,
    "w": 800,
    "h": 800
+  },
+  {
+   "path": "assets/webp/section-pasta-400.webp",
+   "name": "section-pasta-400.webp",
+   "dim": "400×225",
+   "kb": 12.0,
+   "w": 400,
+   "h": 225
+  },
+  {
+   "path": "assets/webp/section-pasta-800.webp",
+   "name": "section-pasta-800.webp",
+   "dim": "800×450",
+   "kb": 31.7,
+   "w": 800,
+   "h": 450
+  },
+  {
+   "path": "assets/webp/section-pasta.webp",
+   "name": "section-pasta.webp",
+   "dim": "1200×675",
+   "kb": 64.9,
+   "w": 1200,
+   "h": 675
+  },
+  {
+   "path": "assets/webp/section-syrian-400.webp",
+   "name": "section-syrian-400.webp",
+   "dim": "400×225",
+   "kb": 20.6,
+   "w": 400,
+   "h": 225
+  },
+  {
+   "path": "assets/webp/section-syrian-800.webp",
+   "name": "section-syrian-800.webp",
+   "dim": "800×450",
+   "kb": 57.4,
+   "w": 800,
+   "h": 450
+  },
+  {
+   "path": "assets/webp/section-syrian.webp",
+   "name": "section-syrian.webp",
+   "dim": "1200×675",
+   "kb": 120.0,
+   "w": 1200,
+   "h": 675
+  },
+  {
+   "path": "assets/webp/section-waffle-400.webp",
+   "name": "section-waffle-400.webp",
+   "dim": "400×225",
+   "kb": 17.1,
+   "w": 400,
+   "h": 225
+  },
+  {
+   "path": "assets/webp/section-waffle-800.webp",
+   "name": "section-waffle-800.webp",
+   "dim": "800×450",
+   "kb": 54.7,
+   "w": 800,
+   "h": 450
+  },
+  {
+   "path": "assets/webp/section-waffle.webp",
+   "name": "section-waffle.webp",
+   "dim": "1200×675",
+   "kb": 135.5,
+   "w": 1200,
+   "h": 675
   },
   {
    "path": "assets/webp/sweet-crepe-400.webp",

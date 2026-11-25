@@ -16,10 +16,10 @@
 
   var SEC_FALLBACK = {
     pizza: 'assets/webp/hero-pizza.webp',
-    syrian: 'assets/webp/burger.webp',
-    pasta: 'assets/webp/crepe.webp',
+    syrian: 'assets/webp/section-syrian.webp',
+    pasta: 'assets/webp/section-pasta.webp',
     sweet_crepe: 'assets/webp/sweet-crepe.webp',
-    waffle: 'assets/webp/sweet-crepe.webp'
+    waffle: 'assets/webp/section-waffle.webp'
   };
 
   function repairDeadPaths(menu, content, catalog, base, userImages) {
