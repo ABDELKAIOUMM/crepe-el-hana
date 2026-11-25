@@ -12,14 +12,14 @@
      لو المستخدم عنده تعديلات قديمة في المتصفح (localStorage) بتشير
      لصور اتشالت من السيرفر → بنصلّحها أوتوماتيك ونعرض الصورة الصح.
      بدون ده، أي صورة يتغيّر مسارها بتفضل مكسورة عنده. */
-  var DEAD_RE = /hero-pizza|burger\.webp|crepe\.webp|sweet-crepe\.webp|sq-professional-overhead|professional-overhead-pizza-isolated|assets\/upload\/pngwing/i;
+  var DEAD_RE = /sq-professional-overhead|professional-overhead-pizza-isolated|assets\/upload\/pngwing/i;
 
   var SEC_FALLBACK = {
-    pizza: 'assets/webp/real-بيتزا-مارجريتا.webp',
-    syrian: 'assets/webp/real-سوري-برجر-سادة.webp',
-    pasta: 'assets/webp/real-باستا-إستربس.webp',
-    sweet_crepe: 'assets/webp/real-كريب-شيكولاتة-نوتيلا.webp',
-    waffle: 'assets/webp/real-وافل-شيكولاتة.webp'
+    pizza: 'assets/webp/hero-pizza.webp',
+    syrian: 'assets/webp/burger.webp',
+    pasta: 'assets/webp/crepe.webp',
+    sweet_crepe: 'assets/webp/sweet-crepe.webp',
+    waffle: 'assets/webp/sweet-crepe.webp'
   };
 
   function repairDeadPaths(menu, content, catalog, base) {

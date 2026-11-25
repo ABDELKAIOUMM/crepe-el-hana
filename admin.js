@@ -89,15 +89,15 @@
      لو أي صورة مربوطة بمسار مش موجود على السيرفر (404)
      — زي الصور القديمة اللي اتشالت — بنصلّحها تلقائي
      ونختار بديل صحيح من نفس القسم. */
-  var DEAD_PATTERNS = /hero-pizza|burger\.webp|crepe\.webp|sweet-crepe\.webp|sq-professional-overhead|professional-overhead-pizza-isolated|assets\/upload\/pngwing/i;
+  var DEAD_PATTERNS = /sq-professional-overhead|professional-overhead-pizza-isolated|assets\/upload\/pngwing/i;
 
   function sectionFallbackImg(key) {
     var map = {
-      pizza: 'assets/webp/real-بيتزا-مارجريتا.webp',
-      syrian: 'assets/webp/real-سوري-برجر-سادة.webp',
-      pasta: 'assets/webp/real-باستا-إستربس.webp',
-      sweet_crepe: 'assets/webp/real-كريب-شيكولاتة-نوتيلا.webp',
-      waffle: 'assets/webp/real-وافل-شيكولاتة.webp'
+      pizza: 'assets/webp/hero-pizza.webp',
+      syrian: 'assets/webp/burger.webp',
+      pasta: 'assets/webp/crepe.webp',
+      sweet_crepe: 'assets/webp/sweet-crepe.webp',
+      waffle: 'assets/webp/sweet-crepe.webp'
     };
     return map[key] || 'assets/webp/real-بيتزا-مارجريتا.webp';
   }
