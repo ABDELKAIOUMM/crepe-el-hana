@@ -93,10 +93,10 @@
 
   function sectionFallbackImg(key) {
     var map = {
-      pizza: 'assets/webp/hero-pizza.webp',
+      pizza: 'assets/webp/section-pizza.webp',
       syrian: 'assets/webp/section-syrian.webp',
       pasta: 'assets/webp/section-pasta.webp',
-      sweet_crepe: 'assets/webp/sweet-crepe.webp',
+      sweet_crepe: 'assets/webp/section-crepe.webp',
       waffle: 'assets/webp/section-waffle.webp'
     };
     return map[key] || 'assets/webp/real-بيتزا-مارجريتا.webp';

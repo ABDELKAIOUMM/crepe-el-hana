@@ -1436,7 +1436,7 @@
     "num": "01",
     "title": "البيتزا",
     "desc": "17 نوع بيتزا بثلاثة أحجام",
-    "img": "assets/webp/hero-pizza.webp"
+    "img": "assets/webp/section-pizza.webp"
    },
    {
     "key": "syrian",
@@ -1457,7 +1457,7 @@
     "num": "04",
     "title": "الكريب الحلو",
     "desc": "6 أنواع كريب حلو",
-    "img": "assets/webp/sweet-crepe.webp"
+    "img": "assets/webp/section-crepe.webp"
    },
    {
     "key": "waffle",
@@ -1527,32 +1527,32 @@
   {
    "path": "assets/webp/hero-pizza-1200.webp",
    "name": "hero-pizza-1200.webp",
-   "dim": "1200×670",
-   "kb": 79.5,
+   "dim": "1200×669",
+   "kb": 106.3,
    "w": 1200,
-   "h": 670
+   "h": 669
   },
   {
    "path": "assets/webp/hero-pizza-400.webp",
    "name": "hero-pizza-400.webp",
    "dim": "400×223",
-   "kb": 13.6,
+   "kb": 12.7,
    "w": 400,
    "h": 223
   },
   {
    "path": "assets/webp/hero-pizza-800.webp",
    "name": "hero-pizza-800.webp",
-   "dim": "800×447",
-   "kb": 43.0,
+   "dim": "800×446",
+   "kb": 49.4,
    "w": 800,
-   "h": 447
+   "h": 446
   },
   {
    "path": "assets/webp/hero-pizza.webp",
    "name": "hero-pizza.webp",
    "dim": "1376×768",
-   "kb": 100.3,
+   "kb": 157.6,
    "w": 1376,
    "h": 768
   },
@@ -2565,76 +2565,124 @@
    "h": 800
   },
   {
+   "path": "assets/webp/section-crepe-400.webp",
+   "name": "section-crepe-400.webp",
+   "dim": "400×400",
+   "kb": 14.0,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/section-crepe-800.webp",
+   "name": "section-crepe-800.webp",
+   "dim": "800×800",
+   "kb": 57.4,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/section-crepe.webp",
+   "name": "section-crepe.webp",
+   "dim": "1200×1200",
+   "kb": 130.3,
+   "w": 1200,
+   "h": 1200
+  },
+  {
    "path": "assets/webp/section-pasta-400.webp",
    "name": "section-pasta-400.webp",
-   "dim": "400×225",
-   "kb": 12.0,
+   "dim": "400×400",
+   "kb": 25.7,
    "w": 400,
-   "h": 225
+   "h": 400
   },
   {
    "path": "assets/webp/section-pasta-800.webp",
    "name": "section-pasta-800.webp",
-   "dim": "800×450",
-   "kb": 31.7,
+   "dim": "800×800",
+   "kb": 89.2,
    "w": 800,
-   "h": 450
+   "h": 800
   },
   {
    "path": "assets/webp/section-pasta.webp",
    "name": "section-pasta.webp",
-   "dim": "1200×675",
-   "kb": 64.9,
+   "dim": "1200×1200",
+   "kb": 187.7,
    "w": 1200,
-   "h": 675
+   "h": 1200
+  },
+  {
+   "path": "assets/webp/section-pizza-400.webp",
+   "name": "section-pizza-400.webp",
+   "dim": "400×400",
+   "kb": 32.0,
+   "w": 400,
+   "h": 400
+  },
+  {
+   "path": "assets/webp/section-pizza-800.webp",
+   "name": "section-pizza-800.webp",
+   "dim": "800×800",
+   "kb": 113.0,
+   "w": 800,
+   "h": 800
+  },
+  {
+   "path": "assets/webp/section-pizza.webp",
+   "name": "section-pizza.webp",
+   "dim": "1200×1200",
+   "kb": 244.8,
+   "w": 1200,
+   "h": 1200
   },
   {
    "path": "assets/webp/section-syrian-400.webp",
    "name": "section-syrian-400.webp",
-   "dim": "400×225",
-   "kb": 20.6,
+   "dim": "400×400",
+   "kb": 18.6,
    "w": 400,
-   "h": 225
+   "h": 400
   },
   {
    "path": "assets/webp/section-syrian-800.webp",
    "name": "section-syrian-800.webp",
-   "dim": "800×450",
-   "kb": 57.4,
+   "dim": "800×800",
+   "kb": 64.9,
    "w": 800,
-   "h": 450
+   "h": 800
   },
   {
    "path": "assets/webp/section-syrian.webp",
    "name": "section-syrian.webp",
-   "dim": "1200×675",
-   "kb": 120.0,
+   "dim": "1200×1200",
+   "kb": 135.4,
    "w": 1200,
-   "h": 675
+   "h": 1200
   },
   {
    "path": "assets/webp/section-waffle-400.webp",
    "name": "section-waffle-400.webp",
-   "dim": "400×225",
-   "kb": 17.1,
+   "dim": "400×400",
+   "kb": 24.7,
    "w": 400,
-   "h": 225
+   "h": 400
   },
   {
    "path": "assets/webp/section-waffle-800.webp",
    "name": "section-waffle-800.webp",
-   "dim": "800×450",
-   "kb": 54.7,
+   "dim": "800×800",
+   "kb": 87.1,
    "w": 800,
-   "h": 450
+   "h": 800
   },
   {
    "path": "assets/webp/section-waffle.webp",
    "name": "section-waffle.webp",
-   "dim": "1200×675",
-   "kb": 135.5,
+   "dim": "1200×1200",
+   "kb": 177.5,
    "w": 1200,
-   "h": 675
+   "h": 1200
   },
   {
    "path": "assets/webp/sweet-crepe-400.webp",

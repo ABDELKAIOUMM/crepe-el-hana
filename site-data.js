@@ -15,10 +15,10 @@
   var DEAD_RE = /sq-professional-overhead|professional-overhead-pizza-isolated|assets\/upload\/pngwing/i;
 
   var SEC_FALLBACK = {
-    pizza: 'assets/webp/hero-pizza.webp',
+    pizza: 'assets/webp/section-pizza.webp',
     syrian: 'assets/webp/section-syrian.webp',
     pasta: 'assets/webp/section-pasta.webp',
-    sweet_crepe: 'assets/webp/sweet-crepe.webp',
+    sweet_crepe: 'assets/webp/section-crepe.webp',
     waffle: 'assets/webp/section-waffle.webp'
   };
 
