@@ -34,23 +34,34 @@
   }
 
   function saveData(silent) {
-    /* الحفظ ممكن يفشل لو localStorage امتلأ (الحد ~5 ميجا).
-       بن catching الخطأ وبنcleanup الصور الأقدم غير المستخدمة
-       لحدى ما يبقى فيه مكان، ومش بنبلع الخطأ بصمت. */
+    /* بنحفظ الصور المرفوعة في IndexedDB (مساحة مفتوحة)،
+       وlocalStorage بياخد البيانات بس — من غير dataUrls.
+       ده بيخلي الحفظ مضمون مهما عدد الصور. */
     try {
+      var imgsMeta = images.map(function (im) {
+        var c = {}; for (var k in im) if (Object.prototype.hasOwnProperty.call(im, k)) c[k] = im[k];
+        delete c.dataUrl;         /* الصورة في IndexedDB */
+        return c;
+      });
       localStorage.setItem(LS_KEY, JSON.stringify(data));
       localStorage.setItem(SCALE_KEY, JSON.stringify(scale));
-      localStorage.setItem(IMGS_KEY, JSON.stringify(images));
+      localStorage.setItem(IMGS_KEY, JSON.stringify(imgsMeta));
     } catch (e) {
+      /* 공간 ضيق فعلاً ⇒ نحذف أقدم الصور غير المستخدمة ونعيد المحاولة */
       if (!freeUpSpace()) {
         setSaveState('dirty');
-        if (!silent) toast('❌ مفيش مساحة كافية للحفظ — صدّر الملف بدل الحفظ', 'err');
+        if (!silent) toast('❌ مفيش مساحة كافية للحفظ — امسح صور قديمة أو صدّر الملف', 'err');
         return false;
       }
       try {
+        var imgsMeta2 = images.map(function (im) {
+          var c = {}; for (var k in im) if (Object.prototype.hasOwnProperty.call(im, k)) c[k] = im[k];
+          delete c.dataUrl;
+          return c;
+        });
         localStorage.setItem(LS_KEY, JSON.stringify(data));
         localStorage.setItem(SCALE_KEY, JSON.stringify(scale));
-        localStorage.setItem(IMGS_KEY, JSON.stringify(images));
+        localStorage.setItem(IMGS_KEY, JSON.stringify(imgsMeta2));
       } catch (e2) {
         setSaveState('dirty');
         if (!silent) toast('❌ الحفظ فشل: ' + (e2 && e2.name ? e2.name : 'خطأ'), 'err');
@@ -64,7 +75,7 @@
   }
 
   /* بنشيل أقدم الصور المرفوعة اللي مش مستخدمة في أي صنف
-     لحدى ما يتProvided مساحة كافية للحفظ. */
+     (من localStorage ومن IndexedDB) لحدى ما يبقى فيه مكان. */
   function freeUpSpace() {
     try {
       var used = {};
@@ -74,17 +85,20 @@
       if (data.content && data.content.sections) {
         data.content.sections.forEach(function (s) { if (s.img) used[s.img] = 1; });
       }
-      /* الأقدم الأول */
-      var withData = images.filter(function (im) { return im.dataUrl; });
+      var withData = images.filter(function (im) { return im.dataUrl || im.path; });
       withData.sort(function (a, b) { return (a.__t || 0) - (b.__t || 0); });
       for (var i = 0; i < withData.length; i++) {
         var im = withData[i];
-        /* لو الصورة مستخدمة في صنف — مش هنشيلها */
-        if (used[im.path]) continue;
+        if (used[im.path]) continue;          /* مستخدمة في صنف — ما نمسحهاش */
         images = images.filter(function (x) { return x.path !== im.path; });
+        delete idbCache[im.path];
+        idbDel(im.path);
         if (data._images) data._images = images.slice();
         try {
-          localStorage.setItem(IMGS_KEY, JSON.stringify(images));
+          localStorage.setItem(IMGS_KEY, JSON.stringify(images.map(function (x) {
+            var c = {}; for (var k in x) if (Object.prototype.hasOwnProperty.call(x, k)) c[k] = x[k];
+            delete c.dataUrl; return c;
+          })));
           localStorage.setItem(LS_KEY, JSON.stringify(data));
           return true;
         } catch (e) { /* لسه مش كفاية */ }
@@ -127,13 +141,37 @@
       savedImgs.forEach(function (si) {
         var found = false;
         for (var i = 0; i < list.length; i++) {
-          if (list[i].path === si.path) { list[i] = si; found = true; break; }
+          if (list[i].path === si.path) {
+            /* نحافظ على الـdataUrl الموجود في localStorage */
+            if (si.dataUrl && !list[i].dataUrl) list[i].dataUrl = si.dataUrl;
+            list[i] = si;
+            found = true; break;
+          }
         }
         if (!found) list.push(si);
       });
     } catch (e) { /* تجاهل */ }
     images = list;
     repairDeadImagePaths();
+    migrateImagesToIdb();
+  }
+
+  /* ── ترحيل الصور القديمة (dataUrl في localStorage) ⇒ IndexedDB ──
+     ده بيحرّر مساحة localStorage وبيخلّي الحفظ مضمون بعدها. */
+  function migrateImagesToIdb() {
+    if (idbFailed) return;
+    var pending = images.filter(function (im) { return im.dataUrl && im.path && im.path.indexOf('assets/upload/') === 0; });
+    if (!pending.length) return;
+    pending.forEach(function (im) {
+      idbPut(im.path, im.dataUrl).then(function () {
+        idbCache[im.path] = im.dataUrl;
+        delete im.dataUrl;                 /* نشيلها من الذاكرة بعد النقل */
+        if (data && data._images) {
+          data._images.forEach(function (x) { if (x.path === im.path) delete x.dataUrl; });
+        }
+        saveData(true);                   /* نحفظ النسخة الخفيفة */
+      }).catch(function () { /* IndexedDB مش متاح — نخليها زي ما هي */ });
+    });
   }
 
   /* ═══════════ 2ب) إصلاح مسارات الصور الميتة ═══════════
@@ -385,6 +423,7 @@
     $('#verInfo').textContent = 'الإصدار ' + (data.version || 1) + ' — ' +
       (data.menu.length) + ' قسم / ' +
       (data.menu.reduce(function (a, m) { return a + m.items.length; }, 0)) + ' صنف';
+    hydrateImgs(document);
   }
 
   /* ═══════════ 5) التبويبات ═══════════ */
@@ -415,13 +454,12 @@
     var grid = $('#sectionsGrid');
     var cs = data.content.sections;
     grid.innerHTML = cs.map(function (s, i) {
-      var src = imgSrc(s.img);
       return '' +
         '<div class="sec-card" data-i="' + i + '">' +
           '<div class="sec-num">' + esc(s.num) + '</div>' +
-          '<img class="sec-img" src="' + esc(src) + '" alt="" loading="lazy">' +
+          '<img class="sec-img" data-imgpath="' + esc(s.img || '') + '" src="" alt="" loading="lazy">' +
           '<div class="sec-thumb-row">' +
-            '<img src="' + esc(src) + '" alt="">' +
+            '<img data-imgpath="' + esc(s.img || '') + '" src="" alt="">' +
             '<input class="inp sm" data-f="img" value="' + esc(s.img) + '">' +
             '<button class="btn ghost sm" data-pick="' + i + '">🖼️</button>' +
           '</div>' +
@@ -437,6 +475,7 @@
         '</div>';
     }).join('');
 
+    hydrateImgs(grid);
     grid.querySelectorAll('.sec-card').forEach(function (card) {
       var i = +card.dataset.i;
       card.querySelectorAll('[data-f]').forEach(function (inp) {
@@ -543,18 +582,18 @@
 
     list.forEach(function (o) {
       var im = o.im;
-      var src = im.dataUrl || im.path;
       var dims = im.dim ? im.dim : (im.w && im.h ? (im.w + '×' + im.h) : '—');
       var badge = o.square ? '🟩' : (o.landscape ? '🟨' : '⬜');
       html += '<button type="button" class="ip-cell' + (im.path === cur ? ' sel' : '') +
         '" data-pick="' + esc(im.path) + '" title="' + esc(im.path) + '">' +
-        '<span class="ip-th"><img src="' + esc(src) + '" alt="" loading="lazy"></span>' +
+        '<span class="ip-th"><img data-imgpath="' + esc(im.path) + '" src="" alt="" loading="lazy"></span>' +
         '<span class="ip-name">' + esc(im.name || im.path) + '</span>' +
         '<span class="ip-meta">' + esc(dims) + ' ' + badge +
           (o.used > 1 ? ' · <b class="ip-use' + (o.used >= 5 ? ' hot' : '') + '">📌 ' + o.used + ' صنف</b>' : '') + '</span>' +
         '</button>';
     });
     grid.innerHTML = html;
+    hydrateImgs(grid);
 
     /* الأبعاد للمصادر اللي مش معروفة ⇒ نحسبها من الصورة نفسها */
     grid.querySelectorAll('.ip-cell .ip-th img').forEach(function (img) {
@@ -591,7 +630,24 @@
     if (!path) return '';
     var im = null;
     for (var i = 0; i < images.length; i++) { if (images[i].path === path) { im = images[i]; break; } }
-    return im ? (im.dataUrl || im.path) : path;
+    if (im && im.dataUrl) return im.dataUrl;
+    /* الصورة في IndexedDB ⇒ بنجيبها من هناك */
+    if (idbCache[path]) return idbCache[path];
+    ensureDataUrl(path);
+    return path;
+  }
+
+  /* بنملي الـsrc asynchronously (بيجيب من IndexedDB لو محتاجة) */
+  function setImgSrc(el, path) {
+    if (!el || !path) return;
+    var im = null;
+    for (var i = 0; i < images.length; i++) { if (images[i].path === path) { im = images[i]; break; } }
+    if (im && im.dataUrl) { el.src = im.dataUrl; return; }
+    if (idbCache[path]) { el.src = idbCache[path]; return; }
+    ensureDataUrl(path).then(function (du) {
+      if (du) el.src = du;
+      else if (!el.src) el.src = path;
+    });
   }
 
   /* معاينة الصورة الحالية */
@@ -599,13 +655,20 @@
     if (!cur) return '<span class="ip-th none"><b class="ip-none-mark">Ø</b></span><span class="ip-name">بدون صورة</span>';
     var im = null;
     for (var i = 0; i < images.length; i++) { if (images[i].path === cur) { im = images[i]; break; } }
-    var src = imgSrc(cur);
     var nm = im ? (im.name || im.path) : cur;
     var dims = im && im.dim ? im.dim : '';
-    var html = '<span class="ip-th"><img src="' + esc(src) + '" alt="" onerror="this.closest(\'.ip-th\').classList.add(\'broken\');this.remove()"></span>' +
+    var html = '<span class="ip-th"><img data-imgpath="' + esc(cur) + '" src="" alt="" onerror="this.closest(\'.ip-th\').classList.add(\'broken\');this.remove()"></span>' +
       '<span class="ip-name">' + esc(nm) + (dims ? ' <small>' + esc(dims) + '</small>' : '') +
       (!dims ? '<span class="ip-dims-auto" hidden></span>' : '') + '</span>';
     return html;
+  }
+
+  /* بنملي كل الصور اللي عندها data-imgpath من IndexedDB/الذاكرة */
+  function hydrateImgs(scope) {
+    (scope || document).querySelectorAll('img[data-imgpath]').forEach(function (im) {
+      var p = im.dataset.imgpath;
+      if (p) setImgSrc(im, p);
+    });
   }
 
   /* يحسب أبعاد الصورة ويملاها تحت الاسم (بعد ما الصورة تتحمّل) */
@@ -658,6 +721,7 @@
   function pickUploadedFor(target, dataUrl, name) {
     var path = 'assets/upload/' + String(name).replace(/[^\w.\-]/g, '_');
     images.push({ path: path, name: name, dataUrl: dataUrl, __t: Date.now() });
+    idbPut(path, dataUrl).then(function () { idbCache[path] = dataUrl; }).catch(function () {});
     target.value = path;
     markDirty();
     toast('✅ اتحدّثت صورة المنتج', 'ok');
@@ -695,10 +759,85 @@
 
   /* ═══ ضغط الصورة قبل التخزين ═══
      localStorage محدود بـ ~5 ميجا، والصورة الأصلية كـbase64 ممكن توصل 900 ك.،
-     فبنصغّرها WebP ونخزّنها كـdataUrl صغير (20-80 ك. بدل 900 ك.).
-     ده بيخلي الحفظ يشتغل حتى مع عشرات الصور المرفوعة. */
+     فبنصغّرها WebP وبنخزّنها في **IndexedDB** (مساحة أكبر بكتير وبلا حدود تقريبية).
+     في localStorage بنخزّن البيانات بس (من غير الصور). */
   var MAX_EDGE = 1200;      /* أقصى طول ضلع */
   var JPEG_Q = 0.82;        /* جودة JPEG/WebP */
+
+  /* ── IndexedDB لتخزين الصور المرفوعة (بلا حدود تقريبية) ── */
+  var IDB_NAME = 'crepeElHanaImg', IDB_STORE = 'imgs', idb = null, idbFailed = false;
+
+  function openIdb() {
+    return new Promise(function (res, rej) {
+      if (idb) return res(idb);
+      if (idbFailed) return rej(new Error('idb unavailable'));
+      try {
+        var rq = indexedDB.open(IDB_NAME, 1);
+        rq.onupgradeneeded = function (e) {
+          var db = e.target.result;
+          if (!db.objectStoreNames.contains(IDB_STORE)) db.createObjectStore(IDB_STORE);
+        };
+        rq.onsuccess = function (e) { idb = e.target.result; res(idb); };
+        rq.onerror = function (e) { idbFailed = true; rej(e.target.error || new Error('idb error')); };
+      } catch (e) { idbFailed = true; rej(e); }
+    });
+  }
+
+  function idbPut(path, dataUrl) {
+    return openIdb().then(function (db) {
+      return new Promise(function (res, rej) {
+        var tx = db.transaction(IDB_STORE, 'readwrite');
+        tx.objectStore(IDB_STORE).put(dataUrl, path);
+        tx.oncomplete = function () { res(true); };
+        tx.onerror = function (e) { rej(e.target.error || new Error('idb write error')); };
+      });
+    });
+  }
+
+  function idbGet(path) {
+    return openIdb().then(function (db) {
+      return new Promise(function (res) {
+        try {
+          var tx = db.transaction(IDB_STORE, 'readonly');
+          var rq = tx.objectStore(IDB_STORE).get(path);
+          rq.onsuccess = function () { res(rq.result || null); };
+          rq.onerror = function () { res(null); };
+        } catch (e) { res(null); }
+      });
+    }).catch(function () { return null; });
+  }
+
+  function idbDel(path) {
+    return openIdb().then(function (db) {
+      return new Promise(function (res) {
+        try {
+          var tx = db.transaction(IDB_STORE, 'readwrite');
+          tx.objectStore(IDB_STORE).delete(path);
+          tx.oncomplete = function () { res(true); };
+          tx.onerror = function () { res(false); };
+        } catch (e) { res(false); }
+      });
+    }).catch(function () { return false; });
+  }
+
+  /* كاش للصور اللي اتقرت من IndexedDB */
+  var idbCache = {};
+
+  /* بنضمن إن كل صورة في الـimages ليها dataUrl متاحة:
+     لو مش موجودة في الـimages (يعني متخزنة في IDB) بنجيبها ونرجعها. */
+  function ensureDataUrl(path) {
+    if (!path) return Promise.resolve(null);
+    var hit = idbCache[path];
+    if (hit) return Promise.resolve(hit);
+    return idbGet(path).then(function (du) {
+      if (!du) return null;
+      idbCache[path] = du;
+      for (var i = 0; i < images.length; i++) {
+        if (images[i].path === path) { images[i].dataUrl = du; break; }
+      }
+      return du;
+    });
+  }
 
   function compressToDataUrl(srcDataUrl, cb) {
     var img = new Image();
@@ -732,7 +871,7 @@
       if (!out) {
         try {
           var jpg = cv.toDataURL('image/jpeg', JPEG_Q);
-          if (jpg && jpg.indexOf('data:image/jpeg') === 0 && jpg.length > 64) out = jpg;
+          if (jpg && jjpg0(jpg)) out = jpg;
         } catch (e) { /* تجاهل */ }
       }
       if (!out || out.length >= srcDataUrl.length) {
@@ -745,6 +884,7 @@
     img.onerror = function () { cb({ dataUrl: srcDataUrl, w: 0, h: 0 }); };
     img.src = srcDataUrl;
   }
+  function jjpg0(s){ return s.indexOf('data:image/jpeg') === 0 && s.length > 64; }
 
   /* ═══ اختيار ملف صورة + قراءته كـ dataUrl مع أبعادها ═══ */
   function pickImageFile(cb) {
@@ -765,10 +905,21 @@
         compressToDataUrl(raw, function (res) {
           var dataUrl = res.dataUrl;
           var w = res.w, h = res.h;
-          cb({
-            path: path, name: f.name, dataUrl: dataUrl,
-            dim: w && h ? (w + '×' + h) : '',
-            w: w, h: h
+          /* بنخزّن الصورة في IndexedDB (مش في localStorage) */
+          idbPut(path, dataUrl).then(function () {
+            idbCache[path] = dataUrl;
+            cb({
+              path: path, name: f.name, dataUrl: dataUrl,
+              dim: w && h ? (w + '×' + h) : '',
+              w: w, h: h
+            });
+          }).catch(function () {
+            /* IndexedDB مش متاح ⇒ fallback للطريقة القديمة */
+            cb({
+              path: path, name: f.name, dataUrl: dataUrl,
+              dim: w && h ? (w + '×' + h) : '',
+              w: w, h: h
+            });
           });
         });
       };
@@ -1169,6 +1320,7 @@
     T.querySelectorAll('[data-img-i]').forEach(function (pk) {
       var i = +pk.dataset.imgI;
       bindPicker(pk);
+      hydrateImgs(pk);
       pk.addEventListener('imgpick', function (ev) {
         var v = ev.detail.value;
         m.items[i].img = v || '';
@@ -1314,7 +1466,7 @@
     g.innerHTML = images.map(function (im, i) {
       var used = countItemsUsing(im.path);
       return '<div class="img-card' + (selImg === im.path ? ' sel' : '') + '" data-i="' + i + '">' +
-        '<img src="' + esc(im.dataUrl || im.path) + '" alt="" loading="lazy">' +
+        '<img data-imgpath="' + esc(im.path) + '" src="" alt="" loading="lazy">' +
         (im.dim ? '<span class="img-dim">' + esc(im.dim) + '</span>' : '') +
         '<div class="img-meta"><b>' + esc(im.name) + '</b>' +
         '<small>' + esc(im.path) + '</small>' +
@@ -1322,12 +1474,13 @@
         '</div>' +
       '</div>';
     }).join('');
+    hydrateImgs(g);
     g.querySelectorAll('.img-card').forEach(function (c) {
       c.onclick = function () {
         var im = images[+c.dataset.i];
         selImg = im.path;
         renderImages();
-        $('#lbImg').src = im.dataUrl || im.path;
+        setImgSrc($('#lbImg'), im.path);
         $('#lbCap').textContent = im.name + ' — ' + im.path + (im.dim ? ' — ' + im.dim : '');
         $('#lightbox').hidden = false;
       };
@@ -1339,6 +1492,8 @@
     confirmBox('حذف الصورة', 'حذف «' + selImg + '»؟')(
       function () {
         images = images.filter(function (x) { return x.path !== selImg; });
+        delete idbCache[selImg];
+        idbDel(selImg);
         selImg = null;
         markDirty(); renderImages();
       });
@@ -1371,20 +1526,27 @@
           : (w && w > 1600 ? '⚠️ العرض كبير — يفضل أقل من 1200 بكسل'
           : '✅ حجم مناسب'));
         var path = 'assets/upload/' + file.name.replace(/[^\w.\-]/g, '_');
-        images.push({ path: path, name: file.name, dim: w && h ? (w + '×' + h) : '', w: w, h: h, dataUrl: res.dataUrl, __t: Date.now() });
-        data._images = images.slice();
-        selImg = path;
-        markDirty();
-        $('#upPreview').hidden = false;
-        $('#upPreview').innerHTML =
-          '<div class="up-preview-box">' +
-            '<img src="' + esc(res.dataUrl) + '" alt="">' +
-            '<div><b>' + esc(file.name) + '</b><br>' +
-            '<small style="color:var(--muted)">المقاس: <b style="color:var(--orange)">' + (w && h ? (w + '×' + h) : '—') + '</b> بكسل · النسبة ' + ratio + '</small><br>' +
-            '<small style="color:' + (ideal.startsWith('✅') ? 'var(--green)' : 'var(--orange)') + '">' + ideal + '</small></div>' +
-          '</div>';
-        renderImages();
-        toast('✅ اتضافت الصورة: ' + file.name + ' (' + Math.round(res.dataUrl.length / 1024) + ' ك.)', 'ok');
+        var finish = function () {
+          images.push({ path: path, name: file.name, dim: w && h ? (w + '×' + h) : '', w: w, h: h, dataUrl: res.dataUrl, __t: Date.now() });
+          data._images = images.slice();
+          selImg = path;
+          markDirty();
+          $('#upPreview').hidden = false;
+          $('#upPreview').innerHTML =
+            '<div class="up-preview-box">' +
+              '<img src="' + esc(res.dataUrl) + '" alt="">' +
+              '<div><b>' + esc(file.name) + '</b><br>' +
+              '<small style="color:var(--muted)">المقاس: <b style="color:var(--orange)">' + (w && h ? (w + '×' + h) : '—') + '</b> بكسل · النسبة ' + ratio + '</small><br>' +
+              '<small style="color:' + (ideal.startsWith('✅') ? 'var(--green)' : 'var(--orange)') + '">' + ideal + '</small></div>' +
+            '</div>';
+          renderImages();
+          toast('✅ اتضافت الصورة: ' + file.name + ' (' + Math.round(res.dataUrl.length / 1024) + ' ك.)', 'ok');
+        };
+        /* بنخزّنها في IndexedDB أول حاجة */
+        idbPut(path, res.dataUrl).then(function () {
+          idbCache[path] = res.dataUrl;
+          finish();
+        }).catch(function () { finish(); });
       });
     };
     reader.readAsDataURL(file);
@@ -1399,7 +1561,7 @@
       '<div class="imgs-gallery" style="max-height:60vh;overflow:auto">' +
       images.map(function (im) {
         return '<div class="img-card" data-p="' + esc(im.path) + '">' +
-          '<img src="' + esc(im.dataUrl || im.path) + '" alt="">' +
+          '<img data-imgpath="' + esc(im.path) + '" src="" alt="">' +
           '<div class="img-meta"><b>' + esc(im.name) + '</b></div></div>';
       }).join('') + '</div>' +
       '<div class="modal-actions" style="margin-top:16px"><button class="btn ghost" data-cancel>إلغاء</button></div>' +
