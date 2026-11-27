@@ -34,12 +34,63 @@
   }
 
   function saveData(silent) {
-    localStorage.setItem(LS_KEY, JSON.stringify(data));
-    localStorage.setItem(SCALE_KEY, JSON.stringify(scale));
-    localStorage.setItem(IMGS_KEY, JSON.stringify(images));
+    /* الحفظ ممكن يفشل لو localStorage امتلأ (الحد ~5 ميجا).
+       بن catching الخطأ وبنcleanup الصور الأقدم غير المستخدمة
+       لحدى ما يبقى فيه مكان، ومش بنبلع الخطأ بصمت. */
+    try {
+      localStorage.setItem(LS_KEY, JSON.stringify(data));
+      localStorage.setItem(SCALE_KEY, JSON.stringify(scale));
+      localStorage.setItem(IMGS_KEY, JSON.stringify(images));
+    } catch (e) {
+      if (!freeUpSpace()) {
+        setSaveState('dirty');
+        if (!silent) toast('❌ مفيش مساحة كافية للحفظ — صدّر الملف بدل الحفظ', 'err');
+        return false;
+      }
+      try {
+        localStorage.setItem(LS_KEY, JSON.stringify(data));
+        localStorage.setItem(SCALE_KEY, JSON.stringify(scale));
+        localStorage.setItem(IMGS_KEY, JSON.stringify(images));
+      } catch (e2) {
+        setSaveState('dirty');
+        if (!silent) toast('❌ الحفظ فشل: ' + (e2 && e2.name ? e2.name : 'خطأ'), 'err');
+        return false;
+      }
+    }
     dirty = false;
     setSaveState('saved');
     if (!silent) toast('✅ اتحفظ كل التعديلات', 'ok');
+    return true;
+  }
+
+  /* بنشيل أقدم الصور المرفوعة اللي مش مستخدمة في أي صنف
+     لحدى ما يتProvided مساحة كافية للحفظ. */
+  function freeUpSpace() {
+    try {
+      var used = {};
+      (data.menu || []).forEach(function (s) {
+        (s.items || []).forEach(function (it) { if (it.img) used[it.img] = 1; });
+      });
+      if (data.content && data.content.sections) {
+        data.content.sections.forEach(function (s) { if (s.img) used[s.img] = 1; });
+      }
+      /* الأقدم الأول */
+      var withData = images.filter(function (im) { return im.dataUrl; });
+      withData.sort(function (a, b) { return (a.__t || 0) - (b.__t || 0); });
+      for (var i = 0; i < withData.length; i++) {
+        var im = withData[i];
+        /* لو الصورة مستخدمة في صنف — مش هنشيلها */
+        if (used[im.path]) continue;
+        images = images.filter(function (x) { return x.path !== im.path; });
+        if (data._images) data._images = images.slice();
+        try {
+          localStorage.setItem(IMGS_KEY, JSON.stringify(images));
+          localStorage.setItem(LS_KEY, JSON.stringify(data));
+          return true;
+        } catch (e) { /* لسه مش كفاية */ }
+      }
+      return false;
+    } catch (e) { return false; }
   }
 
   function setSaveState(s) {
@@ -606,7 +657,7 @@
   /* لما نرفع صورة للمنتج: نضيفها للقائمة ونختارها */
   function pickUploadedFor(target, dataUrl, name) {
     var path = 'assets/upload/' + String(name).replace(/[^\w.\-]/g, '_');
-    images.push({ path: path, name: name, dataUrl: dataUrl });
+    images.push({ path: path, name: name, dataUrl: dataUrl, __t: Date.now() });
     target.value = path;
     markDirty();
     toast('✅ اتحدّثت صورة المنتج', 'ok');
@@ -642,6 +693,59 @@
     }
   }
 
+  /* ═══ ضغط الصورة قبل التخزين ═══
+     localStorage محدود بـ ~5 ميجا، والصورة الأصلية كـbase64 ممكن توصل 900 ك.،
+     فبنصغّرها WebP ونخزّنها كـdataUrl صغير (20-80 ك. بدل 900 ك.).
+     ده بيخلي الحفظ يشتغل حتى مع عشرات الصور المرفوعة. */
+  var MAX_EDGE = 1200;      /* أقصى طول ضلع */
+  var JPEG_Q = 0.82;        /* جودة JPEG/WebP */
+
+  function compressToDataUrl(srcDataUrl, cb) {
+    var img = new Image();
+    img.onload = function () {
+      var w = img.naturalWidth || img.width;
+      var h = img.naturalHeight || img.height;
+      if (!w || !h) { cb({ dataUrl: srcDataUrl, w: w, h: h }); return; }
+
+      var scale = Math.min(1, MAX_EDGE / Math.max(w, h));
+      var tw = Math.max(1, Math.round(w * scale));
+      var th = Math.max(1, Math.round(h * scale));
+
+      var cv = document.createElement('canvas');
+      cv.width = tw; cv.height = th;
+      var cx = cv.getContext('2d');
+      cx.imageSmoothingQuality = 'high';
+      /* خلفية بيضاء للصور الشفافة (PNG) عشان WebP يطلع على أبيض */
+      var transparent = false;
+      try {
+        var d = cx.getImageData(0, 0, 1, 1).data;
+        transparent = (d[3] < 250);
+      } catch (e) { /* canvas مش متاح */ }
+      if (transparent) { cx.fillStyle = '#ffffff'; cx.fillRect(0, 0, tw, th); }
+      cx.drawImage(img, 0, 0, tw, th);
+
+      var out = null;
+      try {
+        var webp = cv.toDataURL('image/webp', JPEG_Q);
+        if (webp && webp.indexOf('data:image/webp') === 0 && webp.length > 64) out = webp;
+      } catch (e) { /* WebP مش مدعوم */ }
+      if (!out) {
+        try {
+          var jpg = cv.toDataURL('image/jpeg', JPEG_Q);
+          if (jpg && jpg.indexOf('data:image/jpeg') === 0 && jpg.length > 64) out = jpg;
+        } catch (e) { /* تجاهل */ }
+      }
+      if (!out || out.length >= srcDataUrl.length) {
+        /* الضغط ما نفعش ⇒ نخزّن الأصل */
+        cb({ dataUrl: srcDataUrl, w: w, h: h });
+      } else {
+        cb({ dataUrl: out, w: tw, h: th });
+      }
+    };
+    img.onerror = function () { cb({ dataUrl: srcDataUrl, w: 0, h: 0 }); };
+    img.src = srcDataUrl;
+  }
+
   /* ═══ اختيار ملف صورة + قراءته كـ dataUrl مع أبعادها ═══ */
   function pickImageFile(cb) {
     var inp = document.createElement('input');
@@ -650,27 +754,23 @@
     inp.onchange = function () {
       var f = inp.files[0];
       if (!f) return;
-      if (f.size > 6 * 1024 * 1024) {
-        toast('❌ الصورة كبيرة أوي (الحد 6 ميجا)', 'err');
+      if (f.size > 12 * 1024 * 1024) {
+        toast('❌ الصورة كبيرة أوي (الحد 12 ميجا)', 'err');
         return;
       }
       var rd = new FileReader();
       rd.onload = function (e) {
-        var dataUrl = e.target.result;
+        var raw = e.target.result;
         var path = 'assets/upload/' + String(f.name).replace(/[^\w.\-]/g, '_');
-        // نحسب الأبعاد عشان نعرف لو مربعة
-        var im = new Image();
-        im.onload = function () {
+        compressToDataUrl(raw, function (res) {
+          var dataUrl = res.dataUrl;
+          var w = res.w, h = res.h;
           cb({
             path: path, name: f.name, dataUrl: dataUrl,
-            dim: im.naturalWidth + '×' + im.naturalHeight,
-            w: im.naturalWidth, h: im.naturalHeight
+            dim: w && h ? (w + '×' + h) : '',
+            w: w, h: h
           });
-        };
-        im.onerror = function () {
-          cb({ path: path, name: f.name, dataUrl: dataUrl });
-        };
-        im.src = dataUrl;
+        });
       };
       rd.readAsDataURL(f);
     };
@@ -1262,31 +1362,30 @@
     if (!/^image\//.test(file.type)) return toast('❌ الملف ده مش صورة', 'err');
     var reader = new FileReader();
     reader.onload = function (e) {
-      var img = new Image();
-      img.onload = function () {
-        var w = img.width, h = img.height;
-        var ratio = (w / h).toFixed(2);
+      var raw = e.target.result;
+      compressToDataUrl(raw, function (res) {
+        var w = res.w, h = res.h;
+        var ratio = (w && h) ? (w / h).toFixed(2) : '—';
         var ideal = ratio > 1.2 && ratio < 1.5 ? '✅ النسبة قريبة من 4:3'
-          : (w < 400 ? '⚠️ العرض صغير — يفضل 400 بكسل على الأقل'
-          : (w > 1600 ? '⚠️ العرض كبير — يفضل أقل من 1200 بكسل'
+          : (w && w < 400 ? '⚠️ العرض صغير — يفضل 400 بكسل على الأقل'
+          : (w && w > 1600 ? '⚠️ العرض كبير — يفضل أقل من 1200 بكسل'
           : '✅ حجم مناسب'));
         var path = 'assets/upload/' + file.name.replace(/[^\w.\-]/g, '_');
-        images.push({ path: path, name: file.name, dim: w + '×' + h, w: w, h: h, dataUrl: e.target.result });
+        images.push({ path: path, name: file.name, dim: w && h ? (w + '×' + h) : '', w: w, h: h, dataUrl: res.dataUrl, __t: Date.now() });
         data._images = images.slice();
         selImg = path;
         markDirty();
         $('#upPreview').hidden = false;
         $('#upPreview').innerHTML =
           '<div class="up-preview-box">' +
-            '<img src="' + esc(e.target.result) + '" alt="">' +
+            '<img src="' + esc(res.dataUrl) + '" alt="">' +
             '<div><b>' + esc(file.name) + '</b><br>' +
-            '<small style="color:var(--muted)">المقاس: <b style="color:var(--orange)">' + w + '×' + h + '</b> بكسل · النسبة ' + ratio + '</small><br>' +
+            '<small style="color:var(--muted)">المقاس: <b style="color:var(--orange)">' + (w && h ? (w + '×' + h) : '—') + '</b> بكسل · النسبة ' + ratio + '</small><br>' +
             '<small style="color:' + (ideal.startsWith('✅') ? 'var(--green)' : 'var(--orange)') + '">' + ideal + '</small></div>' +
           '</div>';
         renderImages();
-        toast('✅ اتضافت الصورة: ' + file.name, 'ok');
-      };
-      img.src = e.target.result;
+        toast('✅ اتضافت الصورة: ' + file.name + ' (' + Math.round(res.dataUrl.length / 1024) + ' ك.)', 'ok');
+      });
     };
     reader.readAsDataURL(file);
   }
