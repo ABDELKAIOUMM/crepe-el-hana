@@ -13,6 +13,10 @@ const __menu_default=[{"key":"pizza","title":"البيتزا","emoji":"🍕","de
 function imgFallback(el){
   try{
     if(!el || el.dataset.fallbackDone) return;
+    /* مسارات assets/upload/ بييجوا من IndexedDB — لازم نمنع الـfallback
+       لحد ما الـdataUrl توصل (لو مش موجودة ⇒ صورة مكسورة فعلاً). */
+    var pth = el.getAttribute('data-imgpath') || el.getAttribute('src') || '';
+    if(pth.indexOf('assets/upload/')===0) return;
     el.dataset.fallbackDone='1';
     var holder=el.closest('.card-img');
     if(!holder) return;
@@ -78,6 +82,32 @@ function imageSrc(path){
   var man=window.__IMAGES_MANIFEST||[];
   for(var i=0;i<man.length;i++){
     if(man[i] && man[i].path===path && man[i].dataUrl) return man[i].dataUrl;
+  }
+  /* صورة مرفوعة من اللوحة ⇒ موجودة في IndexedDB.
+     بنجيبها async ونحدّث كل الصور اللي نفس المسار. */
+  if(/^assets\/upload\//.test(path) && window.CH && window.CH.idbGet){
+    if(window.CH.cacheGet(path)) return window.CH.cacheGet(path);
+    window.CH.idbGet(path).then(function(du){
+      if(!du) return;
+      window.CH.cacheSet(path,du);
+      /* نحدّث الـmanifest */
+      var m2=window.__IMAGES_MANIFEST||[];
+      for(var j=0;j<m2.length;j++){
+        if(m2[j] && m2[j].path===path) m2[j].dataUrl=du;
+      }
+      window.__IMAGES_MANIFEST=m2;
+      /* نحدّث الصور الظاهرة في الصفحة */
+      document.querySelectorAll('img[data-imgpath="'+CSS.escape(path)+'"]').forEach(function(im){
+        if(!im.getAttribute('srcset')) im.src=du;
+      });
+      document.querySelectorAll('img').forEach(function(im){
+        var s=im.getAttribute('src')||'';
+        if(s===path && !im.getAttribute('srcset')) im.src=du;
+      });
+      if(window.__reapplyData) window.__reapplyData();
+    });
+    /* رجّع مسار مؤقت — الـimg هيتحدّث بالـdataUrl لما تجي من IDB */
+    return path;
   }
   return path;
 }
@@ -167,7 +197,7 @@ function panelHTML(m){
       }).join('');
       return `<article class="menu-card menu-card-sizes reveal" style="transition-delay:${i*0.03}s" data-qv-item="${esc(it.id||'')}">
         <button type="button" class="card-link card-link-img" data-qv-img aria-label="${esc(it.name)}">
-          ${it.img?`<span class="card-img" data-emoji="${m.emoji}"><img src="${imageSrc(it.img)}" alt="${esc(it.name)}" loading="lazy" decoding="async"${cardSrcset(it.img)?` srcset="${cardSrcset(it.img)}" sizes="(max-width:640px) 44vw, 300px"`:''} onerror="imgFallback(this)"></span>`:`<span class="card-emoji">${m.emoji}</span>`}
+          ${it.img?`<span class="card-img" data-emoji="${m.emoji}"><img data-imgpath="${esc(it.img)}" src="${imageSrc(it.img)}" alt="${esc(it.name)}" loading="lazy" decoding="async"${cardSrcset(it.img)?` srcset="${cardSrcset(it.img)}" sizes="(max-width:640px) 44vw, 300px"`:''} onerror="imgFallback(this)"></span>`:`<span class="card-emoji">${m.emoji}</span>`}
         </button>
         <div class="card-body">
           <div class="card-sizes">${rows}</div>
@@ -178,7 +208,7 @@ function panelHTML(m){
         </div>
       </article>`;
     }
-    return `<article class="menu-card reveal" style="transition-delay:${i*0.03}s" data-qv-item="${esc(it.id||'')}"><button type="button" class="card-link" data-qv-img aria-label="${esc(it.name)}">${it.img?`<span class="card-img" data-emoji="${m.emoji}"><img src="${imageSrc(it.img)}" alt="${esc(it.name)}" loading="lazy" decoding="async"${cardSrcset(it.img)?` srcset="${cardSrcset(it.img)}" sizes="(max-width:640px) 46vw, 180px"`:''} onerror="imgFallback(this)"></span>`:`<span class="card-emoji">${m.emoji}</span>`}<h3>${esc(it.name)}</h3></button><div class="card-bottom"><span class="card-price">${it.price} <i>ج.م</i></span><button type="button" class="button primary" data-qv-price="" data-qv-price-one="1">اطلبها ←</button></div></article>`;
+    return `<article class="menu-card reveal" style="transition-delay:${i*0.03}s" data-qv-item="${esc(it.id||'')}"><button type="button" class="card-link" data-qv-img aria-label="${esc(it.name)}">${it.img?`<span class="card-img" data-emoji="${m.emoji}"><img data-imgpath="${esc(it.img)}" src="${imageSrc(it.img)}" alt="${esc(it.name)}" loading="lazy" decoding="async"${cardSrcset(it.img)?` srcset="${cardSrcset(it.img)}" sizes="(max-width:640px) 46vw, 180px"`:''} onerror="imgFallback(this)"></span>`:`<span class="card-emoji">${m.emoji}</span>`}<h3>${esc(it.name)}</h3></button><div class="card-bottom"><span class="card-price">${it.price} <i>ج.م</i></span><button type="button" class="button primary" data-qv-price="" data-qv-price-one="1">اطلبها ←</button></div></article>`;
   }).join('');
   const hasSz=m.items.some(function(it){return itemSizesOf(m,it).length;});
   return head+`<div class="menu-cards${hasSz?' menu-cards-sizes':''}">${cards}</div>`;
@@ -262,6 +292,7 @@ function renderProduct(){
       productImage.removeAttribute('srcset');
     }
     var imgVal=imageSrc(item.img);
+    productImage.setAttribute('data-imgpath', item.img);
     if(curSrc!==imgVal) productImage.src=imgVal;
   }
 

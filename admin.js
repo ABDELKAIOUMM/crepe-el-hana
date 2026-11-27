@@ -33,7 +33,65 @@
     images = JSON.parse(localStorage.getItem(IMGS_KEY) || 'null') || [];
   }
 
+  /* ═══════════ مزامنة catalog من menu ═══════════
+     الـCMS بيعدّل data.menu، والـcatalog نفس الأصناف بصيغة تانية.
+     لو ما زامنّاهم، الملف المنشور يبقى فيه تضارب (menu محدّث وcatalog قديم).
+     فقبل الحفظ/النشر بنم��ّن الـcatalog من الـmenu. */
+  function syncCatalogFromMenu() {
+    if (!data || !data.menu || !data.menu.length) return;
+    var cat = data.catalog || {};
+    if (!Object.keys(cat).length) { cat = {}; }
+    data.menu.forEach(function (sec) {
+      var key = sec.key;
+      if (!cat[key]) {
+        cat[key] = { title: sec.title || key, crumb: sec.title || key, eyebrow: '', intro: sec.desc || '', items: [] };
+      }
+      cat[key].title = sec.title || cat[key].title;
+      cat[key].crumb = cat[key].crumb || sec.title || key;
+      if (sec.desc) cat[key].intro = sec.desc;
+
+      var byId = {}, byName = {};
+      (cat[key].items || []).forEach(function (ci, i) { if (ci.id) byId[ci.id] = i; byName[ci.name] = i; });
+
+      (sec.items || []).forEach(function (it) {
+        var idx = (it.id && byId[it.id] !== undefined) ? byId[it.id]
+                : (byName[it.name] !== undefined ? byName[it.name] : -1);
+        var price = null;
+        if (it.sizes && it.sizes.length) price = it.sizes[0].price;
+        else if (it.price !== undefined && it.price !== null) price = it.price;
+        else if (it.small !== undefined && it.small !== null) price = it.small;
+        else if (it.medium !== undefined && it.medium !== null) price = it.medium;
+        else if (it.large !== undefined && it.large !== null) price = it.large;
+
+        if (idx === -1) {
+          var ni = {
+            id: it.id || (key + '-' + it.name),
+            name: it.name,
+            price: price == null ? 0 : price,
+            img: it.img || '',
+            tag: 'مميز',
+            desc: it.desc || '',
+            menuKey: key
+          };
+          cat[key].items.push(ni);
+          byId[ni.id] = cat[key].items.length - 1;
+          byName[ni.name] = cat[key].items.length - 1;
+          return;
+        }
+        var ci = cat[key].items[idx];
+        if (it.name) ci.name = it.name;
+        if (it.desc !== undefined && it.desc !== null) ci.desc = it.desc;
+        if (it.img !== undefined && it.img !== null) ci.img = it.img;
+        if (price !== null && price !== undefined) ci.price = price;
+        ci.menuKey = key;
+      });
+    });
+    data.catalog = cat;
+  }
+
   function saveData(silent) {
+    /* نزامن catalog مع menu الأول (عشان الملف المنشور متسق) */
+    try { syncCatalogFromMenu(); } catch (e) { /* تجاهل */ }
     /* بنحفظ الصور المرفوعة في IndexedDB (مساحة مفتوحة)،
        وlocalStorage بياخد البيانات بس — من غير dataUrls.
        ده بيخلي الحفظ مضمون مهما عدد الصور. */
@@ -91,7 +149,7 @@
         var im = withData[i];
         if (used[im.path]) continue;          /* مستخدمة في صنف — ما نمسحهاش */
         images = images.filter(function (x) { return x.path !== im.path; });
-        delete idbCache[im.path];
+        cacheDel(im.path);
         idbDel(im.path);
         if (data._images) data._images = images.slice();
         try {
@@ -164,7 +222,7 @@
     if (!pending.length) return;
     pending.forEach(function (im) {
       idbPut(im.path, im.dataUrl).then(function () {
-        idbCache[im.path] = im.dataUrl;
+        cacheSet(im.path, im.dataUrl);
         delete im.dataUrl;                 /* نشيلها من الذاكرة بعد النقل */
         if (data && data._images) {
           data._images.forEach(function (x) { if (x.path === im.path) delete x.dataUrl; });
@@ -178,7 +236,9 @@
      لو أي صورة مربوطة بمسار مش موجود على السيرفر (404)
      — زي الصور القديمة اللي اتشالت — بنصلّحها تلقائي
      ونختار بديل صحيح من نفس القسم. */
-  var DEAD_PATTERNS = /sq-professional-overhead|professional-overhead-pizza-isolated/i;
+  var DEAD_PATTERNS = (window.CH && window.CH.DEAD_RE)
+    ? window.CH.DEAD_RE
+    : /sq-professional-overhead|professional-overhead-pizza-isolated/i;
 
   /* مسار رفع المستخدم (assets/upload/...) — دايماً صالح،
      لأن الصورة بتتخزن كـdataUrl في مصفوفة images مش على السيرفر. */
@@ -186,6 +246,7 @@
     if (!path) return false;
     if (/^data:image\//.test(path)) return true;
     if (/^assets\/upload\//.test(path)) return true;
+    if (window.CH && window.CH.cacheGet && window.CH.cacheGet(path)) return true;
     return images.some(function (im) { return im.path === path && im.dataUrl; });
   }
 
@@ -634,7 +695,7 @@
     for (var i = 0; i < images.length; i++) { if (images[i].path === path) { im = images[i]; break; } }
     if (im && im.dataUrl) return im.dataUrl;
     /* الصورة في IndexedDB ⇒ بنجيبها من هناك (best effort) */
-    if (idbCache[path]) return idbCache[path];
+    if (cacheGet(path)) return cacheGet(path);
     if (path.indexOf('assets/upload/') === 0) {
       ensureDataUrl(path);
       return '';   /* لسه مش جاهزة — الـhydrate هيملاها */
@@ -651,7 +712,7 @@
     var im = null;
     for (var i = 0; i < images.length; i++) { if (images[i].path === path) { im = images[i]; break; } }
     if (im && im.dataUrl) { el.src = im.dataUrl; return; }
-    if (idbCache[path]) { el.src = idbCache[path]; return; }
+    if (cacheGet(path)) { el.src = cacheGet(path); return; }
     /* مسار عادي على السيرفر ⇒ نحطه على طول (الصورة موجودة فعلاً) */
     if (path.indexOf('assets/upload/') !== 0) { el.src = path; return; }
     /* صورة مرفوعة ⇒ جيبها من IndexedDB */
@@ -748,7 +809,7 @@
   function pickUploadedFor(target, dataUrl, name) {
     var path = 'assets/upload/' + String(name).replace(/[^\w.\-]/g, '_');
     images.push({ path: path, name: name, dataUrl: dataUrl, __t: Date.now() });
-    idbPut(path, dataUrl).then(function () { idbCache[path] = dataUrl; }).catch(function () {});
+    idbPut(path, dataUrl).then(function () { cacheSet(path, dataUrl); }).catch(function () {});
     target.value = path;
     markDirty();
     toast('✅ اتحدّثت صورة المنتج', 'ok');
@@ -791,74 +852,27 @@
   var MAX_EDGE = 1200;      /* أقصى طول ضلع */
   var JPEG_Q = 0.82;        /* جودة JPEG/WebP */
 
-  /* ── IndexedDB لتخزين الصور المرفوعة (بلا حدود تقريبية) ── */
-  var IDB_NAME = 'crepeElHanaImg', IDB_STORE = 'imgs', idb = null, idbFailed = false;
-
-  function openIdb() {
-    return new Promise(function (res, rej) {
-      if (idb) return res(idb);
-      if (idbFailed) return rej(new Error('idb unavailable'));
-      try {
-        var rq = indexedDB.open(IDB_NAME, 1);
-        rq.onupgradeneeded = function (e) {
-          var db = e.target.result;
-          if (!db.objectStoreNames.contains(IDB_STORE)) db.createObjectStore(IDB_STORE);
-        };
-        rq.onsuccess = function (e) { idb = e.target.result; res(idb); };
-        rq.onerror = function (e) { idbFailed = true; rej(e.target.error || new Error('idb error')); };
-      } catch (e) { idbFailed = true; rej(e); }
-    });
-  }
-
-  function idbPut(path, dataUrl) {
-    return openIdb().then(function (db) {
-      return new Promise(function (res, rej) {
-        var tx = db.transaction(IDB_STORE, 'readwrite');
-        tx.objectStore(IDB_STORE).put(dataUrl, path);
-        tx.oncomplete = function () { res(true); };
-        tx.onerror = function (e) { rej(e.target.error || new Error('idb write error')); };
-      });
-    });
-  }
-
-  function idbGet(path) {
-    return openIdb().then(function (db) {
-      return new Promise(function (res) {
-        try {
-          var tx = db.transaction(IDB_STORE, 'readonly');
-          var rq = tx.objectStore(IDB_STORE).get(path);
-          rq.onsuccess = function () { res(rq.result || null); };
-          rq.onerror = function () { res(null); };
-        } catch (e) { res(null); }
-      });
-    }).catch(function () { return null; });
-  }
-
-  function idbDel(path) {
-    return openIdb().then(function (db) {
-      return new Promise(function (res) {
-        try {
-          var tx = db.transaction(IDB_STORE, 'readwrite');
-          tx.objectStore(IDB_STORE).delete(path);
-          tx.oncomplete = function () { res(true); };
-          tx.onerror = function () { res(false); };
-        } catch (e) { res(false); }
-      });
-    }).catch(function () { return false; });
-  }
-
-  /* كاش للصور اللي اتقرت من IndexedDB */
-  var idbCache = {};
+  /* ── IndexedDB للصور المرفوعة — من المكتبة المشتركة ch-core.js ── */
+  var CH = window.CH || {};
+  var idbFailed = false;
+  function openIdb(){ return CH.openDb ? CH.openDb() : Promise.reject(new Error('no CH')); }
+  function idbPut(p,d){ return CH.idbPut ? CH.idbPut(p,d) : Promise.reject(new Error('no CH')); }
+  function idbGet(p){ return CH.idbGet ? CH.idbGet(p) : Promise.resolve(null); }
+  function idbDel(p){ return CH.idbDel ? CH.idbDel(p) : Promise.resolve(false); }
+  /* الكاش — في ch-core.js */
+  function cacheGet(p){ return CH.cacheGet ? CH.cacheGet(p) : null; }
+  function cacheSet(p,v){ if (CH.cacheSet) CH.cacheSet(p,v); }
+  function cacheDel(p){ if (CH.cacheDel) CH.cacheDel(p); }
 
   /* بنضمن إن كل صورة في الـimages ليها dataUrl متاحة:
      لو مش موجودة في الـimages (يعني متخزنة في IDB) بنجيبها ونرجعها. */
   function ensureDataUrl(path) {
     if (!path) return Promise.resolve(null);
-    var hit = idbCache[path];
+    var hit = cacheGet(path);
     if (hit) return Promise.resolve(hit);
     return idbGet(path).then(function (du) {
       if (!du) return null;
-      idbCache[path] = du;
+      cacheSet(path, du);
       for (var i = 0; i < images.length; i++) {
         if (images[i].path === path) { images[i].dataUrl = du; break; }
       }
@@ -934,7 +948,7 @@
           var w = res.w, h = res.h;
           /* بنخزّن الصورة في IndexedDB (مش في localStorage) */
           idbPut(path, dataUrl).then(function () {
-            idbCache[path] = dataUrl;
+            cacheSet(path, dataUrl);
             cb({
               path: path, name: f.name, dataUrl: dataUrl,
               dim: w && h ? (w + '×' + h) : '',
@@ -1519,7 +1533,7 @@
     confirmBox('حذف الصورة', 'حذف «' + selImg + '»؟')(
       function () {
         images = images.filter(function (x) { return x.path !== selImg; });
-        delete idbCache[selImg];
+        cacheDel(selImg);
         idbDel(selImg);
         selImg = null;
         markDirty(); renderImages();
@@ -1571,7 +1585,7 @@
         };
         /* بنخزّنها في IndexedDB أول حاجة */
         idbPut(path, res.dataUrl).then(function () {
-          idbCache[path] = res.dataUrl;
+          cacheSet(path, res.dataUrl);
           finish();
         }).catch(function () { finish(); });
       });
@@ -1787,6 +1801,78 @@
   };
 
   $('#btnSave').onclick = function () { saveData(); };
+
+  /* ═══════════ 14) النشر على الموقع ═══════════
+     «حفظ» = في المتصفح بس. «نشر» = يرفع لـ GitHub Pages (الزوار). */
+  function initPublish() {
+    var P = window.CH_PUBLISH;
+    var btn = $('#btnPublish');
+    if (!btn) return;
+    if (!P) { btn.disabled = true; btn.title = 'ملف publish.js مش موجود'; return; }
+
+    var modal = $('#pubModal');
+    var logBox = $('#pubLog');
+
+    function openPub() {
+      $('#pubRepo').value = P.getRepo();
+      $('#pubBranch').value = P.getBranch();
+      $('#pubToken').value = P.getToken();
+      logBox.innerHTML = '';
+      modal.hidden = false;
+      $('#pubGo').disabled = false;
+      $('#pubGo').textContent = '🚀 انشر دلوقتي';
+    }
+    function closePub() { modal.hidden = true; }
+
+    btn.onclick = function () {
+      /* لازم نحفظ الأول عشان نرسل آخر حالة */
+      saveData(true);
+      openPub();
+    };
+    modal.querySelector('[data-cancel]').onclick = closePub;
+    modal.onclick = function (e) { if (e.target === modal) closePub(); };
+
+    $('#pubGo').onclick = function () {
+      var repo = ($('#pubRepo').value || '').trim();
+      var branch = ($('#pubBranch').value || '').trim() || 'gh-pages';
+      var token = ($('#pubToken').value || '').trim();
+      if (!repo) return toast('❌ حط اسم المستودع', 'err');
+      if (!token) return toast('❌ حط توكن GitHub', 'err');
+
+      P.setRepo(repo); P.setBranch(branch); P.setToken(token);
+
+      var go = $('#pubGo');
+      go.disabled = true;
+      go.textContent = '⏳ بننشر…';
+      logBox.innerHTML = '';
+
+      function log(txt) {
+        var d = document.createElement('div');
+        d.className = 'pub-log-line';
+        d.textContent = txt;
+        logBox.appendChild(d);
+        logBox.scrollTop = logBox.scrollHeight;
+      }
+
+      P.publish({
+        repo: repo, branch: branch, token: token,
+        data: data,
+        onLog: log
+      }).then(function (res) {
+        go.disabled = false;
+        go.textContent = '🚀 انشر دلوقتي';
+        log('✅ تم رفع ' + res.files + ' ملف');
+        log('⏳ GitHub Pages محتاج دقيقة–دقيقتين — الزوار هيشوفوا التعديل بعد كده');
+        toast('🚀 اتنشر على الموقع!', 'ok');
+      }).catch(function (err) {
+        go.disabled = false;
+        go.textContent = '🚀 انشر دلوقتي';
+        log('❌ فشل: ' + (err && err.message ? err.message : err));
+        toast('❌ فشل النشر: ' + (err && err.message ? err.message : err), 'err');
+      });
+    };
+  }
+  initPublish();
   $('#btnReset').onclick = function () {
     confirmBox('إعادة ضبط التعديلات',
       'هترجع كل التعديلات المحفوظة في المتصفح لحالة data.json الأصلية. كل الصور هترجع لحالتها المنشورة. متأكد؟')(
