@@ -314,6 +314,7 @@
 
   function boot() {
     loadAll();
+    startImgWatcher();
     /* دايماً بنجيب الأحدث من data.json وبندمج فوقه المحفوظ.
        Reason: لو اعتمدنا على المحفوظ بس، الحقول الجديدة (extras/صور جديدة)
        هتفضل ناقصة والمستخدم مش هيشوفها. */
@@ -628,26 +629,35 @@
      فبنرجع dataUrl لو متاح، وإلا المسار العادي. */
   function imgSrc(path) {
     if (!path) return '';
+    if (path.indexOf('data:image') === 0) return path;
     var im = null;
     for (var i = 0; i < images.length; i++) { if (images[i].path === path) { im = images[i]; break; } }
     if (im && im.dataUrl) return im.dataUrl;
-    /* الصورة في IndexedDB ⇒ بنجيبها من هناك */
+    /* الصورة في IndexedDB ⇒ بنجيبها من هناك (best effort) */
     if (idbCache[path]) return idbCache[path];
-    ensureDataUrl(path);
+    if (path.indexOf('assets/upload/') === 0) {
+      ensureDataUrl(path);
+      return '';   /* لسه مش جاهزة — الـhydrate هيملاها */
+    }
     return path;
   }
 
-  /* بنملي الـsrc asynchronously (بيجيب من IndexedDB لو محتاجة) */
+  /* بنملي الـsrc (بيجيب من IndexedDB لو محتاجة) */
   function setImgSrc(el, path) {
-    if (!el || !path) return;
+    if (!el) return;
+    if (!path) { el.removeAttribute('src'); return; }
+    /* data URL جاهزة */
+    if (path.indexOf('data:image') === 0) { el.src = path; return; }
     var im = null;
     for (var i = 0; i < images.length; i++) { if (images[i].path === path) { im = images[i]; break; } }
     if (im && im.dataUrl) { el.src = im.dataUrl; return; }
     if (idbCache[path]) { el.src = idbCache[path]; return; }
+    /* مسار عادي على السيرفر ⇒ نحطه على طول (الصورة موجودة فعلاً) */
+    if (path.indexOf('assets/upload/') !== 0) { el.src = path; return; }
+    /* صورة مرفوعة ⇒ جيبها من IndexedDB */
     ensureDataUrl(path).then(function (du) {
-      if (du) el.src = du;
-      else if (!el.src) el.src = path;
-    });
+      el.src = du || path;
+    }).catch(function () { el.src = path; });
   }
 
   /* معاينة الصورة الحالية */
@@ -667,8 +677,25 @@
   function hydrateImgs(scope) {
     (scope || document).querySelectorAll('img[data-imgpath]').forEach(function (im) {
       var p = im.dataset.imgpath;
-      if (p) setImgSrc(im, p);
+      if (!p) return;
+      /* لو الـsrc مضبوط خلاص ⇒ مش بنعمل حاجة */
+      var cur = im.getAttribute('src') || '';
+      if (cur && cur !== p && cur.indexOf('data:image') !== 0) return;
+      if (cur && cur === p) return;
+      setImgSrc(im, p);
     });
+  }
+
+  /* شبكة أمان: لو أي صورة فضت فاضية ⇒ بنملاها تاني */
+  function startImgWatcher() {
+    setInterval(function () {
+      document.querySelectorAll('img[data-imgpath]').forEach(function (im) {
+        var p = im.dataset.imgpath;
+        if (!p) return;
+        var cur = im.getAttribute('src') || '';
+        if (!cur) setImgSrc(im, p);
+      });
+    }, 1500);
   }
 
   /* يحسب أبعاد الصورة ويملاها تحت الاسم (بعد ما الصورة تتحمّل) */
