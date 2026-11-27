@@ -5,16 +5,109 @@
 (function () {
   'use strict';
 
-  var LS_KEY = 'crepeElHana_data_v1';
-  var SCALE_KEY = 'crepeElHana_scale_v1';
+  /* كل الثوابت من المكتبة المشتركة ch-core.js (مصدر واحد للجميع) */
+  var CH = window.CH || {};
+  var LS_KEY   = CH.LS_KEY   || 'crepeElHana_data_v1';
+  var SCALE_KEY= CH.SCALE_KEY|| 'crepeElHana_scale_v1';
+
+  /* ═══════════ بناء catalog من menu (مصدر واحد للحقيقة) ═══════════
+     الـcatalog هو نفس الأصناف بصيغة تانية (title/crumb/intro/items price).
+     بنبدأ من catalog المنشور (base) ونحدّث كل صنف بالبيانات من الـmenu المدمج،
+     وبنضيف أقسام/أصناف جديدة لو المستخدم زادها. */
+  function buildCatalogFromMenu(menu, baseCatalog, savedCatalog) {
+    var out = {};
+    /* 1) ننسخ الأساس (catalog المنشور) */
+    var src = (baseCatalog && Object.keys(baseCatalog).length) ? baseCatalog : {};
+    Object.keys(src).forEach(function (k) {
+      out[k] = JSON.parse(JSON.stringify(src[k]));
+      out[k].items = out[k].items || [];
+    });
+    /* 2) لو فيه catalog محفوظ (تعديلات قديمة) ندمجه كمان */
+    if (savedCatalog && Object.keys(savedCatalog).length) {
+      Object.keys(savedCatalog).forEach(function (k) {
+        if (!out[k]) out[k] = JSON.parse(JSON.stringify(savedCatalog[k]));
+        out[k].items = out[k].items || [];
+      });
+    }
+    if (!menu || !menu.length) return out;
+
+    /* 3) لكل قسم في الـmenu: حدّث الـcatalog المقابل */
+    menu.forEach(function (sec) {
+      var key = sec.key;
+      if (!out[key]) {
+        out[key] = {
+          title: sec.title || key,
+          crumb: sec.title || key,
+          eyebrow: '',
+          intro: sec.desc || '',
+          items: []
+        };
+      }
+      out[key].title = sec.title || out[key].title;
+      out[key].crumb = out[key].crumb || sec.title || key;
+      if (sec.desc) out[key].intro = sec.desc;
+
+      /* خريطة: الصنف بالـid أو بالاسم */
+      var byId = {}, byName = {};
+      (out[key].items || []).forEach(function (ci, i) {
+        if (ci.id) byId[ci.id] = i;
+        byName[ci.name] = i;
+      });
+
+      (sec.items || []).forEach(function (it) {
+        var idx = (it.id && byId[it.id] !== undefined) ? byId[it.id]
+                : (byName[it.name] !== undefined ? byName[it.name] : -1);
+        if (idx === -1) {
+          /* صنف جديد ⇒ نضيفه للـcatalog */
+          var ni = {
+            id: it.id || (key + '-' + it.name),
+            name: it.name,
+            price: effectivePrice(it),
+            img: it.img || '',
+            tag: 'مميز',
+            desc: it.desc || '',
+            menuKey: key
+          };
+          out[key].items.push(ni);
+          byId[ni.id] = out[key].items.length - 1;
+          byName[ni.name] = out[key].items.length - 1;
+          return;
+        }
+        var ci = out[key].items[idx];
+        if (it.name) ci.name = it.name;
+        if (it.desc !== undefined && it.desc !== null) ci.desc = it.desc;
+        /* الصورة: لو المستخدم رفع صورة ⇒ لازم تنطبق */
+        if (it.img !== undefined && it.img !== null) ci.img = it.img;
+        /* السعر: من الأحجام أو السعر المفرد */
+        var p = effectivePrice(it);
+        if (p !== null && p !== undefined) ci.price = p;
+        ci.menuKey = key;
+      });
+    });
+    return out;
+  }
+
+  /* سعر الصنف: لو عنده أحجام ⇒ متوسط/أول سعر، لو مفرد ⇒ السعر */
+  function effectivePrice(it) {
+    if (!it) return null;
+    if (it.sizes && it.sizes.length) {
+      var first = it.sizes[0].price;
+      return (first !== undefined && first !== null) ? first : null;
+    }
+    if (it.price !== undefined && it.price !== null) return it.price;
+    if (it.small !== undefined && it.small !== null) return it.small;
+    if (it.medium !== undefined && it.medium !== null) return it.medium;
+    if (it.large !== undefined && it.large !== null) return it.large;
+    return null;
+  }
 
   /* ═══════════ إصلاح مسارات الصور القديمة/الميتة ═══════════
      لو المستخدم عنده تعديلات قديمة في المتصفح (localStorage) بتشير
      لصور اتشالت من السيرفر → بنصلّحها أوتوماتيك ونعرض الصورة الصح.
      بدون ده، أي صورة يتغيّر مسارها بتفضل مكسورة عنده. */
-  var DEAD_RE = /sq-professional-overhead|professional-overhead-pizza-isolated|assets\/upload\/pngwing/i;
+  var DEAD_RE = CH.DEAD_RE || /sq-professional-overhead|professional-overhead-pizza-isolated/i;
 
-  var SEC_FALLBACK = {
+  var SEC_FALLBACK = CH.SEC_FALLBACK || {
     pizza: 'assets/webp/section-pizza.webp',
     syrian: 'assets/webp/section-syrian.webp',
     pasta: 'assets/webp/section-pasta.webp',
@@ -45,6 +138,9 @@
     function isDead(path) {
       if (!path) return true;
       if (/^data:image\//.test(path)) return false;
+      /* الصور المرفوعة (assets/upload/...) ⇒ دايماً صالحة
+         (بتتخزن في IndexedDB عند العميل) */
+      if (CH.isUploadPath ? CH.isUploadPath(path) : path.indexOf('assets/upload/') === 0) return false;
       if (userPaths[path]) return false;
       if (DEAD_RE.test(path)) return true;
       if (validPaths) return !validPaths[path];
@@ -61,7 +157,9 @@
         base.content.sections.forEach(function (bs) { baseSec[bs.key] = bs.img; });
       }
       content.sections.forEach(function (s) {
-        var isUserUpload = /^data:image\//.test(s.img || '') || userPaths[s.img || ''];
+        var isUserUpload = /^data:image\//.test(s.img || '')
+          || userPaths[s.img || '']
+          || (CH.isUploadPath ? CH.isUploadPath(s.img || '') : (s.img || '').indexOf('assets/upload/') === 0);
         var published = baseSec[s.key];
         if (published && !isUserUpload && s.img !== published && !isDead(s.img)) {
           /* قيمة محفوظة من نسخة أقدم — نرجّعها للمنشور */
@@ -73,17 +171,38 @@
         }
       });
     }
+    /* ═══ مساعد: نجيب قائمة قسم من الـmenu — الـmenu ممكن يكون:
+           - مصفوفة أقسام: [{key:'pizza', items:[...]}, ...]
+           - كائن بالأقسام: {pizza:{items:[...]}} */
+    function menuSection(key) {
+      if (!menu) return null;
+      if (Array.isArray(menu)) {
+        for (var q = 0; q < menu.length; q++) {
+          if (menu[q] && menu[q].key === key) return menu[q];
+        }
+        return null;
+      }
+      return menu[key] || null;
+    }
+    function baseSection(key) {
+      if (!base || !base.menu) return null;
+      for (var q = 0; q < base.menu.length; q++) {
+        if (base.menu[q] && base.menu[q].key === key) return base.menu[q];
+      }
+      return null;
+    }
+
     /* catalog — بنصلّحه قبل الـmenu عشان الـmenu ياخد منه المسار الصح.
        ولو اتصلح بعد الـmenu، الـmenu هياخد منه المسار الميت تاني. */
     if (catalog) {
       Object.keys(catalog).forEach(function (ck) {
+        var ms = menuSection(ck);
+        var bs = baseSection(ck);
         (catalog[ck].items || []).forEach(function (ci, i) {
           if (isDead(ci.img)) {
-            ci.img = (menu && menu[ck] && menu[ck].items && menu[ck].items[i] && menu[ck].items[i].img && !isDead(menu[ck].items[i].img))
-              ? menu[ck].items[i].img
-              : (base && base.menu && base.menu.filter(function (x) { return x.key === ck; })[0]
-                 && base.menu.filter(function (x) { return x.key === ck; })[0].items[i]
-                 && base.menu.filter(function (x) { return x.key === ck; })[0].items[i].img)
+            ci.img = (ms && ms.items && ms.items[i] && ms.items[i].img && !isDead(ms.items[i].img))
+              ? ms.items[i].img
+              : (bs && bs.items && bs.items[i] && bs.items[i].img)
               || SEC_FALLBACK[ck] || SEC_FALLBACK.pizza;
             fixed++;
           }
@@ -92,14 +211,20 @@
     }
     /* صور الأصناف */
     if (menu) {
-      menu.forEach(function (sec) {
+      var menuList = Array.isArray(menu) ? menu : Object.keys(menu).map(function (k) {
+        var sec = menu[k] || {};
+        if (!sec.key) sec.key = k;
+        return sec;
+      });
+      menuList.forEach(function (sec) {
+        if (!sec) return;
         (sec.items || []).forEach(function (it, i) {
           if (isDead(it.img)) {
-            it.img = (catalog && catalog[sec.key] && catalog[sec.key].items && catalog[sec.key].items[i] && catalog[sec.key].items[i].img && !isDead(catalog[sec.key].items[i].img))
-              ? catalog[sec.key].items[i].img
-              : (base && base.menu && base.menu.filter(function (x) { return x.key === sec.key; })[0]
-                 && base.menu.filter(function (x) { return x.key === sec.key; })[0].items[i]
-                 && base.menu.filter(function (x) { return x.key === sec.key; })[0].items[i].img)
+            var cs = catalog && catalog[sec.key];
+            var bs = baseSection(sec.key);
+            it.img = (cs && cs.items && cs.items[i] && cs.items[i].img && !isDead(cs.items[i].img))
+              ? cs.items[i].img
+              : (bs && bs.items && bs.items[i] && bs.items[i].img)
               || SEC_FALLBACK[sec.key] || SEC_FALLBACK.pizza;
             fixed++;
           }
@@ -107,6 +232,31 @@
       });
     }
     return fixed;
+  }
+
+  /* ═══════════ تحميل الصور المرفوعة من IndexedDB ═══════════
+     الصور المرفوعة من اللوحة بتتخزن في IndexedDB (مش في localStorage).
+     الموقع لازم يجيبها من هناك ويضيفها للـmanifest كـdataUrl،
+     وإلا مش هيعرف يعرضها (المسار fake على السيرفر ⇒ 404). */
+  function injectUploadedImages(cb) {
+    if (!CH.loadUploadedImages) { cb && cb(); return; }
+    CH.loadUploadedImages(function (list) {
+      if (!list || !list.length) { cb && cb(); return; }
+      var man = window.__IMAGES_MANIFEST || [];
+      var byPath = {};
+      man.forEach(function (im) { if (im && im.path) byPath[im.path] = im; });
+      list.forEach(function (u) {
+        if (byPath[u.path]) {
+          /* موجودة ⇒ نحدّث الـdataUrl بتاعها */
+          byPath[u.path].dataUrl = u.dataUrl;
+          if (!byPath[u.path].dim) byPath[u.path].dim = '';
+        } else {
+          man.push({ path: u.path, name: u.path.split('/').pop(), dataUrl: u.dataUrl });
+        }
+      });
+      window.__IMAGES_MANIFEST = man;
+      cb && cb(list.length);
+    });
   }
 
   function applyScale(s) {
@@ -323,13 +473,16 @@
         }
 
         window.__MENU_OVERRIDE = mergedMenu.length ? mergedMenu : saved.menu;
+        /* ═══ catalog مولّد من الـmenu المدمج ═══
+           الـCMS بيعدّل data.menu، والـcatalog مصفوفة موازية لوحدها.
+           لو اعتمدنا على catalog المحفوظ بس، أي تعديل على صورة/اسم صنف
+           في اللوحة كان هيتجاهل في صفحة «قائمة الأكل».
+           الحل: نبني الـcatalog من الـmenu المدمج (مصدر واحد). */
+        window.__CATALOG_OVERRIDE = buildCatalogFromMenu(window.__MENU_OVERRIDE, base.catalog, saved.catalog);
         window.__CONTENT_OVERRIDE = (saved.content && Object.keys(saved.content).length)
           ? saved.content : base.content;
         window.__RESTAURANT_OVERRIDE = (saved.restaurant && Object.keys(saved.restaurant).length)
           ? saved.restaurant : base.restaurant;
-        window.__CATALOG_OVERRIDE = (saved.catalog && saved.catalog.length)
-          ? saved.catalog : base.catalog;
-
         /* 2) الحقول الجديدة: لو مش في المحفوظ → من base (وده اللي كان ناقص) */
         window.__SIZEKEYS_OVERRIDE = (saved.sizeKeys && Object.keys(saved.sizeKeys).length)
           ? saved.sizeKeys : base.sizeKeys;
@@ -338,6 +491,8 @@
         window.__IMAGES_MANIFEST = (saved._images && saved._images.length)
           ? saved._images : base._images;
 
+        /* ═══ الصور المرفوعة من IndexedDB → نضيفها للـmanifest ═══ */
+        injectUploadedImages(function () {
         /* ═══ إصلاح أي مسار صورة ميتة في تعديلات المستخدم المحفوظة ═══ */
         var __fixed = repairDeadPaths(
           window.__MENU_OVERRIDE,
@@ -371,6 +526,7 @@
           }
           if (attempt < 40) setTimeout(function () { tryReapply(attempt + 1); }, 50);
         })(0);
+        });   /* end injectUploadedImages */
       })
       .catch(function () {
         /* فشل الـfetch → نرجع للمحفوظ زي ما كان */
@@ -378,7 +534,8 @@
           window.__MENU_OVERRIDE = saved.menu;
           window.__CONTENT_OVERRIDE = saved.content;
           window.__RESTAURANT_OVERRIDE = saved.restaurant;
-          window.__CATALOG_OVERRIDE = saved.catalog;
+          window.__CATALOG_OVERRIDE = (saved.catalog && Object.keys(saved.catalog).length)
+            ? saved.catalog : (base && base.catalog);
         }
         if (saved.sizeKeys) window.__SIZEKEYS_OVERRIDE = saved.sizeKeys;
         if (saved.extras) window.__EXTRAS_OVERRIDE = saved.extras;
@@ -401,12 +558,15 @@
         window.__MENU_OVERRIDE = d.menu;
         window.__CONTENT_OVERRIDE = d.content;
         window.__RESTAURANT_OVERRIDE = d.restaurant;
-        window.__CATALOG_OVERRIDE = d.catalog;
+        window.__CATALOG_OVERRIDE = buildCatalogFromMenu(window.__MENU_OVERRIDE, d.catalog, null);
         window.__SIZEKEYS_OVERRIDE = d.sizeKeys;
         window.__EXTRAS_OVERRIDE = d.extras;
         window.__IMAGES_MANIFEST = d._images;
-        applyContent(d.content);
-        if (window.__reapplyData) window.__reapplyData();
+        /* ═══ الصور المرفوعة من IndexedDB (لو موجودة على الجهاز) ═══ */
+        injectUploadedImages(function () {
+          applyContent(d.content);
+          if (window.__reapplyData) window.__reapplyData();
+        });
       })
       .catch(function () { /* تجاهل */ });
   }

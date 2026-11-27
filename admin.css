@@ -761,3 +761,52 @@ select option:checked{
 .ip-open,.img-up,.it-img-clear,.it-sz-add,.it-mode-btn,.menu-tab,.subtab{
   font-family:Tajawal,'Noto Color Emoji',Arial,sans-serif;
 }
+
+/* ═══════════════════════════════════════════════════
+   زر النشر والنافذة
+   ═══════════════════════════════════════════════════ */
+.btn.pub {
+  background: linear-gradient(135deg, #16a34a, #0d9488);
+  color: #fff;
+  border: 0;
+  font-weight: 700;
+}
+.btn.pub:hover { filter: brightness(1.08); }
+.btn.pub:disabled { opacity: .6; cursor: progress; }
+.btn.pub.sm { padding: 7px 13px; font-size: 13px; }
+
+.pub-card { max-width: 520px; }
+.pub-lead {
+  background: var(--bg-soft, #1c1c1c);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin: 0 0 16px;
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.pub-lead b { color: var(--orange); }
+.pub-help {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.8;
+  margin: 10px 0 14px;
+}
+.pub-help b { color: var(--text); }
+.pub-log {
+  max-height: 210px;
+  overflow: auto;
+  background: #101010;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  padding: 10px 12px;
+  font-size: 12.5px;
+  line-height: 1.9;
+  margin-bottom: 14px;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  direction: ltr;
+  text-align: left;
+}
+.pub-log:empty { display: none; }
+.pub-log-line { white-space: pre-wrap; word-break: break-word; }

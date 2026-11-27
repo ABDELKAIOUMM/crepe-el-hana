@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>لوحة تحكم — كريب الهنا</title>
-<link rel="stylesheet" href="admin.css?v=20261126p">
+<link rel="stylesheet" href="admin.css?v=20261126q">
 </head>
 <body>
 
@@ -41,7 +41,8 @@
       <span class="save-state" id="saveState">● محفوظ</span>
       <button class="btn ghost sm" id="btnExport">⬇ تصدير</button>
       <button class="btn ghost sm" id="btnImport">⬆ استيراد</button>
-      <button class="btn primary sm" id="btnSave">💾 حفظ</button>
+      <button class="btn primary sm" id="btnSave" title="حفظ في المتصفح ده بس — الزوار مش هيشوفوا التعديل">💾 حفظ</button>
+      <button class="btn pub sm" id="btnPublish" title="ارفع التعديلات للموقع — الزوار هيشوفوها">🚀 نشر على الموقع</button>
       <button class="btn ghost sm" id="btnReset" title="امسح كل التعديلات المحفوظة في المتصفح وارجع لحالة المنشور">↺ إعادة ضبط</button>
       <button class="btn ghost sm" id="btnLogout">خروج</button>
     </div>
@@ -178,6 +179,39 @@
 
 <div id="toast" class="toast" hidden></div>
 
-<script src="admin.js?v=20261126p"></script>
+<!-- ══════════ نافذة النشر ══════════ -->
+<div class="modal" id="pubModal" hidden>
+  <div class="modal-card pub-card">
+    <h3>🚀 نشر على الموقع</h3>
+    <p class="pub-lead">
+      <b>«حفظ»</b> بيحفظ التعديلات في متصفحك بس. <b>«نشر»</b> هو اللي بيخلي الزوار يشوفوها.
+    </p>
+    <label class="fld">
+      <span>المستودع (owner/repo)</span>
+      <input type="text" id="pubRepo" class="inp" placeholder="ABDELKAIOUMM/crepe-el-hana" autocomplete="off">
+    </label>
+    <label class="fld">
+      <span>الفرع</span>
+      <input type="text" id="pubBranch" class="inp" placeholder="gh-pages" autocomplete="off">
+    </label>
+    <label class="fld">
+      <span>توكن GitHub (يُحفظ في متصفحك فقط)</span>
+      <input type="password" id="pubToken" class="inp" placeholder="ghp_…" autocomplete="off">
+    </label>
+    <p class="pub-help">
+      التوكن من: GitHub ← Settings ← Developer settings ← Personal access tokens ←
+      scope <b>contents</b> (write). بعد ما تحطه هنا اضغط «نشر».
+      التوكن مش بينسلش لحد.
+    </p>
+    <div class="pub-log" id="pubLog"></div>
+    <div class="modal-actions">
+      <button class="btn ghost" data-cancel>إلغاء</button>
+      <button class="btn pub" id="pubGo">🚀 انشر دلوقتي</button>
+    </div>
+  </div>
+</div>
+<script src="ch-core.js?v=20261126q"></script><script src="publish.js?v=20261126q"></script>
+<script src="admin.js?v=20261126q"></script>
+
 </body>
 </html>
