@@ -646,35 +646,35 @@
           "id": "sweet_crepe-كريب-شيكولاتة-نيو-كريمة",
           "name": "كريب شيكولاتة نيو كريمة",
           "desc": "كريب حلو بالشوكولاتة والفواكه.",
-          "img": "assets/webp/real-كريب-شيكولاتة-نيو-كريمة.webp",
+          "img": "assets/upload/_Pngtree_a_plate_of_chocolate_crepes_15608829.png",
           "price": 45
         },
         {
           "id": "sweet_crepe-كريب-ميكس-تيلا",
           "name": "كريب ميكس تيلا",
           "desc": "كريب حلو بالشوكولاتة والفواكه.",
-          "img": "assets/webp/real-كريب-ميكس-تيلا.webp",
+          "img": "assets/upload/_Pngtree_a_plate_of_chocolate_crepes_15608829.png",
           "price": 65
         },
         {
           "id": "sweet_crepe-كريب-شيكولاتة-بيضاء",
           "name": "كريب شيكولاتة بيضاء",
           "desc": "كريب حلو بالشوكولاتة والفواكه.",
-          "img": "assets/webp/real-كريب-شيكولاتة-بيضاء.webp",
+          "img": "assets/upload/_Pngtree_a_plate_of_chocolate_crepes_15608829.png",
           "price": 50
         },
         {
           "id": "sweet_crepe-كريب-كراميل",
           "name": "كريب كراميل",
           "desc": "كريب حلو بالشوكولاتة والفواكه.",
-          "img": "assets/webp/real-كريب-كراميل.webp",
+          "img": "assets/upload/_Pngtree_a_plate_of_chocolate_crepes_15608829.png",
           "price": 45
         },
         {
           "id": "sweet_crepe-كريب-لوتس",
           "name": "كريب لوتس",
           "desc": "كريب حلو بالشوكولاتة والفواكه.",
-          "img": "assets/webp/real-كريب-لوتس.webp",
+          "img": "assets/upload/_Pngtree_a_plate_of_chocolate_crepes_15608829.png",
           "price": 50
         }
       ]
@@ -1221,7 +1221,7 @@
           "id": "sweet_crepe-كريب-شيكولاتة-نيو-كريمة",
           "name": "كريب شيكولاتة نيو كريمة",
           "price": 45,
-          "img": "assets/webp/real-كريب-شيكولاتة-نيو-كريمة.webp",
+          "img": "assets/upload/_Pngtree_a_plate_of_chocolate_crepes_15608829.png",
           "tag": "مميز",
           "desc": "كريب حلو بالشوكولاتة والفواكه.",
           "menuKey": "sweet_crepe"
@@ -1230,7 +1230,7 @@
           "id": "sweet_crepe-كريب-ميكس-تيلا",
           "name": "كريب ميكس تيلا",
           "price": 65,
-          "img": "assets/webp/real-كريب-ميكس-تيلا.webp",
+          "img": "assets/upload/_Pngtree_a_plate_of_chocolate_crepes_15608829.png",
           "tag": "مميز",
           "desc": "كريب حلو بالشوكولاتة والفواكه.",
           "menuKey": "sweet_crepe"
@@ -1239,7 +1239,7 @@
           "id": "sweet_crepe-كريب-شيكولاتة-بيضاء",
           "name": "كريب شيكولاتة بيضاء",
           "price": 50,
-          "img": "assets/webp/real-كريب-شيكولاتة-بيضاء.webp",
+          "img": "assets/upload/_Pngtree_a_plate_of_chocolate_crepes_15608829.png",
           "tag": "مميز",
           "desc": "كريب حلو بالشوكولاتة والفواكه.",
           "menuKey": "sweet_crepe"
@@ -1248,7 +1248,7 @@
           "id": "sweet_crepe-كريب-كراميل",
           "name": "كريب كراميل",
           "price": 45,
-          "img": "assets/webp/real-كريب-كراميل.webp",
+          "img": "assets/upload/_Pngtree_a_plate_of_chocolate_crepes_15608829.png",
           "tag": "مميز",
           "desc": "كريب حلو بالشوكولاتة والفواكه.",
           "menuKey": "sweet_crepe"
@@ -1257,7 +1257,7 @@
           "id": "sweet_crepe-كريب-لوتس",
           "name": "كريب لوتس",
           "price": 50,
-          "img": "assets/webp/real-كريب-لوتس.webp",
+          "img": "assets/upload/_Pngtree_a_plate_of_chocolate_crepes_15608829.png",
           "tag": "مميز",
           "desc": "كريب حلو بالشوكولاتة والفواكه.",
           "menuKey": "sweet_crepe"
