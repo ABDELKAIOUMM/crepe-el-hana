@@ -89,7 +89,16 @@
      لو أي صورة مربوطة بمسار مش موجود على السيرفر (404)
      — زي الصور القديمة اللي اتشالت — بنصلّحها تلقائي
      ونختار بديل صحيح من نفس القسم. */
-  var DEAD_PATTERNS = /sq-professional-overhead|professional-overhead-pizza-isolated|assets\/upload\/pngwing/i;
+  var DEAD_PATTERNS = /sq-professional-overhead|professional-overhead-pizza-isolated/i;
+
+  /* مسار رفع المستخدم (assets/upload/...) — دايماً صالح،
+     لأن الصورة بتتخزن كـdataUrl في مصفوفة images مش على السيرفر. */
+  function isUserUploadPath(path) {
+    if (!path) return false;
+    if (/^data:image\//.test(path)) return true;
+    if (/^assets\/upload\//.test(path)) return true;
+    return images.some(function (im) { return im.path === path && im.dataUrl; });
+  }
 
   function sectionFallbackImg(key) {
     var map = {
@@ -109,12 +118,16 @@
     if (pb && pb.items && pb.items[idx] && pb.items[idx].img) return pb.items[idx].img;
     /* 2) catalog */
     var c = data && data.catalog ? data.catalog[catKey] : null;
-    if (c && c.items && c.items[idx] && c.items[idx].img && !DEAD_PATTERNS.test(c.items[idx].img)) {
+    if (c && c.items && c.items[idx] && c.items[idx].img
+        && !DEAD_PATTERNS.test(c.items[idx].img)
+        && !isUserUploadPath(c.items[idx].img)) {
       return c.items[idx].img;
     }
     /* 3) menu — بس لو المسار مش ميت */
     var m = data && data.menu ? data.menu.filter(function (s) { return s.key === catKey; })[0] : null;
-    if (m && m.items && m.items[idx] && m.items[idx].img && !DEAD_PATTERNS.test(m.items[idx].img)) {
+    if (m && m.items && m.items[idx] && m.items[idx].img
+        && !DEAD_PATTERNS.test(m.items[idx].img)
+        && !isUserUploadPath(m.items[idx].img)) {
       return m.items[idx].img;
     }
     /* 4) الصورة الافتراضية للقسم */
@@ -133,8 +146,7 @@
       publishedBase.content.sections.forEach(function (bs) { publishedSec[bs.key] = bs.img; });
     }
     secs.forEach(function (s) {
-      var isUserUpload = /^data:image\//.test(s.img || '')
-        || images.some(function (im) { return im.path === s.img && im.dataUrl; });
+      var isUserUpload = isUserUploadPath(s.img);
       var published = publishedSec[s.key];
       /* القيمة المحفوظة من نسخة أقدم → نرجّعها للمنشور */
       if (published && !isUserUpload && s.img !== published) {
@@ -142,6 +154,7 @@
         return;
       }
       var bad = !s.img || DEAD_PATTERNS.test(s.img);
+      if (!bad && isUserUpload) return;          /* صورة مرفوعة ⇒ سيبها زي ما هي */
       if (!bad && images.length) {
         /* لو المسار موجود بس مش في الـmanifest ومش dataUrl → مش موجود على السيرفر */
         var known = images.some(function (im) { return im.path === s.img; });
@@ -162,6 +175,7 @@
     /* 3) صور الأصناف */
     (data.menu || []).forEach(function (sec) {
       (sec.items || []).forEach(function (it, i) {
+        if (isUserUploadPath(it.img)) return;   /* صورة مرفوعة ⇒ ما نلمسهاش */
         var bad = !it.img || DEAD_PATTERNS.test(it.img);
         if (!bad && images.length) {
           var known = images.some(function (im) { return im.path === it.img; });
@@ -179,6 +193,7 @@
     });
     (data.menu || []).forEach(function (sec) {
       (sec.items || []).forEach(function (it) {
+        if (isUserUploadPath(it.img)) return;
         if (baseItems[it.id] && (!it.img || DEAD_PATTERNS.test(it.img))) it.img = baseItems[it.id];
       });
     });
